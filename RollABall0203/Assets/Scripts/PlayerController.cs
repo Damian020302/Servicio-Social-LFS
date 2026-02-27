@@ -71,17 +71,20 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        //El contador de vidas no interacta con los objetos LifeUp a menos que su vida descienda de 9
         if (other.gameObject.CompareTag("LifeUp") && lives < 9)
         {
             other.gameObject.SetActive(false);
             lives++;
             SetCounterLives();
-        } 
-        else if(other.gameObject.CompareTag("Lava"))
+        }
+        //Destrucción instantánea al caer en lava
+        else if (other.gameObject.CompareTag("Lava"))
         {
             lives = 0;
             SetCounterLives();
         }
+        //Pantalla de victoria
         else if(SceneManager.GetActiveScene().name == "Level2" && other.gameObject.CompareTag("Goal"))
         {
             other.gameObject.SetActive(false);
