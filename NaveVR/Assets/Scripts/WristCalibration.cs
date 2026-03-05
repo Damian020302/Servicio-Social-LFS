@@ -3,6 +3,8 @@ using UnityEngine;
 public class WristCalibration : MonoBehaviour
 {
     public bool isCalibrating = false;
+    public float flexionAngle = 0.0f;
+    public float extensionAngle = 0.0f;
     private Quaternion neutralRotation;
     private bool isCalibrated = false;
     
@@ -18,9 +20,18 @@ public class WristCalibration : MonoBehaviour
         {
             Vector3 forwardNeutral = neutralRotation * Vector3.forward;
             Vector3 rightNeutral = neutralRotation * Vector3.right;
-            float flexionAngle = Vector3.SignedAngle(forwardNeutral, transform.forward, rightNeutral);
-
-            Debug.Log($"Flexion/Extension: {flexionAngle:F1}");
+            float neutralAngle = Vector3.SignedAngle(forwardNeutral, transform.forward, rightNeutral);
+            flexionAngle = 0.0f;
+            extensionAngle = 0.0f;
+            if (neutralAngle > 0)
+            {
+                flexionAngle = neutralAngle;
+            }
+            else if (neutralAngle < 0)
+            {
+                extensionAngle = Mathf.Abs(neutralAngle);
+            }
+            Debug.Log($"Flexion: {flexionAngle:F2}° | Extension: {extensionAngle:F1}°");
         }
     }
 
