@@ -1,13 +1,20 @@
 using UnityEngine;
+using TMPro;
 
 public class WristCalibration : MonoBehaviour
 {
     public bool isCalibrating = false;
     public float flexionAngle = 0.0f;
     public float extensionAngle = 0.0f;
+    public float supinationAngle = 0.0f;
+    public float pronationAngle = 0.0f;
     private Quaternion neutralRotation;
     private bool isCalibrated = false;
-    
+    public TextMeshProUGUI counterFlexion;
+    public TextMeshProUGUI counterExtension;
+    public TextMeshProUGUI counterSupination;
+    public TextMeshProUGUI counterPronation;
+
     // Update is called once per frame
     void Update()
     {
@@ -20,18 +27,32 @@ public class WristCalibration : MonoBehaviour
         {
             Vector3 forwardNeutral = neutralRotation * Vector3.forward;
             Vector3 rightNeutral = neutralRotation * Vector3.right;
-            float neutralAngle = Vector3.SignedAngle(forwardNeutral, transform.forward, rightNeutral);
+            float flexExtAngle = Vector3.SignedAngle(forwardNeutral, transform.forward, rightNeutral);
             flexionAngle = 0.0f;
             extensionAngle = 0.0f;
-            if (neutralAngle > 0)
+            if (flexExtAngle > 0)
             {
-                flexionAngle = neutralAngle;
+                flexionAngle = flexExtAngle;
             }
-            else if (neutralAngle < 0)
+            else if (flexExtAngle < 0)
             {
-                extensionAngle = Mathf.Abs(neutralAngle);
+                extensionAngle = Mathf.Abs(flexExtAngle);
             }
-            Debug.Log($"Flexion: {flexionAngle:F2}° | Extension: {extensionAngle:F1}°");
+            Debug.Log($"Flexion: {flexionAngle:F2}° | Extension: {extensionAngle:F2}°");
+            SetCounterExtension();
+            SetCounterFlexion();
+            float supProAngle = Vector3.SignedAngle(rightNeutral, transform.right, transform.forward);
+            supinationAngle = 0.0f;
+            pronationAngle = 0.0f;
+            if (supProAngle > 0)
+            {
+                supinationAngle = supProAngle;
+            }
+            else if (supProAngle < 0)
+            {
+                pronationAngle = Mathf.Abs(supProAngle);
+            }
+            Debug.Log($"Supination: {supinationAngle:F2}° | Pronation: {pronationAngle:F2}°");
         }
     }
 
@@ -40,5 +61,37 @@ public class WristCalibration : MonoBehaviour
         neutralRotation = transform.rotation;
         isCalibrated = true;
         Debug.Log("Wrist calibrated. Neutral rotation set.");
+    }
+    
+    public void SetCounterFlexion()
+    {
+        if (counterFlexion != null)
+        {
+            counterFlexion.text = $"Flexion: {flexionAngle:F2}°";
+        }
+    }
+
+    public void SetCounterExtension()
+    {
+        if (counterExtension != null)
+        {
+            counterExtension.text = $"Extension: {extensionAngle:F2}°";
+        }
+    }
+
+    public void SetCounterSupination()
+    {
+        if (counterSupination != null)
+        {
+            counterSupination.text = $"Supination: {supinationAngle:F2}°";
+        }
+    }
+
+    public void SetCounterPronation()
+    {
+        if (counterPronation != null)
+        {
+            counterPronation.text = $"Pronation: {pronationAngle:F2}°";
+        }
     }
 }
