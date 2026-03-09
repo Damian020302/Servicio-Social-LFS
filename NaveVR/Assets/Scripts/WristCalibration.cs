@@ -38,7 +38,7 @@ public class WristCalibration : MonoBehaviour
             {
                 extensionAngle = Mathf.Abs(flexExtAngle);
             }
-            Debug.Log($"Flexion: {flexionAngle:F2}° | Extension: {extensionAngle:F2}°");
+            Debug.Log($"Flexion: {flexionAngle:F1}° | Extension: {extensionAngle:F1}°");
             SetCounterExtension();
             SetCounterFlexion();
             float supProAngle = Vector3.SignedAngle(rightNeutral, transform.right, transform.forward);
@@ -52,7 +52,9 @@ public class WristCalibration : MonoBehaviour
             {
                 pronationAngle = Mathf.Abs(supProAngle);
             }
-            Debug.Log($"Supination: {supinationAngle:F2}° | Pronation: {pronationAngle:F2}°");
+            Debug.Log($"Supination: {supinationAngle:F1}° | Pronation: {pronationAngle:F1}°");
+            SetCounterPronation();
+            SetCounterSupination();
         }
     }
 
@@ -67,7 +69,7 @@ public class WristCalibration : MonoBehaviour
     {
         if (counterFlexion != null)
         {
-            counterFlexion.text = $"Flexion: {flexionAngle:F2}°";
+            counterFlexion.text = $"Flexion: {flexionAngle:F1}°";
         }
     }
 
@@ -75,7 +77,7 @@ public class WristCalibration : MonoBehaviour
     {
         if (counterExtension != null)
         {
-            counterExtension.text = $"Extension: {extensionAngle:F2}°";
+            counterExtension.text = $"Extension: {extensionAngle:F1}°";
         }
     }
 
@@ -83,7 +85,7 @@ public class WristCalibration : MonoBehaviour
     {
         if (counterSupination != null)
         {
-            counterSupination.text = $"Supination: {supinationAngle:F2}°";
+            counterSupination.text = $"Supination: {supinationAngle:F1}°";
         }
     }
 
@@ -91,7 +93,7 @@ public class WristCalibration : MonoBehaviour
     {
         if (counterPronation != null)
         {
-            counterPronation.text = $"Pronation: {pronationAngle:F2}°";
+            counterPronation.text = $"Pronation: {pronationAngle:F1}°";
         }
     }
 }
