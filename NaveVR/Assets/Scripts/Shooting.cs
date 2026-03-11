@@ -1,10 +1,11 @@
 using UnityEngine;
+using TMPro;
 
 public class Shooting : MonoBehaviour
 {
     [Header("OVRHand")]
     [Tooltip("Objeto que contenga OVRHand")] public OVRHand hand;
-    [Header("Bullet")] public GameObject bulletPrefab;
+    [Header("Bullet")] public /*Bullet*/GameObject bulletPrefab;
     [Header("Fire Point")]
     [Tooltip("Punto de salida del disparo")] public Transform firePoint;
     public float bulletSpeed = 20f;
@@ -12,6 +13,20 @@ public class Shooting : MonoBehaviour
     private float nextFireTime = 0f;
     private int spreadCount = 5;
     private float spreadAngle = 30f;
+    public TextMeshProUGUI counterScore;
+    private int score;
+
+    private void Start()
+    {
+        score = 0;
+        SetCounterScore();
+    }
+
+    void SetCounterScore()
+    {
+        counterScore.text = "Puntaje: " + score.ToString();
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -32,17 +47,26 @@ public class Shooting : MonoBehaviour
                     nextFireTime = Time.time + fireRate;
             }
         }
+        /*if (bulletPrefab.hit)
+        {
+            score += 10;
+            SetCounterScore();
+            Destroy(bulletPrefab.gameObject);
+        }*/
     }
 
     void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        //Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        //Rigidbody rb = bulletPrefab.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.linearVelocity = firePoint.forward * bulletSpeed;
         }
-        Destroy(bullet, 5f);
+        Destroy(bulletPrefab, 5f);
+        
     }
 
     void Spread()
@@ -55,11 +79,14 @@ public class Shooting : MonoBehaviour
             Quaternion rotation = firePoint.rotation * Quaternion.Euler(0, currentAngle, 0);
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, rotation);
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            //Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            //Rigidbody rb = bulletPrefab.GetComponent<Rigidbody>();
             if (rb != null)
             {
+                //rb.linearVelocity = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation).transform.forward * bulletSpeed;
                 rb.linearVelocity = bullet.transform.forward * bulletSpeed;
             }
-            Destroy(bullet, 5f);
+            Destroy(bulletPrefab, 5f);
         }
     }
 }
