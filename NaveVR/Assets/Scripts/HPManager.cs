@@ -5,16 +5,18 @@ using UnityEngine.UI;
 
 public class HPManager : MonoBehaviour
 {
+    public float Health, MaxHealth, Width, Height;
+    [SerializeField] private RectTransform healthBar;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void SetMaxHealth(float maxHealth)
     {
-        
+        MaxHealth = maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetHealth(float health)
     {
-        
+        Health = health;
+        float newWidth = (Health / MaxHealth) * Width;
+        healthBar.sizeDelta = new Vector2(newWidth, Height);
     }
 }
