@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 
 public class Shooting : MonoBehaviour
 {
@@ -13,20 +12,11 @@ public class Shooting : MonoBehaviour
     private float nextFireTime = 0f;
     private int spreadCount = 5;
     private float spreadAngle = 30f;
-    public TextMeshProUGUI counterScore;
-    private int score;
-
+    
     private void Start()
     {
-        score = 0;
-        SetCounterScore();
+        
     }
-
-    void SetCounterScore()
-    {
-        counterScore.text = "Puntaje: " + score.ToString();
-    }
-
 
     // Update is called once per frame
     void Update()
@@ -43,8 +33,8 @@ public class Shooting : MonoBehaviour
             }
             else if (isPinchingM && Time.time >= nextFireTime)
             {
-                    Spread();
-                    nextFireTime = Time.time + fireRate;
+                Spread();
+                nextFireTime = Time.time + fireRate;
             }
         }
         /*if (bulletPrefab.hit)
@@ -65,7 +55,7 @@ public class Shooting : MonoBehaviour
         {
             rb.linearVelocity = firePoint.forward * bulletSpeed;
         }
-        Destroy(bulletPrefab, 5f);
+        Destroy(bullet, 5f);
         
     }
 
@@ -86,7 +76,7 @@ public class Shooting : MonoBehaviour
                 //rb.linearVelocity = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation).transform.forward * bulletSpeed;
                 rb.linearVelocity = bullet.transform.forward * bulletSpeed;
             }
-            Destroy(bulletPrefab, 5f);
+            Destroy(bullet, 5f);
         }
     }
 }

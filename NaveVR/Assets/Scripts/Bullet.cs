@@ -3,15 +3,13 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public Rigidbody rb;
-    public bool hit;
-
+    //public Rigidbody rb;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    /*void Start()
     {
         rb = GetComponent<Rigidbody>();
-        hit = false;
-    }
+    }*/
 
     // Update is called once per frame
     void Update()
@@ -23,8 +21,9 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
+            GameManager.Instance.ScorePoints(10);
             Destroy(collision.gameObject);
-            hit = true;
+            Destroy(gameObject);
         }
     }
 }
