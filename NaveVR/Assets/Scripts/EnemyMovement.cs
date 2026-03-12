@@ -26,4 +26,24 @@ public class EnemyMovement : MonoBehaviour
             transform.position += transform.forward * speed * Time.deltaTime;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            Destroy(gameObject);
+        }
+        else if(other.gameObject.tag == "Limit")
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    /*void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Limit")
+        {
+            Destroy(gameObject);
+        }
+    }*/
 }
