@@ -4,7 +4,6 @@ public class EnemyMovement : MonoBehaviour
 {
     public Transform player;
     public float speed = 3f;
-    [Tooltip("Distancia minima del jugador en la que se detendra.")] public float stopDistance = 5.0f;
     [Tooltip("Ventana de tiempo que el jugador tendra para destruir al enemigo")] public float timeToDestroy = 5.0f;
     private bool isStopped = false;
     private float waitTimer = 0.0f;
@@ -32,15 +31,8 @@ public class EnemyMovement : MonoBehaviour
         if (!isStopped)
         {
             transform.LookAt(player);
+            transform.position += transform.forward * speed * Time.deltaTime;
             float distance = Vector3.Distance(transform.position, player.position);
-            if (distance > stopDistance)
-            {
-                transform.position += transform.forward * speed * Time.deltaTime;
-            }
-            else
-            {
-                isStopped = true;
-            }
         }
         else
         { 
@@ -58,17 +50,17 @@ public class EnemyMovement : MonoBehaviour
         }*/
     }
 
-    /*private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        /*if(other.gameObject.tag == "Player")
         {
             Destroy(gameObject);
-        }
-        else if(other.gameObject.tag == "Limit")
+        }*/
+        if(other.gameObject.tag == "Limit")
         {
-            Destroy(gameObject);
+            isStopped = true;
         }
-    }*/
+    }
 
     /*void OnCollisionEnter(Collision collision)
     {
