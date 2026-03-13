@@ -4,12 +4,22 @@ public class EnemyMovement : MonoBehaviour
 {
     public Transform player;
     public float speed = 3f;
-    public float minDistance = 1.0f;
+    [Tooltip("Distancia minima del jugador en la que se detendra.")] public float stopDistance = 5.0f;
+    [Tooltip("Ventana de tiempo que el jugador tendra para destruir al enemigo")] public float timeToDestroy = 5.0f;
+    private bool isStopped = false;
+    private float waitTimer = 0.0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        speed = Random.Range(2.0f, 10.0f);
+        if(player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+            return;
+        }
+        //player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
+        speed = Random.Range(1.0f, 5.0f);
     }
 
     // Update is called once per frame
@@ -19,15 +29,36 @@ public class EnemyMovement : MonoBehaviour
         {
             return;
         }
-        transform.LookAt(player);
+        if (!isStopped)
+        {
+            transform.LookAt(player);
+            float distance = Vector3.Distance(transform.position, player.position);
+            if (distance > stopDistance)
+            {
+                transform.position += transform.forward * speed * Time.deltaTime;
+            }
+            else
+            {
+                isStopped = true;
+            }
+        }
+        else
+        { 
+            waitTimer += Time.deltaTime;
+            if(waitTimer >= timeToDestroy)
+            {
+                Destroy(gameObject);
+            }
+        }
+        /*transform.LookAt(player);
         float distance = Vector3.Distance(transform.position, player.position);
         if(distance > minDistance)
         {
             transform.position += transform.forward * speed * Time.deltaTime;
-        }
+        }*/
     }
 
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
         {
@@ -37,7 +68,7 @@ public class EnemyMovement : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
+    }*/
 
     /*void OnCollisionEnter(Collision collision)
     {
