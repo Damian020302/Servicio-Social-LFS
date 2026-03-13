@@ -3683,7 +3683,7 @@ GameObject:
   - component: {fileID: 492981230}
   - component: {fileID: 492981229}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Limit
   m_TagString: Limit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
