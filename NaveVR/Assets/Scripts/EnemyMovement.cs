@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     public Transform player;
-    public float speed = 3f;
+    public float speed/* = 10.0f*/;
     [Tooltip("Ventana de tiempo que el jugador tendra para destruir al enemigo")] public float timeToDestroy = 5.0f;
     private bool isStopped = false;
     private float waitTimer = 0.0f;
@@ -18,7 +18,8 @@ public class EnemyMovement : MonoBehaviour
         }
         //player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
-        speed = Random.Range(1.0f, 5.0f);
+        //speed = Random.Range(1.0f, 5.0f);
+        speed = 10.0f;
     }
 
     // Update is called once per frame

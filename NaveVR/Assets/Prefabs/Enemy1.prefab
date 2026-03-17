@@ -127,8 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   player: {fileID: 0}
-  speed: 3
-  stopDistance: 0.5
+  speed: 10
   timeToDestroy: 5
 --- !u!54 &-329538945352051261
 Rigidbody:
