@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     private int round;
     private int countdown;
     private bool continueYN;
+    //private int successRate;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
         round = 1;
         countdown = 5;
         //enemiesDestroyed = 0;
+        continueYN = true;
         UpdateScoreText();
         UpdateRoundText();
     }
