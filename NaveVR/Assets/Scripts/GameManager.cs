@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,6 +28,29 @@ public class GameManager : MonoBehaviour
     /*private int countdown;
     private bool continueYN;*/
     //private int successRate;
+
+    public void MainScene()
+    {
+        SceneManager.LoadScene("Menu");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
+    public void Calibrate()
+    {
+        SceneManager.LoadScene("Calibracion");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Juego");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el juego
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 
     private void Awake()
     {
@@ -121,13 +145,13 @@ public class GameManager : MonoBehaviour
         float successPercentage = (float)enemiesTouched / enemiesPerRound;
         Debug.Log($"Éxito de la ronda: {successPercentage * 100}%");
 
-        if (successPercentage >= 0.8f) // 80% o más de éxito = Subir dificultad
+        if (successPercentage > 0.7f) // 80% o más de éxito = Subir dificultad
         {
             enemyLifetime = Mathf.Max(3f, enemyLifetime - 1.5f); // Menos tiempo para tocarlo
             timeSpawnInterval = Mathf.Max(0.5f, timeSpawnInterval - 0.2f); // Salen más rápido
             enemySpeed += 0.5f; // Caminan más rápido
         }
-        else if (successPercentage <= 0.4f) // 40% o menos = Bajar dificultad
+        else if (successPercentage < 0.5f) // 40% o menos = Bajar dificultad
         {
             enemyLifetime += 2f; 
             timeSpawnInterval += 0.5f;
@@ -158,6 +182,8 @@ public class GameManager : MonoBehaviour
         // Aquí podrías agregar lógica para terminar el juego o volver al menú principal
         Debug.Log("Juego terminado. Gracias por jugar.");
         //UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu"); // Ejemplo de volver al menú
+        SceneManager.LoadScene("Menu");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
 
     /*public void NextRound()
