@@ -8,7 +8,7 @@ public class HandTouch : MonoBehaviour
         {
             if(GameManager.Instance != null)
             {
-                GameManager.Instance.ScorePoints(10); // Suma 10 puntos al puntaje del jugador
+                //GameManager.Instance.ScorePoints(10); // Suma 10 puntos al puntaje del jugador
             }
             Destroy(other.gameObject); // Destruye el objeto enemigo al tocarlo
         }

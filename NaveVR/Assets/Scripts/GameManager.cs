@@ -1,21 +1,26 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using System.Diagnostics;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    [Header("UI")]
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI roundText;
-    public TextMeshProUGUI continueText;
     public TextMeshProUGUI countdownText;
+    [Header("Continue Prompt")]
+    //public TextMeshProUGUI continueText;
+    public GameObject continuePanel;
+    public TextMeshProUGUI continueText;
     //private int enemiesDestroyed;
+    [Header("Variables del Juego")]
     private int score = 0;
     private int round = 1;
     public int enemiesPerRound = 10;
     private int enemiesTouched = 0;
     private int enemiesExpired = 0;
+    [Header("Dificultad Dinamica")]
     public float enemyLifetime = 10.0f;
     public float timeSpawnInterval = 2.0f;
     public float enemySpeed = 2.0f;
@@ -39,7 +44,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateUI();
-        continueText.gameObject.SetActive(false);
+        if(continuePanel != null)
+        {
+            continuePanel.SetActive(false);
+        }
+        if(countdownText != null)
+        {
+            countdownText.gameObject.SetActive(false);
+        }
+        //continueText.gameObject.SetActive(false);
         StartCoroutine(CoundownRutine());
         /*score = 0;
         round = 1;
@@ -53,7 +66,7 @@ public class GameManager : MonoBehaviour
     IEnumerator CoundownRutine()
     {
         countdownText.gameObject.SetActive(true);
-        int countdown = 5;
+        //int countdown = 5;
         for(int i = 5; i > 0; i--)
         {
             countdownText.text = i.ToString();
@@ -125,23 +138,42 @@ public class GameManager : MonoBehaviour
 
     void ShowContinuePrompt()
     {
-        continueText.gameObject.SetActive(true);
-        continueText.text = "¿Continuar a la siguiente ronda? (Y/N)";
-        StartCoroutine(WaitForContinueInput());
+        if(continuePanel != null)
+        {
+            continuePanel.SetActive(true);
+        }
     }
 
-    public void NextRound()
+    public void OnClickYes()
     {
-        continueText.gameObject.SetActive(false);
+        continuePanel.SetActive(false);
         round++;
         UpdateUI();
         StartCoroutine(CoundownRutine());
     }
 
+    public void OnClickNo()
+    {
+        continuePanel.SetActive(true);
+        // Aquí podrías agregar lógica para terminar el juego o volver al menú principal
+        Debug.Log("Juego terminado. Gracias por jugar.");
+        //UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu"); // Ejemplo de volver al menú
+    }
+
+    /*public void NextRound()
+    {
+        continueText.gameObject.SetActive(false);
+        round++;
+        UpdateUI();
+        StartCoroutine(CoundownRutine());
+    }*/
+
     void UpdateUI()
     {
-        UpdateScoreText();
-        UpdateRoundText();
+        scoreText.text = "Puntuacion: " + score;
+        roundText.text = "Round\n" + round;
+        //UpdateScoreText();
+        //UpdateRoundText();
     }
 
     /*public void ScorePoints(int points)
@@ -156,15 +188,15 @@ public class GameManager : MonoBehaviour
 
     }*/
 
-    void UpdateScoreText()
+    /*void UpdateScoreText()
     {
         scoreText.text = "Puntuaci�n: " + score;
-    }
+    }*/
 
-    void UpdateRoundText()
+   /* void UpdateRoundText()
     {
         roundText.text = "Round\n" + round;
-    }
+    }*/
 
     /*void UpdateCountdownText()
     {

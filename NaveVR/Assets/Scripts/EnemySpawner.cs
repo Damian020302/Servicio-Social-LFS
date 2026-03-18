@@ -23,6 +23,7 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(wait);
             Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-rangeX, rangeX), 0, 0);
             Instantiate(enemyPrefab, spawnPosition, transform.rotation);
+            //Instantiate(enemyPrefab, transform.position, transform.rotation);
         }
     }
     //[SerializeField] private float enemyInterval;

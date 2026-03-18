@@ -4,7 +4,7 @@ public class EnemyMovement : MonoBehaviour
 {
     public Transform player;
     public float speed/* = 10.0f*/;
-    private float timeToDestroy;
+    //private float timeToDestroy;
     [Tooltip("Ventana de tiempo que el jugador tendra para destruir al enemigo")] public float timeToDestroy = 5.0f;
     private bool isStopped = false;
     private float waitTimer = 0.0f;
