@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -68,11 +68,11 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateUI();
-        if(continuePanel != null)
+        if (continuePanel != null)
         {
             continuePanel.SetActive(false);
         }
-        if(countdownText != null)
+        if (countdownText != null)
         {
             countdownText.gameObject.SetActive(false);
         }
@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
     {
         countdownText.gameObject.SetActive(true);
         //int countdown = 5;
-        for(int i = 5; i > 0; i--)
+        for (int i = 5; i > 0; i--)
         {
             countdownText.text = i.ToString();
             yield return new WaitForSeconds(1.0f);
@@ -118,9 +118,9 @@ public class GameManager : MonoBehaviour
     IEnumerator SpawnWaveRoutine()
     {
         EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
-        for(int i = 0; i < enemiesPerRound; i++)
+        for (int i = 0; i < enemiesPerRound; i++)
         {
-            if(spawner != null)
+            if (spawner != null)
             {
                 spawner.SpawnSingleEnemy();
             }
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
     void CheckRoundEnd()
     {
         int totalEnemies = enemiesTouched + enemiesExpired;
-        if(totalEnemies >= enemiesPerRound)
+        if (totalEnemies >= enemiesPerRound)
         {
             EvaluateDifficulty();
             ShowContinuePrompt();
@@ -167,7 +167,7 @@ public class GameManager : MonoBehaviour
         }
         else if (successPercentage < 0.5f) // 40% o menos = Bajar dificultad
         {
-            enemyLifetime += 2f; 
+            enemyLifetime += 2f;
             timeSpawnInterval += 0.5f;
             enemySpeed = Mathf.Max(1f, enemySpeed - 0.5f);
         }
@@ -176,7 +176,7 @@ public class GameManager : MonoBehaviour
 
     void ShowContinuePrompt()
     {
-        if(continuePanel != null)
+        if (continuePanel != null)
         {
             continuePanel.SetActive(true);
         }
@@ -233,10 +233,10 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Puntuaci�n: " + score;
     }*/
 
-   /* void UpdateRoundText()
-    {
-        roundText.text = "Round\n" + round;
-    }*/
+    /* void UpdateRoundText()
+     {
+         roundText.text = "Round\n" + round;
+     }*/
 
     /*void UpdateCountdownText()
     {

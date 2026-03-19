@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnSingleEnemy()
     {
-        if(enemySpawners.Length == 0)
+        if (enemySpawners.Length == 0)
         {
             Debug.LogWarning("No enemy spawners assigned!");
             return;
