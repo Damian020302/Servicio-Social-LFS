@@ -5,8 +5,24 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] public GameObject enemyPrefab;
-    public float rangeX = 2.0f;
-    public void StartGeneration(int enemies)
+    //[Tooltip("Range on the X-axis for spawning enemies around the spawner's position.")] public float rangeX = 1.0f;
+    [Tooltip("Drag the Enemy Spawners")] public Transform[] enemySpawners;
+
+    public void SpawnSingleEnemy()
+    {
+        if(enemySpawners.Length == 0)
+        {
+            Debug.LogWarning("No enemy spawners assigned!");
+            return;
+        }
+        int randomIndex = Random.Range(0, enemySpawners.Length);
+        Transform selectedSpawner = enemySpawners[randomIndex];
+
+        Instantiate(enemyPrefab, selectedSpawner.position, selectedSpawner.rotation);
+    }
+
+
+    /*public void StartGeneration(int enemies)
     {
         StartCoroutine(SpawnEnemies(enemies));
     }
@@ -25,7 +41,8 @@ public class EnemySpawner : MonoBehaviour
             Instantiate(enemyPrefab, spawnPosition, transform.rotation);
             //Instantiate(enemyPrefab, transform.position, transform.rotation);
         }
-    }
+    }*/
+
     //[SerializeField] private float enemyInterval;
     /*public GameObject player;
     private Vector3 offset;

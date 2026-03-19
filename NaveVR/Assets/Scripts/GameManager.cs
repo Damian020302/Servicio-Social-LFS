@@ -106,12 +106,26 @@ public class GameManager : MonoBehaviour
     {
         enemiesTouched = 0;
         enemiesExpired = 0;
-        EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
+        /*EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
         if(spawner != null)
         {
             spawner.StartGeneration(enemiesPerRound);
         }
-        Debug.Log("Inicia la ronda " + round);
+        Debug.Log("Inicia la ronda " + round);*/
+        StartCoroutine(SpawnWaveRoutine());
+    }
+
+    IEnumerator SpawnWaveRoutine()
+    {
+        EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
+        for(int i = 0; i < enemiesPerRound; i++)
+        {
+            if(spawner != null)
+            {
+                spawner.SpawnSingleEnemy();
+            }
+            yield return new WaitForSeconds(timeSpawnInterval);
+        }
     }
 
     public void EnemyTouched(int points)
