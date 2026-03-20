@@ -3110,7 +3110,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Calibraci\xF3n\n"
+  m_text: "Opci\xF3n 2"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fd776498105942e4e8eaa269251c0e45, type: 2}
   m_sharedMaterial: {fileID: 6264901535176047496, guid: fd776498105942e4e8eaa269251c0e45, type: 2}
@@ -4506,7 +4506,7 @@ GameObject:
   - component: {fileID: 741741647}
   - component: {fileID: 741741646}
   m_Layer: 3
-  m_Name: Salida
+  m_Name: Opcion3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4578,7 +4578,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 629680549}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ExitGame
+        m_MethodName: Level2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5574,7 +5574,7 @@ GameObject:
   - component: {fileID: 928138593}
   - component: {fileID: 928138592}
   m_Layer: 3
-  m_Name: Inicio
+  m_Name: Opcion1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5646,7 +5646,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 629680549}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Difficulty
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9597,7 +9597,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Inicio
+  m_text: "Opci\xF3n 1"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fd776498105942e4e8eaa269251c0e45, type: 2}
   m_sharedMaterial: {fileID: 6264901535176047496, guid: fd776498105942e4e8eaa269251c0e45, type: 2}
@@ -11574,7 +11574,7 @@ GameObject:
   - component: {fileID: 1775639637}
   - component: {fileID: 1775639636}
   m_Layer: 3
-  m_Name: Calibracion
+  m_Name: Opcion2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11646,7 +11646,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 629680549}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Calibrate
+        m_MethodName: Level1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12712,7 +12712,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Salida
+  m_text: "Opci\xF3n 3"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fd776498105942e4e8eaa269251c0e45, type: 2}
   m_sharedMaterial: {fileID: 6264901535176047496, guid: fd776498105942e4e8eaa269251c0e45, type: 2}

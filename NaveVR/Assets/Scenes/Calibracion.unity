@@ -2373,7 +2373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.22352941, g: 0.61960787, b: 1, a: 0.392}
+  m_Color: {r: 0.22352941, g: 0.61960787, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5419,7 +5419,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 205337461}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: Difficulty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

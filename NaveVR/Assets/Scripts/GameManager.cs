@@ -41,10 +41,34 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
 
+    public void Difficulty()
+    {
+        SceneManager.LoadScene("Dificultad");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene("Juego");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el juego
+    }
+
+    public void Level1()
+    {
+        SceneManager.LoadScene("Juego1");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el nivel
+    }
+
+    public void Level2()
+    {
+        SceneManager.LoadScene("Juego2");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el nivel
+    }
+
+    public void Level3()
+    {
+        SceneManager.LoadScene("Juego3");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el nivel
     }
 
     public void ExitGame()
