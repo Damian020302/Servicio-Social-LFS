@@ -161,17 +161,23 @@ public class GameManager : MonoBehaviour
 
         if (successPercentage > 0.7f) // 80% o más de éxito = Subir dificultad
         {
+            Debug.Log("Subiendo dificultad para la próxima ronda.");
             enemyLifetime = Mathf.Max(3f, enemyLifetime - 1.5f); // Menos tiempo para tocarlo
             timeSpawnInterval = Mathf.Max(0.5f, timeSpawnInterval - 0.2f); // Salen más rápido
             enemySpeed += 0.5f; // Caminan más rápido
         }
         else if (successPercentage < 0.5f) // 40% o menos = Bajar dificultad
         {
+            Debug.Log("Bajando dificultad para la próxima ronda.");
             enemyLifetime += 2f;
             timeSpawnInterval += 0.5f;
             enemySpeed = Mathf.Max(1f, enemySpeed - 0.5f);
         }
-        // Si está entre 41% y 79%, la dificultad se mantiene igual.
+        else
+        {
+            Debug.Log("Manteniendo dificultad para la próxima ronda.");
+        }
+        // Si está entre 49% y 70%, la dificultad se mantiene igual.
     }
 
     void ShowContinuePrompt()
