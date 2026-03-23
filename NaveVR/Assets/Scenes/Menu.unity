@@ -5646,7 +5646,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 629680549}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Difficulty
+        m_MethodName: Calibrate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

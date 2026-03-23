@@ -11,10 +11,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI countdownText;
     [Header("Continue Prompt")]
-    //public TextMeshProUGUI continueText;
     public GameObject continuePanel;
     public TextMeshProUGUI continueText;
-    //private int enemiesDestroyed;
     [Header("Variables del Juego")]
     private int score = 0;
     private int round = 1;
@@ -25,9 +23,6 @@ public class GameManager : MonoBehaviour
     public float enemyLifetime = 10.0f;
     public float timeSpawnInterval = 2.0f;
     public float enemySpeed = 2.0f;
-    /*private int countdown;
-    private bool continueYN;*/
-    //private int successRate;
 
     public void MainScene()
     {
@@ -51,24 +46,6 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Juego");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el juego
-    }
-
-    public void Level1()
-    {
-        SceneManager.LoadScene("Juego1");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el nivel
-    }
-
-    public void Level2()
-    {
-        SceneManager.LoadScene("Juego2");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el nivel
-    }
-
-    public void Level3()
-    {
-        SceneManager.LoadScene("Juego3");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el nivel
     }
 
     public void ExitGame()
@@ -100,21 +77,12 @@ public class GameManager : MonoBehaviour
         {
             countdownText.gameObject.SetActive(false);
         }
-        //continueText.gameObject.SetActive(false);
         StartCoroutine(CoundownRutine());
-        /*score = 0;
-        round = 1;
-        countdown = 5;
-        //enemiesDestroyed = 0;
-        continueYN = true;
-        UpdateScoreText();
-        UpdateRoundText();*/
     }
 
     IEnumerator CoundownRutine()
     {
         countdownText.gameObject.SetActive(true);
-        //int countdown = 5;
         for (int i = 5; i > 0; i--)
         {
             countdownText.text = i.ToString();
@@ -130,12 +98,6 @@ public class GameManager : MonoBehaviour
     {
         enemiesTouched = 0;
         enemiesExpired = 0;
-        /*EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
-        if(spawner != null)
-        {
-            spawner.StartGeneration(enemiesPerRound);
-        }
-        Debug.Log("Inicia la ronda " + round);*/
         StartCoroutine(SpawnWaveRoutine());
     }
 
@@ -163,7 +125,6 @@ public class GameManager : MonoBehaviour
     public void EnemyExpired()
     {
         enemiesExpired++;
-        //UpdateUI();
         CheckRoundEnd();
     }
 
@@ -201,7 +162,6 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Manteniendo dificultad para la próxima ronda.");
         }
-        // Si está entre 49% y 70%, la dificultad se mantiene igual.
     }
 
     void ShowContinuePrompt()
@@ -225,54 +185,13 @@ public class GameManager : MonoBehaviour
         continuePanel.SetActive(true);
         // Aquí podrías agregar lógica para terminar el juego o volver al menú principal
         Debug.Log("Juego terminado. Gracias por jugar.");
-        //UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu"); // Ejemplo de volver al menú
         SceneManager.LoadScene("Menu");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
-
-    /*public void NextRound()
-    {
-        continueText.gameObject.SetActive(false);
-        round++;
-        UpdateUI();
-        StartCoroutine(CoundownRutine());
-    }*/
 
     void UpdateUI()
     {
         scoreText.text = "Puntuacion: " + score;
         roundText.text = "Round\n" + round;
-        //UpdateScoreText();
-        //UpdateRoundText();
     }
-
-    /*public void ScorePoints(int points)
-    {
-        score += points;
-        UpdateScoreText();
-    }*/
-
-    /*public void EnemiesDestroyed(int count)
-    {
-        enemiesDestroyed += count;
-
-    }*/
-
-    /*void UpdateScoreText()
-    {
-        scoreText.text = "Puntuaci�n: " + score;
-    }*/
-
-    /* void UpdateRoundText()
-     {
-         roundText.text = "Round\n" + round;
-     }*/
-
-    /*void UpdateCountdownText()
-    {
-        for(int i = countdown; i > 0; i--)
-        {
-            countdownText.text = "" + i;
-        }
-    }*/
 }

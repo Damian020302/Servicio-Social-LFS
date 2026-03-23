@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] public GameObject enemyPrefab;
-    //[Tooltip("Range on the X-axis for spawning enemies around the spawner's position.")] public float rangeX = 1.0f;
     [Tooltip("Drag the Enemy Spawners")] public Transform[] enemySpawners;
 
     public void SpawnSingleEnemy()
@@ -20,40 +19,4 @@ public class EnemySpawner : MonoBehaviour
 
         Instantiate(enemyPrefab, selectedSpawner.position, selectedSpawner.rotation);
     }
-
-
-    /*public void StartGeneration(int enemies)
-    {
-        StartCoroutine(SpawnEnemies(enemies));
-    }
-
-    IEnumerator SpawnEnemies(int count)
-    {
-        for(int i = 0; i < count; i++)
-        {
-            float wait = 2.0f;
-            if(GameManager.Instance != null)
-            {
-                wait = GameManager.Instance.timeSpawnInterval;
-            }
-            yield return new WaitForSeconds(wait);
-            Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-rangeX, rangeX), 0, 0);
-            Instantiate(enemyPrefab, spawnPosition, transform.rotation);
-            //Instantiate(enemyPrefab, transform.position, transform.rotation);
-        }
-    }*/
-
-    //[SerializeField] private float enemyInterval;
-    /*public GameObject player;
-    private Vector3 offset;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        InvokeRepeating("spawnEnemy", enemyInterval, enemyInterval);
-    }
-
-    void spawnEnemy()
-    {
-        Instantiate(enemyPrefab, transform.position, transform.rotation);
-    }*/
 }

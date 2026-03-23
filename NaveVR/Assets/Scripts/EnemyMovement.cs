@@ -3,11 +3,12 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     public Transform player;
-    public float speed/* = 10.0f*/;
-    //private float timeToDestroy;
-    [Tooltip("Ventana de tiempo que el jugador tendra para destruir al enemigo")] public float timeToDestroy = 5.0f;
+    public float speed;
+    [Tooltip("Ventana de tiempo que el jugador tiene para destruir al enemigo")] public float timeToDestroy = 5.0f;
     private bool isStopped = false;
     private float waitTimer = 0.0f;
+
+    private float radioJugador;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,7 +16,6 @@ public class EnemyMovement : MonoBehaviour
         if(player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player").transform;
-            //return;
         }
         if(GameManager.Instance != null)
         {
@@ -27,10 +27,7 @@ public class EnemyMovement : MonoBehaviour
             speed = 3.0f;
             timeToDestroy = 5.0f;
         }
-        //player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-
-        //speed = Random.Range(1.0f, 5.0f);
-        //speed = 10.0f;
+        radioJugador = PlayerPrefs.GetFloat("RadioJugador", 0.7f);
     }
 
     // Update is called once per frame
@@ -43,8 +40,15 @@ public class EnemyMovement : MonoBehaviour
         if (!isStopped)
         {
             transform.LookAt(player);
-            transform.position += transform.forward * speed * Time.deltaTime;
-            //float distance = Vector3.Distance(transform.position, player.position);
+            float playerDistance = Vector3.Distance(transform.position, player.position);
+            if(playerDistance > radioJugador)
+            {
+                transform.position += transform.forward * speed * Time.deltaTime;
+            }
+            else
+            {
+                isStopped = true;
+            }
         }
         else
         { 
@@ -58,31 +62,5 @@ public class EnemyMovement : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-        /*transform.LookAt(player);
-        float distance = Vector3.Distance(transform.position, player.position);
-        if(distance > minDistance)
-        {
-            transform.position += transform.forward * speed * Time.deltaTime;
-        }*/
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        /*if(other.gameObject.tag == "Player")
-        {
-            Destroy(gameObject);
-        }*/
-        if(other.gameObject.tag == "Limit")
-        {
-            isStopped = true;
-        }
-    }
-
-    /*void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Limit")
-        {
-            Destroy(gameObject);
-        }
-    }*/
 }
