@@ -81,7 +81,7 @@ public class VRCalibration : MonoBehaviour
 
     void LoadNextScene()
     {
-        SceneManager.LoadScene("Juego");
+        SceneManager.LoadScene("Dificultad");
         Time.timeScale = 1.0f;
     }
 }

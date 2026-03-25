@@ -68,6 +68,8 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        enemySpeed = PlayerPrefs.GetFloat("EnemySpeed", 3.0f);
+        enemyLifetime = PlayerPrefs.GetFloat("EnemyLifetime", 10.0f);
         UpdateUI();
         if (continuePanel != null)
         {
