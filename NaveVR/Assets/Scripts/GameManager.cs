@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     [Header("Sistema de semiesfera")]
     private float maxRadius;
     public float actualRadius;
+    public bool roundOver = false;
 
     public void MainScene()
     {
@@ -108,6 +109,7 @@ public class GameManager : MonoBehaviour
     {
         enemiesTouched = 0;
         enemiesExpired = 0;
+        roundOver = false;
         StartCoroutine(SpawnWaveRoutine());
     }
 
@@ -143,6 +145,7 @@ public class GameManager : MonoBehaviour
         int totalEnemies = enemiesTouched + enemiesExpired;
         if (totalEnemies >= enemiesPerRound)
         {
+            roundOver = true;
             EvaluateDifficulty();
             ShowContinuePrompt();
         }

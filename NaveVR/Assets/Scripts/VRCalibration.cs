@@ -19,7 +19,7 @@ public class VRCalibration : MonoBehaviour
     {
         if(instructionText != null)
         {
-            instructionText.text = "Estira tu brazo sano lo más que puedas.\nSi puedes, haz el gesto de pellizco con tu pulgar e indice.";
+            instructionText.text = "Estira tu brazo sano lo mï¿½s que puedas.\nSi puedes, haz el gesto de pellizco con tu pulgar e indice.";
         }
     }
 
@@ -54,12 +54,12 @@ public class VRCalibration : MonoBehaviour
         {
             float extensionDistance = Vector3.Distance(playerCenter.position, referencePointL.position);
             float finalRadio = extensionDistance - 0.05f;
-            PlayerPrefs.SetFloat("RadioJugador", finalRadio);
+            PlayerPrefs.SetFloat("PlayerRadius", finalRadio);
             PlayerPrefs.Save();
             if(instructionText != null)
             {
-                instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
-                Debug.Log($"Calibración completa. Radio guardado: {finalRadio:F2}m");
+                instructionText.text = $"Calibraciï¿½n completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
+                Debug.Log($"Calibraciï¿½n completa. Radio guardado: {finalRadio:F2}m");
                 Invoke("LoadNextScene", 3f); // Espera 3 segundos antes de cargar la siguiente escena)
             }
         }
@@ -67,12 +67,12 @@ public class VRCalibration : MonoBehaviour
         {
             float extensionDistance = Vector3.Distance(playerCenter.position, referencePointR.position);
             float finalRadio = extensionDistance - 0.05f;
-            PlayerPrefs.SetFloat("RadioJugador", finalRadio);
+            PlayerPrefs.SetFloat("PlayerRadius", finalRadio);
             PlayerPrefs.Save();
             if (instructionText != null)
             {
-                instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
-                Debug.Log($"Calibración completa. Radio guardado: {finalRadio:F2}m");
+                instructionText.text = $"Calibraciï¿½n completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
+                Debug.Log($"Calibraciï¿½n completa. Radio guardado: {finalRadio:F2}m");
                 Invoke("LoadNextScene", 3f); // Espera 3 segundos antes de cargar la siguiente escena)
             }
         }

@@ -31,7 +31,7 @@ public class EnemyMovement : MonoBehaviour
             timeToDestroy = 5.0f;
             playerRadius = 0.7f;
         }
-        playerRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.7f);
+        //playerRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.7f);
     }
 
     // Update is called once per frame
