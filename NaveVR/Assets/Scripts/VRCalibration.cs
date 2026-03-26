@@ -36,7 +36,7 @@ public class VRCalibration : MonoBehaviour
                 SaveMaxDistance(1);
             }
         }
-        else if (ovrHandR != null && ovrHandR.IsTracked)
+        if (ovrHandR != null && ovrHandR.IsTracked)
         {
             bool isPinchingR = ovrHandR.GetFingerIsPinching(OVRHand.HandFinger.Index);
             if(isPinchingR)
@@ -66,7 +66,7 @@ public class VRCalibration : MonoBehaviour
         else if (hand == 2)
         {
             float extensionDistance = Vector3.Distance(playerCenter.position, referencePointR.position);
-            float finalRadio = extensionDistance - 0.5f;
+            float finalRadio = extensionDistance - 0.05f;
             PlayerPrefs.SetFloat("RadioJugador", finalRadio);
             PlayerPrefs.Save();
             if (instructionText != null)

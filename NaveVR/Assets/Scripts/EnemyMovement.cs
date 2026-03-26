@@ -7,8 +7,8 @@ public class EnemyMovement : MonoBehaviour
     [Tooltip("Ventana de tiempo que el jugador tiene para destruir al enemigo")] public float timeToDestroy = 5.0f;
     private bool isStopped = false;
     private float waitTimer = 0.0f;
-
-    private float radioJugador;
+    private float playerRadius;
+    private float scale;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,13 +21,17 @@ public class EnemyMovement : MonoBehaviour
         {
             speed = GameManager.Instance.enemySpeed;
             timeToDestroy = GameManager.Instance.enemyLifetime;
+            playerRadius = GameManager.Instance.actualRadius;
+            scale = GameManager.Instance.enemySize;
+            transform.localScale = new Vector3(scale, scale, scale);
         }
         else
         {
             speed = 3.0f;
             timeToDestroy = 5.0f;
+            playerRadius = 0.7f;
         }
-        radioJugador = PlayerPrefs.GetFloat("RadioJugador", 0.7f);
+        playerRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.7f);
     }
 
     // Update is called once per frame
@@ -41,7 +45,7 @@ public class EnemyMovement : MonoBehaviour
         {
             transform.LookAt(player);
             float playerDistance = Vector3.Distance(transform.position, player.position);
-            if(playerDistance > radioJugador)
+            if(playerDistance > playerRadius)
             {
                 transform.position += transform.forward * speed * Time.deltaTime;
             }

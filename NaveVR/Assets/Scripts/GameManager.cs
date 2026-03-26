@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     public float enemyLifetime = 10.0f;
     public float timeSpawnInterval = 2.0f;
     public float enemySpeed = 2.0f;
+    public float enemySize = 1.0f;
+    [Header("Sistema de semiesfera")]
+    private float maxRadius;
+    public float actualRadius;
 
     public void MainScene()
     {
@@ -70,6 +74,10 @@ public class GameManager : MonoBehaviour
     {
         enemySpeed = PlayerPrefs.GetFloat("EnemySpeed", 3.0f);
         enemyLifetime = PlayerPrefs.GetFloat("EnemyLifetime", 10.0f);
+        timeSpawnInterval = PlayerPrefs.GetFloat("TimeSpawnInterval", 2.0f);
+        enemySize = PlayerPrefs.GetFloat("EnemySize", 1.0f);
+        maxRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.7f);
+        actualRadius = 0.3f; // Comenzamos con un radio más pequeño para aumentar la dificultad gradualmente
         UpdateUI();
         if (continuePanel != null)
         {
@@ -152,6 +160,7 @@ public class GameManager : MonoBehaviour
             enemyLifetime = Mathf.Max(3f, enemyLifetime - 1.5f); // Menos tiempo para tocarlo
             timeSpawnInterval = Mathf.Max(0.5f, timeSpawnInterval - 0.2f); // Salen más rápido
             enemySpeed += 0.5f; // Caminan más rápido
+            actualRadius = Mathf.Min(actualRadius + 0.1f, maxRadius); // Aumenta el radio del jugador para hacerlo más difícil
         }
         else if (successPercentage < 0.5f) // 40% o menos = Bajar dificultad
         {

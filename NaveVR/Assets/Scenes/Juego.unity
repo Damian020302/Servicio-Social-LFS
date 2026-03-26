@@ -1385,14 +1385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5304c7d76da012649b0190f5c4f7f603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooting
-  hand: {fileID: 1822546942}
-  bulletPrefab: {fileID: 5815870493130946573, guid: 63160b465f68cb84db67d0b3424089a0, type: 3}
-  firePoint: {fileID: 0}
-  bulletSpeed: 20
-  fireRate: 0.5
-  nextFireTime: 0
-  spreadCount: 5
-  spreadAngle: 30
 --- !u!1 &251051689
 GameObject:
   m_ObjectHideFlags: 0
@@ -1594,14 +1586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5304c7d76da012649b0190f5c4f7f603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooting
-  hand: {fileID: 125004572}
-  bulletPrefab: {fileID: 5815870493130946573, guid: 63160b465f68cb84db67d0b3424089a0, type: 3}
-  firePoint: {fileID: 0}
-  bulletSpeed: 20
-  fireRate: 0.5
-  nextFireTime: 0
-  spreadCount: 5
-  spreadAngle: 30
 --- !u!1 &284370513
 GameObject:
   m_ObjectHideFlags: 0
@@ -7797,36 +7781,6 @@ MonoBehaviour:
   - {fileID: 1962314316}
   - {fileID: 1533722270}
   - {fileID: 585158012}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &1252607706
 Transform:
   m_ObjectHideFlags: 0
@@ -10459,6 +10413,8 @@ MonoBehaviour:
   enemyLifetime: 10
   timeSpawnInterval: 2
   enemySpeed: 2
+  enemySize: 1
+  actualRadius: 0
 --- !u!4 &1617407036
 Transform:
   m_ObjectHideFlags: 0
