@@ -19,7 +19,7 @@ public class VRCalibration : MonoBehaviour
     {
         if(instructionText != null)
         {
-            instructionText.text = "Estira tu brazo sano lo m�s que puedas.\nSi puedes, haz el gesto de pellizco con tu pulgar e indice.";
+            instructionText.text = "Estira tu brazo sano lo más que puedas.\nSi puedes, haz el gesto de pellizco con tu pulgar e indice.";
         }
     }
 

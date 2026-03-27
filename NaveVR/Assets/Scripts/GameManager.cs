@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
     void CheckRoundEnd()
     {
         int totalEnemies = enemiesTouched + enemiesExpired;
-        if (totalEnemies >= enemiesPerRound)
+        if (totalEnemies >= enemiesPerRound && !roundOver)
         {
             roundOver = true;
             EvaluateDifficulty();
@@ -159,11 +159,16 @@ public class GameManager : MonoBehaviour
 
         if (successPercentage > 0.7f) // 80% o más de éxito = Subir dificultad
         {
-            Debug.Log("Subiendo dificultad para la próxima ronda.");
             enemyLifetime = Mathf.Max(3f, enemyLifetime - 1.5f); // Menos tiempo para tocarlo
             timeSpawnInterval = Mathf.Max(0.5f, timeSpawnInterval - 0.2f); // Salen más rápido
             enemySpeed += 0.5f; // Caminan más rápido
-            actualRadius = Mathf.Min(actualRadius + 0.1f, maxRadius); // Aumenta el radio del jugador para hacerlo más difícil
+            float increase = 0.15f;
+            actualRadius = Mathf.Min(actualRadius + increase, maxRadius); // Aumenta el radio del jugador para hacerlo más difícil
+            if(maxRadius - actualRadius <= 0.01f)
+            {
+                actualRadius = maxRadius; // Asegura que no se pase del radio máximo
+            }
+            Debug.Log($"Subiendo dificultad para la próxima ronda. {actualRadius}");
         }
         else if (successPercentage < 0.5f) // 40% o menos = Bajar dificultad
         {
