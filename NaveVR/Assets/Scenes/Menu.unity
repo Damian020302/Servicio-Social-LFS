@@ -2765,11 +2765,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5304c7d76da012649b0190f5c4f7f603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooting
-  hand: {fileID: 952858628}
-  bulletPrefab: {fileID: 5815870493130946573, guid: 63160b465f68cb84db67d0b3424089a0, type: 3}
-  firePoint: {fileID: 1061009593}
-  bulletSpeed: 20
-  fireRate: 0.5
 --- !u!114 &471967067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3676,7 +3671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &629680549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3698,6 +3693,9 @@ MonoBehaviour:
   enemyLifetime: 10
   timeSpawnInterval: 2
   enemySpeed: 2
+  enemySize: 1
+  actualRadius: 0
+  roundOver: 0
 --- !u!4 &629680550
 Transform:
   m_ObjectHideFlags: 0
@@ -6759,11 +6757,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5304c7d76da012649b0190f5c4f7f603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooting
-  hand: {fileID: 458102415}
-  bulletPrefab: {fileID: 5815870493130946573, guid: 63160b465f68cb84db67d0b3424089a0, type: 3}
-  firePoint: {fileID: 674669968}
-  bulletSpeed: 20
-  fireRate: 0.5
 --- !u!114 &1073285177
 MonoBehaviour:
   m_ObjectHideFlags: 0
