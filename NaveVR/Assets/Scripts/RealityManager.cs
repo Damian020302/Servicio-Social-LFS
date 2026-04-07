@@ -10,13 +10,24 @@ public class RealityManager : MonoBehaviour
 
     private void Start()
     {
-        ActivateVR();
+        int savedReality = PlayerPrefs.GetInt("RealityMode", 0);
+        isMixedReality = (savedReality == 1);
+        if(isMixedReality)
+        {
+            ActivateMR();
+        }
+        else
+        {
+            ActivateVR();
+        }
     }
 
     public void AlternateReality()
     {
         isMixedReality = !isMixedReality;
-        if(isMixedReality)
+        PlayerPrefs.SetInt("RealityMode", isMixedReality ? 1 : 0);
+        PlayerPrefs.Save();
+        if (isMixedReality)
         {
             ActivateMR();
         }
@@ -28,7 +39,17 @@ public class RealityManager : MonoBehaviour
 
     void ActivateMR()
     {
-        passthroughLayer.hidden = false;
+        if(OVRManager.instance != null)
+        {
+            OVRManager.instance.isInsightPassthroughEnabled = true;
+            Debug.Log("Ya debería funcionar");
+        }
+
+        if(passthroughLayer != null)
+        {
+            passthroughLayer.enabled = true;
+            passthroughLayer.hidden = false;
+        }
         mainCamera.clearFlags = CameraClearFlags.SolidColor;
         mainCamera.backgroundColor = new Color(0,0,0,0);
         Debug.Log("Mixed Reality Activated");
@@ -36,7 +57,15 @@ public class RealityManager : MonoBehaviour
 
     void ActivateVR()
     {
-        passthroughLayer.hidden = true;
+        if(OVRManager.instance != null)
+        {
+            OVRManager.instance.isInsightPassthroughEnabled = false;
+        }
+        if (passthroughLayer != null)
+        {
+            passthroughLayer.enabled = false;
+            passthroughLayer.hidden = true;
+        }
         mainCamera.clearFlags = CameraClearFlags.Skybox;
         Debug.Log("Virtual Reality Activated");
     }
