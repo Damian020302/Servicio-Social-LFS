@@ -5280,7 +5280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9056604, g: 0.28622285, b: 0.3524884, a: 1}
+  m_Color: {r: 0.9056604, g: 0.28622285, b: 0.3524884, a: 0.7058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6899,7 +6899,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4620397, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.4620397, g: 1, b: 0, a: 0.7058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7171,7 +7171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2216981, g: 0.62144756, b: 1, a: 1}
+  m_Color: {r: 0.2216981, g: 0.62144756, b: 1, a: 0.7058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7979,7 +7979,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90d0466eba5fc0d41b7b47dfc2843f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 8715758816730475172, guid: 541580ea224c8684fa991cb65c629889, type: 3}
+  enemyPrefabs:
+  - {fileID: 8715758816730475172, guid: 541580ea224c8684fa991cb65c629889, type: 3}
+  - {fileID: 3420555239579643932, guid: 00c59269d5318254e8943f6d1ec3d7f6, type: 3}
   enemySpawners:
   - {fileID: 1639740345}
   - {fileID: 1424589859}
@@ -7996,6 +7998,7 @@ MonoBehaviour:
   - {fileID: 1173859407}
   - {fileID: 315872509}
   - {fileID: 615843232}
+  selectedEnemy: {fileID: 0}
 --- !u!4 &1252607706
 Transform:
   m_ObjectHideFlags: 0
