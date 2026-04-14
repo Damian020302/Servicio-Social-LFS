@@ -7980,16 +7980,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefabs:
-  - {fileID: 8760426288192570506, guid: 939c978d3648c214f942b89b58832f11, type: 3}
-  - {fileID: 181457601859185205, guid: 14a4f632d9542ae448efa4a24e4a2c4d, type: 3}
-  - {fileID: 7312410448949452927, guid: dee1948ea08a3014e85269cd1b40e6d5, type: 3}
-  - {fileID: 3369483972617532616, guid: 40da49ae49f040b4e8a3c2d446dcf62e, type: 3}
-  - {fileID: 181457601859185205, guid: 14a4f632d9542ae448efa4a24e4a2c4d, type: 3}
-  - {fileID: 181457601859185205, guid: 14a4f632d9542ae448efa4a24e4a2c4d, type: 3}
-  - {fileID: 181457601859185205, guid: 14a4f632d9542ae448efa4a24e4a2c4d, type: 3}
-  - {fileID: 181457601859185205, guid: 14a4f632d9542ae448efa4a24e4a2c4d, type: 3}
-  - {fileID: 181457601859185205, guid: 14a4f632d9542ae448efa4a24e4a2c4d, type: 3}
-  - {fileID: 181457601859185205, guid: 14a4f632d9542ae448efa4a24e4a2c4d, type: 3}
+  - {fileID: 875865236129242942, guid: aa92002764046e045897f732cb707898, type: 3}
+  - {fileID: 2812539507881227944, guid: 1da6a28a759cb0447ba9d79d959a34dc, type: 3}
+  - {fileID: 6577555757742526727, guid: 7f1e3ba8ec1459144bf334dc776ddaeb, type: 3}
+  - {fileID: 1464638333052537585, guid: c17d521046903bd4aa21e18a8d3fba1b, type: 3}
+  - {fileID: 8062431879973334311, guid: 5296b8fd4eb1e7f43b6272f682070e6e, type: 3}
+  - {fileID: 2441485045092562721, guid: 0a68f10c7ea607b43b7a37a3763e2952, type: 3}
+  - {fileID: 5045074876527213932, guid: a071202cf831a3141b6f93a8cd4aa7cc, type: 3}
+  - {fileID: 470411376550761925, guid: ddbbf7cfd9cff61449110476508c5aa1, type: 3}
+  - {fileID: 7668974278373799925, guid: 9e2bb4555c6b29b49939b9930dbdb18b, type: 3}
+  - {fileID: 6790040388008909486, guid: eddcc67f8a51a73468e9fafae1c3953f, type: 3}
   enemySpawners:
   - {fileID: 1639740345}
   - {fileID: 1424589859}
