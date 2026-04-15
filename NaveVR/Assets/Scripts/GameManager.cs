@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     [Header("UI")]
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI missText;
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI countdownText;
     [Header("Continue Prompt")]
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI continueText;
     [Header("Variables del Juego")]
     private int score = 0;
+    private int misses = 0;
     private int round = 1;
     public int enemiesPerRound = 10;
     private int enemiesTouched = 0;
@@ -136,7 +138,9 @@ public class GameManager : MonoBehaviour
 
     public void EnemyExpired()
     {
+        misses++;
         enemiesExpired++;
+        UpdateUI();
         CheckRoundEnd();
     }
 
@@ -211,6 +215,7 @@ public class GameManager : MonoBehaviour
     void UpdateUI()
     {
         scoreText.text = "Puntuacion: " + score;
-        roundText.text = "Round\n" + round;
+        missText.text = "Fallos: " + misses;
+        roundText.text = "Round " + round;
     }
 }

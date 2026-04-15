@@ -6,9 +6,10 @@ public class HandTouch : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            if(GameManager.Instance != null)
+            other.enabled = false; // Desactiva el collider del enemigo para evitar múltiples colisiones
+            if (GameManager.Instance != null && !GameManager.Instance.roundOver)
             {
-                GameManager.Instance.EnemyTouched(10); // Incrementa el contador de enemigos tocados
+                GameManager.Instance.EnemyTouched(1); // Incrementa el contador de enemigos tocados
             }
             Destroy(other.gameObject); // Destruye el objeto enemigo al tocarlo
         }
