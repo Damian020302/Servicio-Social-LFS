@@ -2,33 +2,92 @@ using UnityEngine;
 
 public class PuzzleManager : MonoBehaviour
 {
+    public GameObject victoria;
     [Header("Puzzle Pieces")]
     public Collider[] puzzlePieces; // Array to hold references to the puzzle piece colliders
     private int currentPieceIndex = 0; // Index to track the current active piece
 
+    [Header("Victory configuration")]
+    [Tooltip("Margin of error")]
+    public float victoryMargin = 12.0f; // Margin of error for victory condition
+
+    private Quaternion[] targetRotations; // Array to hold target rotations for each piece
+    private int actualActiveIndex = 0; // Index to track the actual active piece for victory condition
+    private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        victoria.SetActive(false); // Ensure the victory object is initially inactive
+        targetRotations = new Quaternion[puzzlePieces.Length];
         for(int i = 0; i < puzzlePieces.Length; i++)
         {
             if(puzzlePieces[i] != null)
             {
+                targetRotations[i] = puzzlePieces[i].transform.rotation; // Store the initial rotation as the target rotation
+                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
+                //puzzlePieces[i].transform.rotation = Quaternion.Euler(0, randomYRotation, 0); // Apply the random rotation
+                puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
                 puzzlePieces[i].enabled = (i == 0); // Disable all colliders at the start
+                
             }
         }
     }
 
     public void ActivatePiece(int index)
     {
-        if(puzzlePieces[currentPieceIndex] != null)
+        if(isVictoryAchieved)
+        {
+            Debug.Log("Victory already achieved. No more pieces can be activated.");
+            return; // Exit if victory has already been achieved
+        }
+        if (puzzlePieces[currentPieceIndex] != null)
         {
             puzzlePieces[currentPieceIndex].enabled = false; // Enable the collider for the specified piece
         }
         if(puzzlePieces[index] != null)
         {
             puzzlePieces[index].enabled = true; // Disable the collider for the current piece
+            actualActiveIndex = index; // Update the actual active index for victory condition
+                                       // Check for victory condition
         }
         currentPieceIndex = index; // Update the current piece index
         Debug.Log($"Activated piece: {index}"); // Log the activated piece index
+    }
+
+    public void Update()
+    {
+        if(isVictoryAchieved)
+        {
+            return; // Exit if victory has already been achieved
+        }
+        if(AlignVerification())
+        {
+            isVictoryAchieved = true; // Set victory flag to true
+            VictoryAchieved();
+            Debug.Log("Victory Achieved! All pieces are aligned.");
+        }
+    }
+
+    bool AlignVerification()
+    {
+        for(int i = 0; i < puzzlePieces.Length; i++)
+        {
+            if(puzzlePieces[i] != null)
+            {
+                float angleDifference = Quaternion.Angle(puzzlePieces[i].transform.rotation, targetRotations[i]);
+                if(angleDifference > victoryMargin)
+                {
+                    return false; // If any piece is not aligned within the margin, return false
+                }
+            }
+        }
+        return true; // All pieces are aligned within the margin
+    }
+
+    void VictoryAchieved()
+    {
+        victoria.SetActive(true); // Activate the victory object
+        // Implement your victory logic here
+        Debug.Log("Victory logic executed.");
     }
 }
