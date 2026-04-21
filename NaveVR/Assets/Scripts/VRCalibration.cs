@@ -58,7 +58,7 @@ public class VRCalibration : MonoBehaviour
             PlayerPrefs.Save();
             if(instructionText != null)
             {
-                instructionText.text = $"Calibraci�n completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
+                instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
                 Debug.Log($"Calibraci�n completa. Radio guardado: {finalRadio:F2}m");
                 Invoke("LoadNextScene", 3f); // Espera 3 segundos antes de cargar la siguiente escena)
             }
@@ -71,7 +71,7 @@ public class VRCalibration : MonoBehaviour
             PlayerPrefs.Save();
             if (instructionText != null)
             {
-                instructionText.text = $"Calibraci�n completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
+                instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
                 Debug.Log($"Calibraci�n completa. Radio guardado: {finalRadio:F2}m");
                 Invoke("LoadNextScene", 3f); // Espera 3 segundos antes de cargar la siguiente escena)
             }
