@@ -11,6 +11,9 @@ public class PuzzleManager : MonoBehaviour
     [Tooltip("Margin of error")]
     public float victoryMargin = 12.0f; // Margin of error for victory condition
 
+    [Header("Door Manager")]
+    public DoorManager doorManager; // Reference to the DoorManager script
+
     private Quaternion[] targetRotations; // Array to hold target rotations for each piece
     //private int actualActiveIndex = 0; // Index to track the actual active piece for victory condition
     private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
@@ -60,15 +63,46 @@ public class PuzzleManager : MonoBehaviour
         {
             return; // Exit if victory has already been achieved
         }
-        if(AlignVerification())
+        int correctPieces = GetCorrectPiecesCount();
+        float progress = 0.0f;
+        if(puzzlePieces.Length > 0)
         {
+            progress = (float)correctPieces / puzzlePieces.Length; // Calculate progress as a percentage
+        }
+        if (doorManager != null)
+        {
+            doorManager.UpdateOpening(progress); // Update the door opening based on progress
+        }
+        if(correctPieces == puzzlePieces.Length)
+        {
+            Debug.Log("All pieces are correctly aligned! Checking for victory condition...");
+        /*}
+        if (/*AlignVerification())
+        {*/
             isVictoryAchieved = true; // Set victory flag to true
             VictoryAchieved();
             Debug.Log("Victory Achieved! All pieces are aligned.");
         }
     }
 
-    bool AlignVerification()
+    private int GetCorrectPiecesCount()
+    {
+        int count = 0;
+        for(int i = 0; i < puzzlePieces.Length; i++)
+        {
+            if(puzzlePieces[i] != null)
+            {
+                float angleDifference = Quaternion.Angle(puzzlePieces[i].transform.rotation, targetRotations[i]);
+                if(angleDifference <= victoryMargin)
+                {
+                    count++; // Increment count if the piece is aligned within the margin
+                }
+            }
+        }
+        return count; // Return the total count of correctly aligned pieces
+    }
+
+    /*bool AlignVerification()
     {
         for(int i = 0; i < puzzlePieces.Length; i++)
         {
@@ -82,12 +116,15 @@ public class PuzzleManager : MonoBehaviour
             }
         }
         return true; // All pieces are aligned within the margin
-    }
+    }*/
 
     void VictoryAchieved()
     {
         victoria.SetActive(true); // Activate the victory object
-        // Implement your victory logic here
+        if(doorManager != null)
+        {
+            doorManager.UpdateOpening(1.0f); // Ensure the door is fully open on victory
+        }
         Debug.Log("Victory logic executed.");
     }
 }
