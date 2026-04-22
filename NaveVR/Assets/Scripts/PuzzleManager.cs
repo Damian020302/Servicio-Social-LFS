@@ -5,14 +5,14 @@ public class PuzzleManager : MonoBehaviour
     public GameObject victoria;
     [Header("Puzzle Pieces")]
     public Collider[] puzzlePieces; // Array to hold references to the puzzle piece colliders
-    private int currentPieceIndex = 0; // Index to track the current active piece
+    //private int currentPieceIndex = 0; // Index to track the current active piece
 
     [Header("Victory configuration")]
     [Tooltip("Margin of error")]
     public float victoryMargin = 12.0f; // Margin of error for victory condition
 
     private Quaternion[] targetRotations; // Array to hold target rotations for each piece
-    private int actualActiveIndex = 0; // Index to track the actual active piece for victory condition
+    //private int actualActiveIndex = 0; // Index to track the actual active piece for victory condition
     private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,13 +27,13 @@ public class PuzzleManager : MonoBehaviour
                 float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
                 //puzzlePieces[i].transform.rotation = Quaternion.Euler(0, randomYRotation, 0); // Apply the random rotation
                 puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
-                puzzlePieces[i].enabled = (i == 0); // Disable all colliders at the start
+                puzzlePieces[i].enabled = true; // Disable all colliders at the start
                 
             }
         }
     }
 
-    public void ActivatePiece(int index)
+    /*public void ActivatePiece(int index)
     {
         if(isVictoryAchieved)
         {
@@ -52,7 +52,7 @@ public class PuzzleManager : MonoBehaviour
         }
         currentPieceIndex = index; // Update the current piece index
         Debug.Log($"Activated piece: {index}"); // Log the activated piece index
-    }
+    }*/
 
     public void Update()
     {
