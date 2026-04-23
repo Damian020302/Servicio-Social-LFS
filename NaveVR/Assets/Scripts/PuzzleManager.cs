@@ -1,8 +1,10 @@
+using TMPro;
 using UnityEngine;
 
 public class PuzzleManager : MonoBehaviour
 {
     public GameObject victoria;
+    public GameObject derrota;
     [Header("Puzzle Pieces")]
     public Collider[] puzzlePieces; // Array to hold references to the puzzle piece colliders
     //private int currentPieceIndex = 0; // Index to track the current active piece
@@ -17,10 +19,15 @@ public class PuzzleManager : MonoBehaviour
     private Quaternion[] targetRotations; // Array to hold target rotations for each piece
     //private int actualActiveIndex = 0; // Index to track the actual active piece for victory condition
     private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    public float timer = 60.0f; // Timer for defeat condition (if needed)
+    public bool timerIsRunning = false; // Flag to track if the timer is running
+    public TextMeshProUGUI timeRemaining;
+
     void Start()
     {
         victoria.SetActive(false); // Ensure the victory object is initially inactive
+        derrota.SetActive(false); // Ensure the defeat object is initially inactive
         targetRotations = new Quaternion[puzzlePieces.Length];
         for(int i = 0; i < puzzlePieces.Length; i++)
         {
@@ -83,6 +90,29 @@ public class PuzzleManager : MonoBehaviour
             VictoryAchieved();
             Debug.Log("Victory Achieved! All pieces are aligned.");
         }
+        if(timerIsRunning)
+        {
+            if(timer > 0)
+            {
+                timer -= Time.deltaTime; // Decrease the timer by the time elapsed since the last frame
+                DisplayTime(timer); // Update the UI text with the remaining time
+            }
+            else
+            {
+                timer = 0;
+                timerIsRunning = false; // Stop the timer
+                DefeatAchieved(); // Trigger defeat logic
+                Debug.Log("Defeat Achieved! Time has run out.");
+            }
+        }
+    }
+
+    void DisplayTime(float timeToDisplay)
+    {
+        timeToDisplay += 1; // Add 1 second to account for the timer reaching 0
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60); // Calculate minutes
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60); // Calculate seconds
+        timeRemaining.text = "Tiempo restante: " + string.Format("{0:00}:{1:00}", minutes, seconds); // Update the UI text with formatted time
     }
 
     private int GetCorrectPiecesCount()
@@ -126,5 +156,11 @@ public class PuzzleManager : MonoBehaviour
             doorManager.UpdateOpening(1.0f); // Ensure the door is fully open on victory
         }
         Debug.Log("Victory logic executed.");
+    }
+
+    void DefeatAchieved()
+    {
+        derrota.SetActive(true); // Activate the defeat object
+        Debug.Log("Defeat logic executed.");
     }
 }
