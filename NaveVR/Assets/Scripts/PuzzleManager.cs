@@ -5,6 +5,8 @@ public class PuzzleManager : MonoBehaviour
 {
     public GameObject victoria;
     public GameObject derrota;
+    public GameObject yes;
+    public GameObject no;
     [Header("Puzzle Pieces")]
     public Collider[] puzzlePieces; // Array to hold references to the puzzle piece colliders
     //private int currentPieceIndex = 0; // Index to track the current active piece
@@ -26,8 +28,11 @@ public class PuzzleManager : MonoBehaviour
 
     void Start()
     {
+        yes.SetActive(false); // Ensure the yes object is initially inactive
+        no.SetActive(false); // Ensure the no object is initially inactive
         victoria.SetActive(false); // Ensure the victory object is initially inactive
         derrota.SetActive(false); // Ensure the defeat object is initially inactive
+        timerIsRunning = true; // Start the timer
         targetRotations = new Quaternion[puzzlePieces.Length];
         for(int i = 0; i < puzzlePieces.Length; i++)
         {
@@ -63,6 +68,23 @@ public class PuzzleManager : MonoBehaviour
         currentPieceIndex = index; // Update the current piece index
         Debug.Log($"Activated piece: {index}"); // Log the activated piece index
     }*/
+
+    void DefeatAchieved()
+    {
+        yes.SetActive(true); // Activate the yes object
+        no.SetActive(true); // Activate the no object
+        derrota.SetActive(true); // Activate the defeat object
+        
+        for(int i = 0; i < puzzlePieces.Length; i++)
+        {
+            if(puzzlePieces[i] != null)
+            {
+                puzzlePieces[i].gameObject.SetActive(false); // Deactivate all puzzle pieces
+            }
+        }
+
+        Debug.Log("Defeat logic executed.");
+    }
 
     public void Update()
     {
@@ -158,9 +180,5 @@ public class PuzzleManager : MonoBehaviour
         Debug.Log("Victory logic executed.");
     }
 
-    void DefeatAchieved()
-    {
-        derrota.SetActive(true); // Activate the defeat object
-        Debug.Log("Defeat logic executed.");
-    }
+    
 }
