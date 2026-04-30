@@ -1,12 +1,25 @@
-using TMPro;
 using UnityEngine;
+using TMPro;
+//using System.Collections;
+//using UnityEngine.SceneManagement;
 
 public class PuzzleManager : MonoBehaviour
 {
     public GameObject victoria;
     public GameObject derrota;
-    public GameObject yes;
-    public GameObject no;
+    public GameObject yesD;
+    public GameObject noD;
+    public GameObject yesV;
+    public GameObject noV;
+    [Header("UI")]
+    public TextMeshProUGUI dungeonText;
+    public TextMeshProUGUI timeRemainingText;
+    [Header("Variables")]
+    public int dungeon = 1;
+    private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
+    public float timer = 60.0f; // Timer for defeat condition (if needed)
+    public bool timerIsRunning = false; // Flag to track if the timer is running
+    public float initialTimerValue;
     [Header("Puzzle Pieces")]
     public Collider[] puzzlePieces; // Array to hold references to the puzzle piece colliders
     //private int currentPieceIndex = 0; // Index to track the current active piece
@@ -20,16 +33,14 @@ public class PuzzleManager : MonoBehaviour
 
     private Quaternion[] targetRotations; // Array to hold target rotations for each piece
     //private int actualActiveIndex = 0; // Index to track the actual active piece for victory condition
-    private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
     
-    public float timer = 60.0f; // Timer for defeat condition (if needed)
-    public bool timerIsRunning = false; // Flag to track if the timer is running
-    public TextMeshProUGUI timeRemaining;
+    
 
     void Start()
     {
-        yes.SetActive(false); // Ensure the yes object is initially inactive
-        no.SetActive(false); // Ensure the no object is initially inactive
+        initialTimerValue = timer; // Store the initial timer value for potential resets
+        yesD.SetActive(false); // Ensure the yes object is initially inactive
+        noD.SetActive(false); // Ensure the no object is initially inactive
         victoria.SetActive(false); // Ensure the victory object is initially inactive
         derrota.SetActive(false); // Ensure the defeat object is initially inactive
         timerIsRunning = true; // Start the timer
@@ -71,8 +82,8 @@ public class PuzzleManager : MonoBehaviour
 
     void DefeatAchieved()
     {
-        yes.SetActive(true); // Activate the yes object
-        no.SetActive(true); // Activate the no object
+        yesD.SetActive(true); // Activate the yes object
+        noD.SetActive(true); // Activate the no object
         derrota.SetActive(true); // Activate the defeat object
         
         for(int i = 0; i < puzzlePieces.Length; i++)
@@ -134,7 +145,7 @@ public class PuzzleManager : MonoBehaviour
         timeToDisplay += 1; // Add 1 second to account for the timer reaching 0
         float minutes = Mathf.FloorToInt(timeToDisplay / 60); // Calculate minutes
         float seconds = Mathf.FloorToInt(timeToDisplay % 60); // Calculate seconds
-        timeRemaining.text = "Tiempo restante: " + string.Format("{0:00}:{1:00}", minutes, seconds); // Update the UI text with formatted time
+        timeRemainingText.text = "Tiempo restante: " + string.Format("{0:00}:{1:00}", minutes, seconds); // Update the UI text with formatted time
     }
 
     private int GetCorrectPiecesCount()
@@ -180,5 +191,15 @@ public class PuzzleManager : MonoBehaviour
         Debug.Log("Victory logic executed.");
     }
 
+    public void OnClickYes()
+    {
+        dungeon++;
+        UpdateUI();
+    }
+
+    void UpdateUI()
+    {
+
+    }
     
 }
