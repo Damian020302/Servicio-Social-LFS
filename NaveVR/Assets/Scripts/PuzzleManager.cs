@@ -39,6 +39,8 @@ public class PuzzleManager : MonoBehaviour
     void Start()
     {
         initialTimerValue = timer; // Store the initial timer value for potential resets
+        yesV.SetActive(false); // Ensure the yes object is initially inactive
+        noV.SetActive(false);
         yesD.SetActive(false); // Ensure the yes object is initially inactive
         noD.SetActive(false); // Ensure the no object is initially inactive
         victoria.SetActive(false); // Ensure the victory object is initially inactive
@@ -183,6 +185,8 @@ public class PuzzleManager : MonoBehaviour
 
     void VictoryAchieved()
     {
+        yesV.SetActive(true); // Activate the yes object
+        noV.SetActive(true); // Activate the no object
         victoria.SetActive(true); // Activate the victory object
         if(doorManager != null)
         {
@@ -191,15 +195,69 @@ public class PuzzleManager : MonoBehaviour
         Debug.Log("Victory logic executed.");
     }
 
-    public void OnClickYes()
+    public void OnClickYesD()
+    {
+        yesD.SetActive(false); // Deactivate the yes object
+        noD.SetActive(false); // Deactivate the no object
+        derrota.SetActive(false); // Deactivate the defeat object
+        timer = initialTimerValue; // Reset the timer to its initial value
+        timerIsRunning = true; // Restart the timer
+        isVictoryAchieved = false; // Reset victory flag
+        for(int i = 0; i < puzzlePieces.Length; i++)
+        {
+            if(puzzlePieces[i] != null)
+            {
+                puzzlePieces[i].gameObject.SetActive(true); // Reactivate all puzzle pieces
+                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
+                puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
+            }
+        }
+        if(doorManager != null)
+        {
+            doorManager.UpdateOpening(0.0f); // Reset the door to closed position
+        }
+        Debug.Log("Restarting puzzle after defeat.");
+        UpdateUI(); // Update the UI to reflect the reset state
+    }
+
+    public void OnClickYesV()
     {
         dungeon++;
-        UpdateUI();
+        yesV.SetActive(false); // Deactivate the yes object
+        noV.SetActive(false); // Deactivate the no object
+        victoria.SetActive(false); // Deactivate the victory object
+        timer = initialTimerValue; // Reset the timer to its initial value
+        timerIsRunning = true; // Restart the timer
+        isVictoryAchieved = false; // Reset victory flag
+        for(int i = 0; i < puzzlePieces.Length; i++)
+        {
+            if(puzzlePieces[i] != null)
+            {
+                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
+                puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
+            }
+        }
+        if(doorManager != null)
+        {
+            doorManager.UpdateOpening(0.0f); // Reset the door to closed position
+        }
+        Debug.Log("Avanzando al calabozo " + dungeon + " después de la victoria.");
+        UpdateUI(); // Update the UI to reflect the new dungeon level
+    }
+
+    public void OnClickNo()
+    {
+        Debug.Log("Player chose not to restart after defeat. Implement additional logic if needed.");
+        
+        // Implement additional logic for when the player chooses not to restart, if necessary
     }
 
     void UpdateUI()
     {
-
+        if(dungeonText != null)
+        {
+            dungeonText.text = "Calabozo: " + dungeon; // Update the dungeon level text
+        }
     }
     
 }
