@@ -256,7 +256,7 @@ public class PuzzleManager : MonoBehaviour
     {
         if(dungeonText != null)
         {
-            dungeonText.text = "Calabozo: " + dungeon; // Update the dungeon level text
+            dungeonText.text = "Calabozo " + dungeon; // Update the dungeon level text
         }
     }
     

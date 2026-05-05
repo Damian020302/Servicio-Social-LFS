@@ -2207,6 +2207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!65 &316030546
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4457,10 +4458,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleManager
   victoria: {fileID: 1830701457}
   derrota: {fileID: 405864287}
-  yesD: {fileID: 1986871588}
-  noD: {fileID: 470638190}
-  yesV: {fileID: 0}
-  noV: {fileID: 0}
+  yesD: {fileID: 1716530242}
+  noD: {fileID: 302160164}
+  yesV: {fileID: 1986871588}
+  noV: {fileID: 470638190}
   dungeonText: {fileID: 335501687}
   timeRemainingText: {fileID: 237766582}
   dungeon: 1
@@ -6677,6 +6678,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!54 &808382879
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8391,6 +8393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!23 &1006774475
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8538,6 +8541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!65 &1010489414
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9099,6 +9103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!23 &1070112677
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10245,6 +10250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!23 &1211187943
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11104,6 +11110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!23 &1296914988
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11306,10 +11313,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleManager
   victoria: {fileID: 1830701457}
   derrota: {fileID: 405864287}
-  yesD: {fileID: 1986871588}
-  noD: {fileID: 470638190}
-  yesV: {fileID: 0}
-  noV: {fileID: 0}
+  yesD: {fileID: 1716530242}
+  noD: {fileID: 302160164}
+  yesV: {fileID: 1986871588}
+  noV: {fileID: 470638190}
   dungeonText: {fileID: 335501687}
   timeRemainingText: {fileID: 237766582}
   dungeon: 1
@@ -13657,6 +13664,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1672281947}
   - component: {fileID: 1672281946}
+  - component: {fileID: 1672281948}
   m_Layer: 0
   m_Name: Puzzle2
   m_TagString: Untagged
@@ -13678,10 +13686,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleManager
   victoria: {fileID: 1830701457}
   derrota: {fileID: 405864287}
-  yesD: {fileID: 1986871588}
-  noD: {fileID: 470638190}
-  yesV: {fileID: 0}
-  noV: {fileID: 0}
+  yesD: {fileID: 1716530242}
+  noD: {fileID: 302160164}
+  yesV: {fileID: 1986871588}
+  noV: {fileID: 470638190}
   dungeonText: {fileID: 335501687}
   timeRemainingText: {fileID: 237766582}
   dungeon: 1
@@ -13710,6 +13718,36 @@ Transform:
   - {fileID: 1296914990}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1672281948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672281945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a69b8ff519794dd49bd144d94e03ca72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzleManager
+  victoria: {fileID: 1830701457}
+  derrota: {fileID: 405864287}
+  yesD: {fileID: 1716530242}
+  noD: {fileID: 302160164}
+  yesV: {fileID: 1986871588}
+  noV: {fileID: 470638190}
+  dungeonText: {fileID: 335501687}
+  timeRemainingText: {fileID: 237766582}
+  dungeon: 1
+  timer: 50
+  timerIsRunning: 1
+  initialTimerValue: 0
+  puzzlePieces:
+  - {fileID: 808382874}
+  - {fileID: 1987597562}
+  - {fileID: 1010489414}
+  victoryMargin: 12
+  doorManager: {fileID: 1013593309}
 --- !u!1 &1673605995
 GameObject:
   m_ObjectHideFlags: 0
@@ -15570,6 +15608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!65 &1824336030
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17188,6 +17227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!65 &1987597562
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18640,6 +18680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025d90ea6547f074984a959e15a17822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatePuzzle
+  maxRotationPerInteraction: 90
 --- !u!23 &2146578970
 MeshRenderer:
   m_ObjectHideFlags: 0

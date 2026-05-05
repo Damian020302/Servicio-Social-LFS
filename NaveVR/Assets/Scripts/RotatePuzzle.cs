@@ -4,7 +4,6 @@ public class RotatePuzzle : MonoBehaviour
 {
     private bool isGrabbed = false;
     private Transform handInteraction;
-
     private Quaternion initialHandRotation;
     private Quaternion initialPuzzleRotation;
 
@@ -12,6 +11,10 @@ public class RotatePuzzle : MonoBehaviour
     private Vector3 pos;
     private float xRotation;
     private float yRotation;
+
+    [Header("Therapeutic Restriction")]
+    [Tooltip("Set the maximum rotation angle for each interaction")]
+    public float maxRotationPerInteraction = 90.0f;
 
     private void Start()
     {
@@ -26,7 +29,9 @@ public class RotatePuzzle : MonoBehaviour
         {
             // Calculate the rotation based on the hand's movement
             Quaternion difRotation = handInteraction.rotation * Quaternion.Inverse(initialHandRotation);
-            transform.rotation = difRotation * initialPuzzleRotation;
+            Quaternion targetRotation = difRotation * initialPuzzleRotation;
+            //transform.rotation = difRotation * initialPuzzleRotation;
+            transform.rotation = Quaternion.RotateTowards(initialPuzzleRotation, targetRotation, maxRotationPerInteraction);
             transform.position = pos;
             Vector3 blockedRotation = transform.localEulerAngles;
             blockedRotation.x = xRotation;
@@ -53,6 +58,7 @@ public class RotatePuzzle : MonoBehaviour
         {
             isGrabbed = false;
             handInteraction = null;
+            Debug.Log("Released. 90 degrees accomplished.");
         }
     }
 }
