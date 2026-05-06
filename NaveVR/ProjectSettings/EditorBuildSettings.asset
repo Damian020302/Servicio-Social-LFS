@@ -6,20 +6,35 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MenuGeneral.unity
+    guid: cd539ee35e43cde489270c829aee374b
+  - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: f29f65b2630a4a9499ab27a72d1f00c1
+  - enabled: 1
+    path: Assets/Scenes/Menu2.unity
+    guid: 4c0501d07780bf5438749c9bd10dccc2
   - enabled: 1
     path: Assets/Scenes/Calibracion.unity
     guid: 154363a38c6e49d4ea72569813eb7e6f
   - enabled: 1
-    path: Assets/Scenes/Enemigos.unity
-    guid: b3aaf3dee1df21f4d8e6dabc29a031ad
-  - enabled: 1
     path: Assets/Scenes/Dificultad.unity
     guid: cc56cee9adfa0db4495003f6737f8cd6
   - enabled: 1
+    path: Assets/Scenes/Enemigos.unity
+    guid: b3aaf3dee1df21f4d8e6dabc29a031ad
+  - enabled: 1
     path: Assets/Scenes/Juego.unity
     guid: 4ad93a2e764dfaa40ac78bb2de0f6c33
+  - enabled: 1
+    path: Assets/Scenes/Juego2Demo2.unity
+    guid: 9d0f9d8c107c37f48b17d9c6d19fa5fe
+  - enabled: 1
+    path: Assets/Scenes/Juego2Demo1.unity
+    guid: 9334a07d1b6360f44b6e988279f75d88
+  - enabled: 1
+    path: Assets/Scenes/Puzzles.unity
+    guid: bd18ca5c40a439645a9544bbc5aa209c
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 74bdebe8ddff10745bae83a1771a612a, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
