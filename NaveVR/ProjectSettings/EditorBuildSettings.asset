@@ -27,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Juego.unity
     guid: 4ad93a2e764dfaa40ac78bb2de0f6c33
   - enabled: 1
-    path: Assets/Scenes/Juego2Demo2.unity
+    path: Assets/Scenes/Juego2.unity
     guid: 9d0f9d8c107c37f48b17d9c6d19fa5fe
   - enabled: 1
     path: Assets/Scenes/Juego2Demo1.unity
