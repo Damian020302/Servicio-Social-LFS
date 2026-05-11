@@ -3918,8 +3918,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 629680550}
-  - component: {fileID: 629680549}
   - component: {fileID: 629680551}
+  - component: {fileID: 629680552}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3927,31 +3927,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &629680549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 629680548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c4dc88133923554e98f4aa7c50b10ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  scoreText: {fileID: 0}
-  missText: {fileID: 0}
-  roundText: {fileID: 0}
-  countdownText: {fileID: 0}
-  continuePanel: {fileID: 0}
-  continueText: {fileID: 0}
-  enemiesPerRound: 10
-  enemyLifetime: 10
-  timeSpawnInterval: 2
-  enemySpeed: 2
-  enemySize: 1
-  actualRadius: 0
-  roundOver: 0
 --- !u!4 &629680550
 Transform:
   m_ObjectHideFlags: 0
@@ -3981,6 +3956,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RealityManager
   mainCamera: {fileID: 159029307}
   passthroughLayer: {fileID: 591693384}
+--- !u!114 &629680552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629680548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b78a05252ff3c74391e792542e29af7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManagerPuzzle
 --- !u!1 &639625403
 GameObject:
   m_ObjectHideFlags: 0
@@ -4977,9 +4964,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 629680549}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ExitGame
+      - m_Target: {fileID: 629680552}
+        m_TargetAssemblyTypeName: GameManagerPuzzle, Assembly-CSharp
+        m_MethodName: MenuGeneral
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6045,9 +6032,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 629680549}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Calibrate
+      - m_Target: {fileID: 629680552}
+        m_TargetAssemblyTypeName: GameManagerPuzzle, Assembly-CSharp
+        m_MethodName: MainScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12042,7 +12029,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 629680549}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Calibrate
         m_Mode: 1

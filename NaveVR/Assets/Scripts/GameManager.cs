@@ -57,7 +57,8 @@ public class GameManager : MonoBehaviour
 
     public void ExitGame()
     {
-        Application.Quit();
+        SceneManager.LoadScene("MenuGeneral");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú general
     }
 
     private void Awake()

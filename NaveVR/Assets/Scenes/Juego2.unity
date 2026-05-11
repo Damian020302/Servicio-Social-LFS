@@ -1852,7 +1852,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 824793583}
+      - m_Target: {fileID: 634323022}
         m_TargetAssemblyTypeName: PuzzleManager, Assembly-CSharp
         m_MethodName: OnClickNo
         m_Mode: 1
@@ -3726,7 +3726,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 824793583}
+      - m_Target: {fileID: 634323022}
         m_TargetAssemblyTypeName: PuzzleManager, Assembly-CSharp
         m_MethodName: OnClickNo
         m_Mode: 1
@@ -4451,7 +4451,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 555871090}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a69b8ff519794dd49bd144d94e03ca72, type: 3}
   m_Name: 
@@ -4483,7 +4483,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 555871090}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
@@ -4492,7 +4492,7 @@ Transform:
   - {fileID: 1070112679}
   - {fileID: 2146578972}
   - {fileID: 316030543}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 634323023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &558532788
 GameObject:
@@ -5033,8 +5033,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 629680550}
-  - component: {fileID: 629680549}
   - component: {fileID: 629680551}
+  - component: {fileID: 629680552}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5042,31 +5042,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &629680549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 629680548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c4dc88133923554e98f4aa7c50b10ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  scoreText: {fileID: 0}
-  missText: {fileID: 0}
-  roundText: {fileID: 0}
-  countdownText: {fileID: 0}
-  continuePanel: {fileID: 0}
-  continueText: {fileID: 0}
-  enemiesPerRound: 10
-  enemyLifetime: 10
-  timeSpawnInterval: 2
-  enemySpeed: 2
-  enemySize: 1
-  actualRadius: 0
-  roundOver: 0
 --- !u!4 &629680550
 Transform:
   m_ObjectHideFlags: 0
@@ -5096,6 +5071,84 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RealityManager
   mainCamera: {fileID: 159029307}
   passthroughLayer: {fileID: 591693384}
+--- !u!114 &629680552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629680548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b78a05252ff3c74391e792542e29af7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManagerPuzzle
+--- !u!1 &634323021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 634323023}
+  - component: {fileID: 634323022}
+  m_Layer: 0
+  m_Name: PuzzleGeneral
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &634323022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634323021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a69b8ff519794dd49bd144d94e03ca72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzleManager
+  victoria: {fileID: 1830701457}
+  derrota: {fileID: 405864287}
+  yesD: {fileID: 1716530242}
+  noD: {fileID: 302160164}
+  yesV: {fileID: 1986871588}
+  noV: {fileID: 470638190}
+  dungeonText: {fileID: 335501687}
+  timeRemainingText: {fileID: 237766582}
+  dungeon: 1
+  timer: 120
+  timerIsRunning: 1
+  initialTimerValue: 0
+  puzzlePieces:
+  - {fileID: 808382874}
+  - {fileID: 1987597562}
+  - {fileID: 1010489414}
+  victoryMargin: 12
+  doorManager: {fileID: 1013593309}
+--- !u!4 &634323023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634323021}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 824793582}
+  - {fileID: 1672281947}
+  - {fileID: 1313114325}
+  - {fileID: 555871092}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &639625403
 GameObject:
   m_ObjectHideFlags: 0
@@ -6229,7 +6282,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 629680549}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
@@ -6888,7 +6941,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 824793581}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
@@ -6896,7 +6949,7 @@ Transform:
   - {fileID: 808382877}
   - {fileID: 1987597559}
   - {fileID: 1010489411}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 634323023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &824793583
 MonoBehaviour:
@@ -6905,7 +6958,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 824793581}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a69b8ff519794dd49bd144d94e03ca72, type: 3}
   m_Name: 
@@ -7516,7 +7569,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 629680549}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Calibrate
         m_Mode: 1
@@ -11306,7 +11359,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1313114323}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a69b8ff519794dd49bd144d94e03ca72, type: 3}
   m_Name: 
@@ -11335,13 +11388,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1313114323}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1824336027}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 634323023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1315603991
 GameObject:
@@ -13679,7 +13732,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672281945}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a69b8ff519794dd49bd144d94e03ca72, type: 3}
   m_Name: 
@@ -13709,14 +13762,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672281945}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1211187945}
   - {fileID: 1296914990}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 634323023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1672281948
 MonoBehaviour:
@@ -14273,7 +14326,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 824793583}
+      - m_Target: {fileID: 634323022}
         m_TargetAssemblyTypeName: PuzzleManager, Assembly-CSharp
         m_MethodName: OnClickYesD
         m_Mode: 1
@@ -14898,7 +14951,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 629680549}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Calibrate
         m_Mode: 1
@@ -17102,7 +17155,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 824793583}
+      - m_Target: {fileID: 634323022}
         m_TargetAssemblyTypeName: PuzzleManager, Assembly-CSharp
         m_MethodName: OnClickYesV
         m_Mode: 1
@@ -18764,10 +18817,7 @@ SceneRoots:
   - {fileID: 1641953632}
   - {fileID: 629680550}
   - {fileID: 591693386}
-  - {fileID: 824793582}
-  - {fileID: 1672281947}
-  - {fileID: 1313114325}
-  - {fileID: 555871092}
+  - {fileID: 634323023}
   - {fileID: 1806914862}
   - {fileID: 1013593308}
   - {fileID: 389332630}

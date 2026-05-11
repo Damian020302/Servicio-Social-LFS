@@ -1,5 +1,6 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 //using System.Collections;
 //using UnityEngine.SceneManagement;
 
@@ -247,9 +248,20 @@ public class PuzzleManager : MonoBehaviour
 
     public void OnClickNo()
     {
-        Debug.Log("Player chose not to restart after defeat. Implement additional logic if needed.");
-        
-        // Implement additional logic for when the player chooses not to restart, if necessary
+        SceneManager.LoadScene("Menu2");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
+    public void MenuGeneral()
+    {
+        SceneManager.LoadScene("MenuGeneral");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
+    public void MainScene()
+    {
+        SceneManager.LoadScene("Juego2");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
 
     void UpdateUI()
