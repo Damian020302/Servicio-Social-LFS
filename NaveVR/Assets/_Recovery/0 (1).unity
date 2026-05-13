@@ -3679,7 +3679,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 85, y: -20}
+  m_AnchoredPosition: {x: 85, y: -58}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &470638192
@@ -4467,7 +4467,6 @@ MonoBehaviour:
   puzzleAdmin: {fileID: 0}
   dungeon: 1
   difficulty: 0
-  winningStreak: 0
   timer: 50
   timerIsRunning: 1
   initialTimerValue: 0
@@ -5118,10 +5117,9 @@ MonoBehaviour:
   noV: {fileID: 470638190}
   dungeonText: {fileID: 335501687}
   timeRemainingText: {fileID: 237766582}
-  puzzleAdmin: {fileID: 634323021}
+  puzzleAdmin: {fileID: 0}
   dungeon: 1
   difficulty: 0
-  winningStreak: 0
   timer: 120
   timerIsRunning: 1
   initialTimerValue: 0
@@ -5813,8 +5811,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 15}
-  m_SizeDelta: {x: 0, y: 30}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &712873919
 MonoBehaviour:
@@ -6971,7 +6969,6 @@ MonoBehaviour:
   puzzleAdmin: {fileID: 0}
   dungeon: 1
   difficulty: 0
-  winningStreak: 0
   timer: 50
   timerIsRunning: 1
   initialTimerValue: 0
@@ -11347,7 +11344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1313114324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11371,7 +11368,6 @@ MonoBehaviour:
   puzzleAdmin: {fileID: 0}
   dungeon: 1
   difficulty: 0
-  winningStreak: 0
   timer: 50
   timerIsRunning: 1
   initialTimerValue: 0
@@ -13744,7 +13740,6 @@ MonoBehaviour:
   puzzleAdmin: {fileID: 0}
   dungeon: 1
   difficulty: 0
-  winningStreak: 0
   timer: 50
   timerIsRunning: 1
   initialTimerValue: 0
@@ -15774,7 +15769,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 345, y: 90}
+  m_SizeDelta: {x: 250, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1830701459
 MonoBehaviour:
@@ -17074,7 +17069,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -85, y: -20}
+  m_AnchoredPosition: {x: -85, y: -58}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1986871590

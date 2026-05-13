@@ -1,8 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-//using System.Collections;
-//using UnityEngine.SceneManagement;
 
 public class PuzzleManager : MonoBehaviour
 {
@@ -21,6 +19,7 @@ public class PuzzleManager : MonoBehaviour
     [Header("Level Variables")]
     public int dungeon = 1;
     public int difficulty = 0; // Variable to track the current difficulty level
+    public int winningStreak = 0;
     private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
     public float timer = 60.0f; // Timer for defeat condition (if needed)
     public bool timerIsRunning = false; // Flag to track if the timer is running
@@ -37,10 +36,23 @@ public class PuzzleManager : MonoBehaviour
     [Header("Door Manager")]
     public DoorManager doorManager; // Reference to the DoorManager script
 
-    
-    //private int actualActiveIndex = 0; // Index to track the actual active piece for victory condition
-    
-    
+    public void OnClickNo()
+    {
+        SceneManager.LoadScene("Menu2");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
+    public void MenuGeneral()
+    {
+        SceneManager.LoadScene("MenuGeneral");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
+    public void MainScene()
+    {
+        SceneManager.LoadScene("Juego2");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
 
     void Start()
     {
@@ -53,19 +65,6 @@ public class PuzzleManager : MonoBehaviour
         derrota.SetActive(false); // Ensure the defeat object is initially inactive
         timerIsRunning = true; // Start the timer
         DinamicPuzzle();
-        //targetRotations = new Quaternion[puzzlePieces.Length];
-        /*for(int i = 0; i < puzzlePieces.Length; i++)
-        {
-            if(puzzlePieces[i] != null)
-            {
-                targetRotations[i] = puzzlePieces[i].transform.rotation; // Store the initial rotation as the target rotation
-                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
-                //puzzlePieces[i].transform.rotation = Quaternion.Euler(0, randomYRotation, 0); // Apply the random rotation
-                puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
-                puzzlePieces[i].enabled = true; // Disable all colliders at the start
-                
-            }
-        }*/
     }
 
     void DinamicPuzzle()
@@ -93,27 +92,6 @@ public class PuzzleManager : MonoBehaviour
             puzzlePieces[i].enabled = true; // Enable the collider for each piece
         }
     }
-
-    /*public void ActivatePiece(int index)
-    {
-        if(isVictoryAchieved)
-        {
-            Debug.Log("Victory already achieved. No more pieces can be activated.");
-            return; // Exit if victory has already been achieved
-        }
-        if (puzzlePieces[currentPieceIndex] != null)
-        {
-            puzzlePieces[currentPieceIndex].enabled = false; // Enable the collider for the specified piece
-        }
-        if(puzzlePieces[index] != null)
-        {
-            puzzlePieces[index].enabled = true; // Disable the collider for the current piece
-            actualActiveIndex = index; // Update the actual active index for victory condition
-                                       // Check for victory condition
-        }
-        currentPieceIndex = index; // Update the current piece index
-        Debug.Log($"Activated piece: {index}"); // Log the activated piece index
-    }*/
 
     void DefeatAchieved()
     {
@@ -200,22 +178,6 @@ public class PuzzleManager : MonoBehaviour
         return count; // Return the total count of correctly aligned pieces
     }
 
-    /*bool AlignVerification()
-    {
-        for(int i = 0; i < puzzlePieces.Length; i++)
-        {
-            if(puzzlePieces[i] != null)
-            {
-                float angleDifference = Quaternion.Angle(puzzlePieces[i].transform.rotation, targetRotations[i]);
-                if(angleDifference > victoryMargin)
-                {
-                    return false; // If any piece is not aligned within the margin, return false
-                }
-            }
-        }
-        return true; // All pieces are aligned within the margin
-    }*/
-
     void VictoryAchieved()
     {
         yesV.SetActive(true); // Activate the yes object
@@ -236,17 +198,9 @@ public class PuzzleManager : MonoBehaviour
         timer = initialTimerValue; // Reset the timer to its initial value
         timerIsRunning = true; // Restart the timer
         isVictoryAchieved = false; // Reset victory flag
+        winningStreak = 0; // Reset winning streak on defeat
         difficulty--;
         DinamicPuzzle(); // Regenerate the puzzle with the updated difficulty level
-        /*for (int i = 0; i < puzzlePieces.Length; i++)
-        {
-            if(puzzlePieces[i] != null)
-            {
-                puzzlePieces[i].gameObject.SetActive(true); // Reactivate all puzzle pieces
-                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
-                puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
-            }
-        }*/
         if(doorManager != null)
         {
             doorManager.UpdateOpening(0.0f); // Reset the door to closed position
@@ -263,44 +217,27 @@ public class PuzzleManager : MonoBehaviour
         victoria.SetActive(false); // Deactivate the victory object
         if(timer >= (initialTimerValue * 0.5f))
         {
-            difficulty++; // Increase difficulty if the player won with more than 50% of the time remaining
+            winningStreak++;
+            if(winningStreak >= 2)
+            {
+                difficulty++; // Increase difficulty if the player won with more than 50% of the time remaining
+                winningStreak = 0; // Reset winning streak after increasing difficulty
+            }
+        }
+        else
+        {
+            winningStreak = 0; // Reset winning streak if the player won with less than 50% of the time remaining
         }
         timer = initialTimerValue; // Reset the timer to its initial value
         timerIsRunning = true; // Restart the timer
         isVictoryAchieved = false; // Reset victory flag
         DinamicPuzzle(); // Regenerate the puzzle with the updated difficulty level
-        /*for (int i = 0; i < puzzlePieces.Length; i++)
-        {
-            if(puzzlePieces[i] != null)
-            {
-                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
-                puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
-            }
-        }*/
         if(doorManager != null)
         {
             doorManager.UpdateOpening(0.0f); // Reset the door to closed position
         }
         Debug.Log("Avanzando al calabozo " + dungeon + " después de la victoria.");
         UpdateUI(); // Update the UI to reflect the new dungeon level*/
-    }
-
-    public void OnClickNo()
-    {
-        SceneManager.LoadScene("Menu2");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
-    }
-
-    public void MenuGeneral()
-    {
-        SceneManager.LoadScene("MenuGeneral");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
-    }
-
-    public void MainScene()
-    {
-        SceneManager.LoadScene("Juego2");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
 
     void UpdateUI()
@@ -310,5 +247,4 @@ public class PuzzleManager : MonoBehaviour
             dungeonText.text = "Calabozo " + dungeon; // Update the dungeon level text
         }
     }
-    
 }

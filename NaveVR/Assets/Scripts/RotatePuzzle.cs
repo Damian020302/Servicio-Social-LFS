@@ -30,7 +30,6 @@ public class RotatePuzzle : MonoBehaviour
             // Calculate the rotation based on the hand's movement
             Quaternion difRotation = handInteraction.rotation * Quaternion.Inverse(initialHandRotation);
             Quaternion targetRotation = difRotation * initialPuzzleRotation;
-            //transform.rotation = difRotation * initialPuzzleRotation;
             transform.rotation = Quaternion.RotateTowards(initialPuzzleRotation, targetRotation, maxRotationPerInteraction);
             transform.position = pos;
             Vector3 blockedRotation = transform.localEulerAngles;
