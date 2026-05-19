@@ -7,6 +7,11 @@ public class HandTouch : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             other.enabled = false; // Desactiva el collider del enemigo para evitar múltiples colisiones
+            EnemyMovement enemyMovement = other.GetComponent<EnemyMovement>();
+            if (enemyMovement != null)
+            {
+                enemyMovement.Pieces(); // Llama al método Pieces() del enemigo para que se destruya en partes
+            }
             if (GameManager.Instance != null && !GameManager.Instance.roundOver)
             {
                 GameManager.Instance.EnemyTouched(1); // Incrementa el contador de enemigos tocados

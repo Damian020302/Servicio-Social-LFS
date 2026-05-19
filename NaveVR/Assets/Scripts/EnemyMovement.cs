@@ -7,6 +7,8 @@ public class EnemyMovement : MonoBehaviour
     [Tooltip("Ventana de tiempo que el jugador tiene para destruir al enemigo")] public float timeToDestroy = 5.0f;
     private bool isStopped = false;
     private float waitTimer = 0.0f;
+    [Header("Effects")]
+    public GameObject destroyedEnemyPrefab;
     //private float playerRadius;
     private float scale;
 
@@ -69,6 +71,14 @@ public class EnemyMovement : MonoBehaviour
                 }
                 Destroy(gameObject);
             }
+        }
+    }
+
+    public void Pieces()
+    {
+        if(destroyedEnemyPrefab != null)
+        {
+            Instantiate(destroyedEnemyPrefab, transform.position, transform.rotation);
         }
     }
 }
