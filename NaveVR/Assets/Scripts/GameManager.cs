@@ -11,6 +11,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI missText;
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI countdownText;
+    [Header("Constant Warning")]
+    public TextMeshProUGUI warning;
+    public float warningBlinkSpeed = 5.0f;
+    public float warningScaleMultiplier = 1.2f;
+    private Coroutine warningCoroutine;
+    private Vector3 warningOriginalScale;
     [Header("Continue Prompt")]
     public GameObject continuePanel;
     public TextMeshProUGUI continueText;
@@ -91,6 +97,11 @@ public class GameManager : MonoBehaviour
         {
             countdownText.gameObject.SetActive(false);
         }
+        if (warning != null)
+        {
+            warningOriginalScale = warning.transform.localScale;
+            warning.gameObject.SetActive(false);
+        }
         StartCoroutine(CoundownRutine());
     }
 
@@ -113,6 +124,7 @@ public class GameManager : MonoBehaviour
         enemiesTouched = 0;
         enemiesExpired = 0;
         roundOver = false;
+        StartReminder();
         StartCoroutine(SpawnWaveRoutine());
     }
 
@@ -192,6 +204,7 @@ public class GameManager : MonoBehaviour
     {
         if (continuePanel != null)
         {
+            StopReminder();
             continuePanel.SetActive(true);
         }
     }
@@ -218,5 +231,41 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Puntuacion: " + score;
         missText.text = "Fallos: " + misses;
         roundText.text = "Round " + round;
+    }
+    
+    IEnumerator WarningAnimationRoutine(string message)
+    {
+        if(warning == null) yield break;
+        warning.text = message;
+        warning.gameObject.SetActive(true);
+        Color originalColor = warning.color;
+        float tiempo = 0.0f;
+        while(true)
+        {
+            tiempo += Time.deltaTime * warningBlinkSpeed;
+            float alpha = (Mathf.Sin(tiempo) + 1.0f) / 2.0f; // Oscila entre 0 y 1
+            Color nuevoColor = originalColor;
+            nuevoColor.a = Mathf.Lerp(0.5f, 1.0f, alpha); // Cambia la transparencia entre 50% y 100%
+            warning.color = nuevoColor;
+            float scaleMultiplier = Mathf.Lerp(1.0f, warningScaleMultiplier, alpha); // Cambia el tamaño entre 100% y el multiplicador
+            warning.transform.localScale = warningOriginalScale * scaleMultiplier;
+            yield return null;
+        }
+    }
+
+    public void StartReminder()
+    {
+        if(warningCoroutine != null) StopCoroutine(warningCoroutine);
+        warningCoroutine = StartCoroutine(WarningAnimationRoutine("Estírate para destruir las naves"));
+    }
+
+    public void StopReminder()
+    {
+        if (warningCoroutine != null)
+        {
+            StopCoroutine(warningCoroutine);
+            warningCoroutine = null;
+        }
+        if(warning != null) warning.gameObject.SetActive(false);
     }
 }
