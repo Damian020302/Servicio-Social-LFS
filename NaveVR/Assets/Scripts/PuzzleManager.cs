@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PuzzleManager : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class PuzzleManager : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI dungeonText;
     public TextMeshProUGUI timeRemainingText;
+    [Header("Constant Warning")]
+    public TextMeshProUGUI warning;
+    public float warningBlinkSpeed = 5.0f;
+    public float warningScaleMultiplier = 1.2f;
+    private Coroutine warningCoroutine;
+    private Vector3 warningOriginalScale;
     [Header("Puzzle Administrator")]
     public GameObject puzzleAdmin;
     [Header("Level Variables")]
@@ -65,6 +72,16 @@ public class PuzzleManager : MonoBehaviour
         derrota.SetActive(false); // Ensure the defeat object is initially inactive
         timerIsRunning = true; // Start the timer
         DinamicPuzzle();
+        if (warning != null)
+        {
+            warningOriginalScale = warning.transform.localScale;
+            if(warningOriginalScale == Vector3.zero)
+            {
+                warningOriginalScale = Vector3.one; // Fallback to a default scale if the original scale is not set
+            }
+            //warning.gameObject.SetActive(false);
+        }
+        StartReminder(); // Start the reminder animation
     }
 
     void DinamicPuzzle()
@@ -95,6 +112,7 @@ public class PuzzleManager : MonoBehaviour
 
     void DefeatAchieved()
     {
+        StopReminder(); // Stop any active reminders when defeat is achieved
         yesD.SetActive(true); // Activate the yes object
         noD.SetActive(true); // Activate the no object
         derrota.SetActive(true); // Activate the defeat object
@@ -185,6 +203,7 @@ public class PuzzleManager : MonoBehaviour
         victoria.SetActive(true); // Activate the victory object
         if(doorManager != null)
         {
+            StopReminder(); // Stop any active reminders when victory is achieved
             doorManager.UpdateOpening(1.0f); // Ensure the door is fully open on victory
         }
         Debug.Log("Victory logic executed.");
@@ -192,6 +211,7 @@ public class PuzzleManager : MonoBehaviour
 
     public void OnClickYesD()
     {
+        StartReminder();
         yesD.SetActive(false); // Deactivate the yes object
         noD.SetActive(false); // Deactivate the no object
         derrota.SetActive(false); // Deactivate the defeat object
@@ -211,6 +231,7 @@ public class PuzzleManager : MonoBehaviour
 
     public void OnClickYesV()
     {
+        StartReminder();
         dungeon++;
         yesV.SetActive(false); // Deactivate the yes object
         noV.SetActive(false); // Deactivate the no object
@@ -245,6 +266,48 @@ public class PuzzleManager : MonoBehaviour
         if(dungeonText != null)
         {
             dungeonText.text = "Calabozo " + dungeon; // Update the dungeon level text
+        }
+    }
+
+    IEnumerator WarningAnimationRoutine(string message)
+    {
+        if (warning == null) yield break;
+        warning.text = message;
+        warning.gameObject.SetActive(true);
+        Color originalColor = warning.color;
+        float tiempo = 0.0f;
+        while (true)
+        {
+            tiempo += Time.deltaTime * warningBlinkSpeed;
+            float alpha = (Mathf.Sin(tiempo) + 1.0f) / 2.0f; // Oscila entre 0 y 1
+            Color nuevoColor = originalColor;
+            nuevoColor.a = Mathf.Lerp(0.5f, 1.0f, alpha); // Cambia la transparencia entre 50% y 100%
+            warning.color = nuevoColor;
+            float scaleMultiplier = Mathf.Lerp(1.0f, warningScaleMultiplier, alpha); // Cambia el tamaño entre 100% y el multiplicador
+            warning.transform.localScale = warningOriginalScale * scaleMultiplier;
+            yield return null;
+        }
+    }
+
+    public void StartReminder()
+    {
+        if (warningCoroutine != null) StopCoroutine(warningCoroutine);
+        warningCoroutine = StartCoroutine(WarningAnimationRoutine("Rota tu muñeca en la pieza deseada"));
+    }
+
+    public void StopReminder()
+    {
+        if (warningCoroutine != null)
+        {
+            StopCoroutine(warningCoroutine);
+            warningCoroutine = null;
+        }
+        if (warning != null)
+        {
+            warning.gameObject.SetActive(false);
+            Color c = warning.color;
+            c.a = 1.0f; // Reset alpha to fully visible
+            warning.color = c;
         }
     }
 }
