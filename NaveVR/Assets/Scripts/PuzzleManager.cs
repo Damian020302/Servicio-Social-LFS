@@ -34,6 +34,7 @@ public class PuzzleManager : MonoBehaviour
     [Header("Puzzle Pieces")]
     private Collider[] puzzlePieces; // Array to hold references to the puzzle piece colliders
     private Quaternion[] targetRotations; // Array to hold target rotations for each piece
+    private System.Collections.Generic.Dictionary<Collider, Quaternion> perfectRotations = new System.Collections.Generic.Dictionary<Collider, Quaternion>(); // Dictionary to store perfect rotations for each piece
     //private int currentPieceIndex = 0; // Index to track the current active piece
 
     [Header("Victory configuration")]
@@ -63,6 +64,11 @@ public class PuzzleManager : MonoBehaviour
 
     void Start()
     {
+        Collider[] allPieces = puzzleAdmin.GetComponentsInChildren<Collider>(true); // Get all colliders from the puzzle pieces
+        foreach(Collider piece in allPieces)
+        {
+            perfectRotations.Add(piece, piece.transform.rotation); // Store the initial rotation as the perfect rotation for each piece
+        }
         initialTimerValue = timer; // Store the initial timer value for potential resets
         yesV.SetActive(false); // Ensure the yes object is initially inactive
         noV.SetActive(false);
@@ -100,10 +106,12 @@ public class PuzzleManager : MonoBehaviour
         int pieceCount = activePuzzle.transform.childCount;
         puzzlePieces = new Collider[pieceCount]; // Initialize the puzzle pieces array based on the number of pieces in the active puzzle
         targetRotations = new Quaternion[pieceCount];
-        for(int i = 0; i < pieceCount; i++)
+        for (int i = 0; i < pieceCount; i++)
         {
             puzzlePieces[i] = activePuzzle.transform.GetChild(i).GetComponent<Collider>(); // Get the collider component of each piece
-            targetRotations[i] = puzzlePieces[i].transform.rotation; // Store the initial rotation as the target rotation
+            //targetRotations[i] = puzzlePieces[i].transform.rotation; // Store the initial rotation as the target rotation
+            targetRotations[i] = perfectRotations[puzzlePieces[i]]; // Retrieve the perfect rotation from the dictionary
+            puzzlePieces[i].transform.rotation = targetRotations[i]; // Reset the piece to its perfect rotation
             float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
             puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
             puzzlePieces[i].enabled = true; // Enable the collider for each piece
