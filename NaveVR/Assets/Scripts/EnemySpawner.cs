@@ -1,5 +1,7 @@
 //using System.Collections;
 //using Oculus.Interaction.Editor;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -9,6 +11,8 @@ public class EnemySpawner : MonoBehaviour
     [Tooltip("Drag the Enemy Spawners")] public Transform[] enemySpawners;
 
     public GameObject selectedEnemy;
+    public AudioSource audioSource;
+    public AudioClip spawnSound;
 
     public void Start()
     {
@@ -43,6 +47,15 @@ public class EnemySpawner : MonoBehaviour
         }
         int randomIndex = Random.Range(0, enemySpawners.Length);
         Transform selectedSpawner = enemySpawners[randomIndex];
+        PlaySpawnSound();
         Instantiate(selectedEnemy, selectedSpawner.position, selectedSpawner.rotation);
+    }
+
+    public void PlaySpawnSound()
+    {
+        if (audioSource != null && spawnSound != null)
+        {
+            audioSource.PlayOneShot(spawnSound);
+        }
     }
 }
