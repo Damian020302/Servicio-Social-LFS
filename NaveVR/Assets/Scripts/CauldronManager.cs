@@ -5,10 +5,16 @@ using System.Collections;
 
 public class CauldronManager : MonoBehaviour
 {
+    [Header("Flexion/Extension Thresholds")]
+    public float flexionThreshold = 30.0f; // Ángulo mínimo para considerar una flexión
+    public float extensionThreshold = 30.0f; // Ángulo mínimo para considerar una extensión
     [Header("Wrist Flexion/Extension Counter")]
     public float flexionAngle = 0.0f;
     public float extensionAngle = 0.0f;
     private Quaternion neutralRotation;
+    private int completeExercises = 0;
+    private bool flexionCompleted = false;
+    private bool extensionCompleted = false;
     [Header("Constant Warning")]
     public TextMeshProUGUI warning;
     public float warningBlinkSpeed = 5.0f;
@@ -17,7 +23,8 @@ public class CauldronManager : MonoBehaviour
     private Vector3 warningOriginalScale;
     void Start()
     {
-        if(warning != null)
+        neutralRotation = transform.rotation;
+        if (warning != null)
         {
             warningOriginalScale = warning.transform.localScale;
             if(warningOriginalScale == Vector3.zero)
@@ -44,7 +51,32 @@ public class CauldronManager : MonoBehaviour
         {
             extensionAngle = Mathf.Abs(flexExtAngle);
         }
+        if(flexionAngle >= flexionThreshold/* && !flexionCompleted*/)
+        {
+            flexionCompleted = true;
+            Debug.Log("Flexión completa");
+        }
+        else if(extensionAngle >= extensionThreshold/* && !extensionCompleted*/)
+        {
+            extensionCompleted = true;
+            Debug.Log("Extensión completa");
+        }
+        if(flexionCompleted && extensionCompleted)
+        {
+            completeExercises++;
+            Debug.Log($"Ejercicio completo #{completeExercises}");
+            flexionCompleted = false;
+            extensionCompleted = false;
+        }
         Debug.Log($"Flexion: {flexionAngle:F1}° | Extension: {extensionAngle:F1}°");
+    }
+
+    public void RecalibrateNeutral()
+    {
+        neutralRotation = transform.rotation;
+        flexionCompleted = false;
+        extensionCompleted = false;
+        Debug.Log("Neutral recalibrado");
     }
 
     IEnumerator WarningAnimationRoutine(string message)
