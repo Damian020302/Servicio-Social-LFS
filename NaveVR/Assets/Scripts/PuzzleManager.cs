@@ -32,10 +32,10 @@ public class PuzzleManager : MonoBehaviour
     public bool timerIsRunning = false; // Flag to track if the timer is running
     public float initialTimerValue;
     [Header("Puzzle Pieces")]
-    private Collider[] puzzlePieces; // Array to hold references to the puzzle piece colliders
-    private Quaternion[] targetRotations; // Array to hold target rotations for each piece
     private System.Collections.Generic.Dictionary<Collider, Quaternion> perfectRotations = new System.Collections.Generic.Dictionary<Collider, Quaternion>(); // Dictionary to store perfect rotations for each piece
-    //private int currentPieceIndex = 0; // Index to track the current active piece
+    [Header("Phases")]
+    private System.Collections.Generic.List<Collider[]> puzzlePhases = new System.Collections.Generic.List<Collider[]>(); // Dictionary to store puzzles for each phase
+    private int actualPhase = 0; // Variable to track the current phase of the puzzle
 
     [Header("Victory configuration")]
     [Tooltip("Margin of error")]
@@ -85,7 +85,6 @@ public class PuzzleManager : MonoBehaviour
             {
                 warningOriginalScale = Vector3.one; // Fallback to a default scale if the original scale is not set
             }
-            //warning.gameObject.SetActive(false);
         }
         StartReminder(); // Start the reminder animation
     }
@@ -103,18 +102,37 @@ public class PuzzleManager : MonoBehaviour
                 activePuzzle = puzzleAdmin.transform.GetChild(i).gameObject; // Store reference to the active puzzle
             }
         }
-        int pieceCount = activePuzzle.transform.childCount;
-        puzzlePieces = new Collider[pieceCount]; // Initialize the puzzle pieces array based on the number of pieces in the active puzzle
-        targetRotations = new Quaternion[pieceCount];
-        for (int i = 0; i < pieceCount; i++)
+        puzzlePhases.Clear(); // Clear any existing phases
+        actualPhase = 0; // Reset to the first phase
+        int phases = activePuzzle.transform.childCount;
+        for (int f = 0; f < phases; f++)
         {
-            puzzlePieces[i] = activePuzzle.transform.GetChild(i).GetComponent<Collider>(); // Get the collider component of each piece
-            //targetRotations[i] = puzzlePieces[i].transform.rotation; // Store the initial rotation as the target rotation
-            targetRotations[i] = perfectRotations[puzzlePieces[i]]; // Retrieve the perfect rotation from the dictionary
-            puzzlePieces[i].transform.rotation = targetRotations[i]; // Reset the piece to its perfect rotation
-            float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
-            puzzlePieces[i].transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
-            puzzlePieces[i].enabled = true; // Enable the collider for each piece
+            Transform nPuzzle = activePuzzle.transform.GetChild(f);
+            int piecesInPhase = nPuzzle.childCount;
+            Collider[] phasePieces = new Collider[piecesInPhase];
+            for(int p = 0; p < piecesInPhase; p++)
+            {
+                Collider pieceCollider = nPuzzle.GetChild(p).GetComponent<Collider>();
+                phasePieces[p] = pieceCollider; // Store the collider for each piece in the current phase
+                pieceCollider.gameObject.SetActive(true); // Ensure the piece is active in the scene
+                Rigidbody rb = pieceCollider.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = false; // Make the pieces non-physical to prevent them from falling or being interacted with
+                    rb.angularVelocity = Vector3.zero; // Stop any existing angular velocity to prevent pieces from spinning
+                    rb.angularDamping = 15.0f; // Apply angular damping to gradually stop rotation
+                }
+                pieceCollider.transform.rotation = perfectRotations[pieceCollider]; // Reset the piece to its perfect rotation
+                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
+                pieceCollider.transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
+                pieceCollider.enabled = (f == 0); // Enable only the pieces of the first phase
+                RotatePuzzle scriptRotation = pieceCollider.GetComponent<RotatePuzzle>();
+                if (scriptRotation != null)
+                {
+                    scriptRotation.enabled = (f == 0); // Enable the RotatePuzzle script only for the pieces of the first phase
+                }
+            }
+            puzzlePhases.Add(phasePieces); // Add the current phase pieces to the list of phases
         }
     }
 
@@ -124,12 +142,15 @@ public class PuzzleManager : MonoBehaviour
         yesD.SetActive(true); // Activate the yes object
         noD.SetActive(true); // Activate the no object
         derrota.SetActive(true); // Activate the defeat object
-        
-        for(int i = 0; i < puzzlePieces.Length; i++)
+
+        foreach(Collider[] phase in puzzlePhases)
         {
-            if(puzzlePieces[i] != null)
+            foreach(Collider piece in phase)
             {
-                puzzlePieces[i].gameObject.SetActive(false); // Deactivate all puzzle pieces
+                if(piece != null)
+                {
+                    piece.gameObject.SetActive(false); // Deactivate all puzzle pieces
+                }
             }
         }
 
@@ -142,27 +163,61 @@ public class PuzzleManager : MonoBehaviour
         {
             return; // Exit if victory has already been achieved
         }
-        int correctPieces = GetCorrectPiecesCount();
-        float progress = 0.0f;
-        if(puzzlePieces != null && puzzlePieces.Length > 0)
+        Collider[] currentPhasePieces = puzzlePhases[actualPhase]; // Get the pieces for the current phase
+        int correctPieces = GetCorrectPiecesCount(currentPhasePieces);
+        if(doorManager != null && currentPhasePieces.Length > 0)
         {
-            progress = (float)correctPieces / puzzlePieces.Length; // Calculate progress as a percentage
-        }
-        if (doorManager != null)
-        {
+            float progress = (float)correctPieces / currentPhasePieces.Length; // Calculate progress as a percentage
             doorManager.UpdateOpening(progress); // Update the door opening based on progress
         }
-        if(puzzlePieces != null && correctPieces == puzzlePieces.Length)
+        if (correctPieces == currentPhasePieces.Length)
         {
-            Debug.Log("All pieces are correctly aligned! Checking for victory condition...");
-        /*}
-        if (/*AlignVerification())
-        {*/
-            isVictoryAchieved = true; // Set victory flag to true
-            VictoryAchieved();
-            Debug.Log("Victory Achieved! All pieces are aligned.");
+            foreach (Collider piece in currentPhasePieces)
+            {
+                if (piece != null)
+                {
+                    piece.enabled = false; // Disable the colliders for the current phase pieces
+                    Rigidbody rb = piece.GetComponent<Rigidbody>();
+                    if (rb != null)
+                    {
+                        rb.angularVelocity = Vector3.zero; // Stop any existing angular velocity to prevent pieces from spinning
+                        rb.isKinematic = true; // Make the pieces non-physical to prevent them from falling or being interacted with
+                    }
+                    RotatePuzzle scriptRotation = piece.GetComponent<RotatePuzzle>();
+                    if (scriptRotation != null)
+                    {
+                        scriptRotation.enabled = false; // Disable the RotatePuzzle script to prevent further interaction
+                    }
+                    piece.gameObject.SetActive(false); // Deactivate the pieces of the current phase to prevent further interaction
+                    piece.gameObject.SetActive(true); // Reactivate the pieces to ensure they remain visible but non-interactive
+                }
+            }
+            actualPhase++; // Move to the next phase
+            if (actualPhase >= puzzlePhases.Count)
+            {
+                Debug.Log("All pieces are correctly aligned! Checking for victory condition...");
+                isVictoryAchieved = true; // Set victory flag to true
+                VictoryAchieved();
+                Debug.Log("Victory Achieved! All pieces are aligned.");
+            }
+            else
+            {
+                Collider[] nextPhasePieces = puzzlePhases[actualPhase]; // Get the pieces for the next phase
+                foreach (Collider piece in nextPhasePieces)
+                {
+                    if (piece != null)
+                    {
+                        piece.enabled = true; // Enable the colliders for the next phase pieces
+                        RotatePuzzle scriptRotation = piece.GetComponent<RotatePuzzle>();
+                        if (scriptRotation != null)
+                        {
+                            scriptRotation.enabled = true; // Enable the RotatePuzzle script to allow interaction
+                        }
+                    }
+                }
+            }
         }
-        if(timerIsRunning)
+        if (timerIsRunning)
         {
             if(timer > 0)
             {
@@ -187,14 +242,15 @@ public class PuzzleManager : MonoBehaviour
         timeRemainingText.text = "Tiempo restante: " + string.Format("{0:00}:{1:00}", minutes, seconds); // Update the UI text with formatted time
     }
 
-    private int GetCorrectPiecesCount()
+    private int GetCorrectPiecesCount(Collider[] pieces)
     {
         int count = 0;
-        for(int i = 0; i < puzzlePieces.Length; i++)
+        for(int i = 0; i < pieces.Length; i++)
         {
-            if(puzzlePieces[i] != null)
+            if(pieces[i] != null)
             {
-                float angleDifference = Quaternion.Angle(puzzlePieces[i].transform.rotation, targetRotations[i]);
+                Quaternion target = perfectRotations[pieces[i]];
+                float angleDifference = Quaternion.Angle(pieces[i].transform.rotation, target);
                 if(angleDifference <= victoryMargin)
                 {
                     count++; // Increment count if the piece is aligned within the margin
