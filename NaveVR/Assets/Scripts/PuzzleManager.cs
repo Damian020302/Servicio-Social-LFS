@@ -165,10 +165,20 @@ public class PuzzleManager : MonoBehaviour
         }
         Collider[] currentPhasePieces = puzzlePhases[actualPhase]; // Get the pieces for the current phase
         int correctPieces = GetCorrectPiecesCount(currentPhasePieces);
-        if(doorManager != null && currentPhasePieces.Length > 0)
+        if(doorManager != null/* && currentPhasePieces.Length > 0*/)
         {
-            float progress = (float)correctPieces / currentPhasePieces.Length; // Calculate progress as a percentage
-            doorManager.UpdateOpening(progress); // Update the door opening based on progress
+            int totalLevelPieces = 0;
+            int totalCorrectPieces = 0;
+            foreach (Collider[] phase in puzzlePhases)
+            {
+                totalLevelPieces += phase.Length; // Count total pieces across all phases
+                totalCorrectPieces += GetCorrectPiecesCount(phase); // Count total correct pieces across all phases
+            }
+            if(totalLevelPieces > 0)
+            {
+                float progress = (float)totalCorrectPieces / totalLevelPieces; // Calculate overall progress as a percentage
+                doorManager.UpdateOpening(progress); // Update the door opening based on overall progress
+            }
         }
         if (correctPieces == currentPhasePieces.Length)
         {
