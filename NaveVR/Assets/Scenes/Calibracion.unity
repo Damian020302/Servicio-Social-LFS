@@ -462,6 +462,26 @@ Transform:
   - {fileID: 1524320887}
   m_Father: {fileID: 1360319358}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &38731209 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5106417804157790012, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1455508691}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &38731210 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9170937211371257168, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1455508691}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &38731211 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8702425413754196323, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1455508691}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &38731212 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6147449420076126351, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1455508691}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &39779197
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,6 +1808,9 @@ MonoBehaviour:
   missText: {fileID: 0}
   roundText: {fileID: 0}
   countdownText: {fileID: 0}
+  warning: {fileID: 0}
+  warningBlinkSpeed: 5
+  warningScaleMultiplier: 1.2
   continuePanel: {fileID: 0}
   continueText: {fileID: 0}
   enemiesPerRound: 10
@@ -10468,6 +10491,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4148778239110795873, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       insertIndex: 1
       addedObject: {fileID: 1455508696}
+    - targetCorrespondingSourceObject: {fileID: 4148778239110795873, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1455508697}
     - targetCorrespondingSourceObject: {fileID: 3903482225804038116, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1455508695}
@@ -10521,6 +10547,24 @@ MonoBehaviour:
   installationRoutineCheckpoint:
     _installationRoutineId: 2063f481-1b63-4eda-9ee8-a00df98536bc
     _installationVariants: []
+--- !u!114 &1455508697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455508694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df7f5b73cddbf84582b4be07f6428ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandConfigurator
+  leftHandInteraction: {fileID: 38731210}
+  leftHandVisuals: {fileID: 38731212}
+  leftHandAnchor: {fileID: 189375423}
+  rightHandInteraction: {fileID: 38731209}
+  rightHandVisuals: {fileID: 38731211}
+  rightHandAnchor: {fileID: 832431406}
 --- !u!1 &1455904906
 GameObject:
   m_ObjectHideFlags: 0

@@ -3976,11 +3976,16 @@ MonoBehaviour:
   noV: {fileID: 0}
   dungeonText: {fileID: 0}
   timeRemainingText: {fileID: 0}
+  warning: {fileID: 0}
+  warningBlinkSpeed: 5
+  warningScaleMultiplier: 1.2
+  puzzleAdmin: {fileID: 0}
   dungeon: 1
+  difficulty: 0
+  winningStreak: 0
   timer: 60
   timerIsRunning: 0
   initialTimerValue: 0
-  puzzlePieces: []
   victoryMargin: 12
   doorManager: {fileID: 0}
 --- !u!1 &639625403
@@ -6196,6 +6201,26 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.6778891, y: -3.0013652, z: -1.9480774}
     m_Extent: {x: 3.368389, y: 4.3300548, z: 5.2953033}
   m_DirtyAABB: 0
+--- !u!1 &934050251 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5106417804157790012, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1812633100}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &934050252 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9170937211371257168, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1812633100}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &934050253 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8702425413754196323, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1812633100}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &934050254 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6147449420076126351, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1812633100}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &938196479
 GameObject:
   m_ObjectHideFlags: 0
@@ -12257,6 +12282,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4148778239110795873, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       insertIndex: 1
       addedObject: {fileID: 1812633105}
+    - targetCorrespondingSourceObject: {fileID: 4148778239110795873, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1812633106}
     - targetCorrespondingSourceObject: {fileID: 3903482225804038116, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1812633104}
@@ -12310,6 +12338,24 @@ MonoBehaviour:
   installationRoutineCheckpoint:
     _installationRoutineId: 2063f481-1b63-4eda-9ee8-a00df98536bc
     _installationVariants: []
+--- !u!114 &1812633106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1812633103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df7f5b73cddbf84582b4be07f6428ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandConfigurator
+  leftHandInteraction: {fileID: 934050252}
+  leftHandVisuals: {fileID: 934050254}
+  leftHandAnchor: {fileID: 1073285174}
+  rightHandInteraction: {fileID: 934050251}
+  rightHandVisuals: {fileID: 934050253}
+  rightHandAnchor: {fileID: 1224339723}
 --- !u!1 &1815391350
 GameObject:
   m_ObjectHideFlags: 0
