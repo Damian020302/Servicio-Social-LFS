@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 2122639757272504470}
   - component: {fileID: 1077529180573255767}
   - component: {fileID: 2261481493460878333}
-  - component: {fileID: 1493047823510290597}
-  - component: {fileID: 1073607075927909129}
-  - component: {fileID: -4459889417562350316}
+  - component: {fileID: 8854929073809207109}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Bullet
@@ -94,55 +92,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &1493047823510290597
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5815870493130946573}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &1073607075927909129
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5815870493130946573}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &-4459889417562350316
+--- !u!114 &8854929073809207109
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,10 +101,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5815870493130946573}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 874c7fce86649924c93731da99c71978, type: 3}
+  m_Script: {fileID: 11500000, guid: 58996c368d2504b43ac9c18048c18e12, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  rb: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::Parabola
+  speed: 0
+  archHeight: 0
 --- !u!1 &8425580946080041988
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +115,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2210978295986902872}
-  - component: {fileID: 6591077787897927572}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -187,16 +137,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2122639757272504470}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6591077787897927572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8425580946080041988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 874c7fce86649924c93731da99c71978, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  rb: {fileID: 0}
