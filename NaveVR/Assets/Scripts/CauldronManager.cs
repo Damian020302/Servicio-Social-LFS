@@ -5,6 +5,11 @@ using System.Collections;
 
 public class CauldronManager : MonoBehaviour
 {
+    [Header("Wrist tracking")]
+    public Transform leftWrist;
+    public Transform rightWrist;
+    private Transform activeWrist;
+
     [Header("Buttons")]
     public GameObject victory;
     public GameObject defeat;
@@ -81,8 +86,8 @@ public class CauldronManager : MonoBehaviour
         noD.SetActive(false);
         victory.SetActive(false);
         defeat.SetActive(false);
-        timerIsRunning = true;
-        neutralRotation = transform.rotation;
+        //timerIsRunning = true;
+        //neutralRotation = transform.rotation;
         if (warning != null)
         {
             warningOriginalScale = warning.transform.localScale;
@@ -93,6 +98,32 @@ public class CauldronManager : MonoBehaviour
         }
         StartReminder();
         LevelConfig();
+        UpdateActiveWrist();
+        if(activeWrist != null)
+        {
+            neutralRotation = activeWrist.rotation;
+        }
+        else
+        {
+            Debug.LogError("No se ha asignado ninguna muñeca activa. Por favor, asigna una muñeca en el inspector.");
+        }
+    }
+
+    void UpdateActiveWrist()
+    {
+        if (leftWrist != null && leftWrist.gameObject.activeInHierarchy)
+        {
+            activeWrist = leftWrist;
+        }
+        else if (rightWrist != null && rightWrist.gameObject.activeInHierarchy)
+        {
+            activeWrist = rightWrist;
+        }
+        else
+        {
+            activeWrist = null;
+            Debug.LogError("No se ha asignado ninguna muñeca activa. Por favor, asigna una muñeca en el inspector.");
+        }
     }
 
     void LevelConfig()
@@ -123,9 +154,14 @@ public class CauldronManager : MonoBehaviour
         {
             return; // Evita que se ejecute el código de actualización si ya se ha logrado la victoria
         }
+        UpdateActiveWrist();
+        if (activeWrist == null)
+        {
+            return; // Evita que se ejecute el código de actualización si no hay una muñeca activa asignada00
+        }
         Vector3 forwardNeutral = neutralRotation * Vector3.forward;
         Vector3 rightNeutral = neutralRotation * Vector3.right;
-        float flexExtAngle = Vector3.SignedAngle(forwardNeutral, transform.forward, rightNeutral);
+        float flexExtAngle = Vector3.SignedAngle(forwardNeutral, activeWrist.forward, rightNeutral);
         flexionAngle = 0.0f;
         extensionAngle = 0.0f;
         if (flexExtAngle > 0)
@@ -218,10 +254,14 @@ public class CauldronManager : MonoBehaviour
 
     public void RecalibrateNeutral()
     {
-        neutralRotation = transform.rotation;
-        flexionCompleted = false;
-        extensionCompleted = false;
-        Debug.Log("Neutral recalibrado");
+        UpdateActiveWrist();
+        if(activeWrist != null)
+        {
+            neutralRotation = transform.rotation;
+            flexionCompleted = false;
+            extensionCompleted = false;
+            Debug.Log("Neutral recalibrado");
+        }
     }
 
     void DisplayTime(float timeToDisplay)
@@ -234,7 +274,7 @@ public class CauldronManager : MonoBehaviour
 
     void VictoryAchieved()
     {
-        //StopReminder();
+        StopReminder();
         yesV.SetActive(true);
         noV.SetActive(true);
         victory.SetActive(true);
@@ -324,7 +364,7 @@ public class CauldronManager : MonoBehaviour
     {
         if(cauldronText != null)
         {
-            cauldronText.text = "Calderos Completados: " + cauldron;
+            cauldronText.text = "Caldero " + cauldron;
         }
     }
 }
