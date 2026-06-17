@@ -5,6 +5,15 @@ using System.Collections;
 
 public class CauldronManager : MonoBehaviour
 {
+    public enum ExerciseState
+    {
+        WaitingForExtension,
+        WaitingForFlexion,
+        WatingForPotionToLand
+    }
+
+    private ExerciseState currentState = ExerciseState.WaitingForExtension;
+
     [Header("Wrist tracking")]
     public Transform leftWrist;
     public Transform rightWrist;
@@ -91,15 +100,15 @@ public class CauldronManager : MonoBehaviour
         if (warning != null)
         {
             warningOriginalScale = warning.transform.localScale;
-            if(warningOriginalScale == Vector3.zero)
+            if (warningOriginalScale == Vector3.zero)
             {
                 warningOriginalScale = Vector3.one;
             }
         }
-        StartReminder();
-        LevelConfig();
+        //StartReminder("Extiende tu muñeca para lanzar la poción");
         UpdateActiveWrist();
-        if(activeWrist != null)
+
+        if (activeWrist != null)
         {
             neutralRotation = activeWrist.rotation;
         }
@@ -107,6 +116,7 @@ public class CauldronManager : MonoBehaviour
         {
             Debug.LogError("No se ha asignado ninguna muñeca activa. Por favor, asigna una muñeca en el inspector.");
         }
+        LevelConfig();
     }
 
     void UpdateActiveWrist()
@@ -133,8 +143,11 @@ public class CauldronManager : MonoBehaviour
         timer = initialTimerValue;
         timerIsRunning = true;
         isVictoryAchieved = false;
-        flexionCompleted = false;
-        extensionCompleted = false;
+        if (currentPotion != null) Destroy(currentPotion);
+        currentState = ExerciseState.WaitingForExtension;
+        StartReminder("Extiende tu muñeca para tomar la poción");
+        //flexionCompleted = false;
+        //extensionCompleted = false;
         UpdateUI();
     }
 
@@ -150,15 +163,15 @@ public class CauldronManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isVictoryAchieved)
+        if (isVictoryAchieved || activeWrist == null)
         {
             return; // Evita que se ejecute el código de actualización si ya se ha logrado la victoria
         }
-        UpdateActiveWrist();
+        /*UpdateActiveWrist();
         if (activeWrist == null)
         {
             return; // Evita que se ejecute el código de actualización si no hay una muñeca activa asignada00
-        }
+        }*/
         Vector3 forwardNeutral = neutralRotation * Vector3.forward;
         Vector3 rightNeutral = neutralRotation * Vector3.right;
         float flexExtAngle = Vector3.SignedAngle(forwardNeutral, activeWrist.forward, rightNeutral);
@@ -172,37 +185,61 @@ public class CauldronManager : MonoBehaviour
         {
             extensionAngle = Mathf.Abs(flexExtAngle);
         }
-        if(flexionAngle >= flexionThreshold/* && !flexionCompleted*/)
+        if (currentState == ExerciseState.WaitingForExtension)
         {
-            flexionCompleted = true;
-            Debug.Log("Flexión completa");
-        }
-        else if(extensionAngle >= extensionThreshold/* && !extensionCompleted*/)
-        {
-            extensionCompleted = true;
-            Debug.Log("Extensión completa");
-        }
-        if(flexionCompleted && extensionCompleted)
-        {
-            if(currentPotion == null)
+            if (extensionAngle >= extensionThreshold)
             {
-                completeExercises++;
-                Debug.Log($"Ejercicio completo #{completeExercises}");
-                flexionCompleted = false;
-                extensionCompleted = false;
+                SpawnPotion();
+                /*currentState = ExerciseState.WaitingForFlexion;
+                StopReminder();
+                StartReminder("Flexiona tu muñeca para lanzar la poción");
+                Debug.Log("Extensión completa");*/
+            }
+        }
+        else if (currentState == ExerciseState.WaitingForFlexion)
+        {
+            if (flexionAngle >= flexionThreshold)
+            {
                 ThrowPotion();
+                /*currentState = ExerciseState.WatingForPotionToLand;
+                StopReminder();
+                Debug.Log("Flexión completa");
+                ThrowPotion();*/
             }
-            else
-            {
-                flexionCompleted = false;
-                extensionCompleted = false;
-            }
-            
         }
+        //if(flexionAngle >= flexionThreshold/* && !flexionCompleted*/)
+        //{
+        //    flexionCompleted = true;
+        //    StopReminder();
+        //    StartReminder("Flexiona tu muñeca para lanzar la poción");
+        //    Debug.Log("Flexión completa");
+        //}
+        //else if(extensionAngle >= extensionThreshold/* && !extensionCompleted*/)
+        //{
+        //    extensionCompleted = true;
+        //    Debug.Log("Extensión completa");
+        //}
+        //if(flexionCompleted/* && extensionCompleted*/)
+        //{
+        //    if(currentPotion == null)
+        //    {
+        //        completeExercises++;
+        //        Debug.Log($"Ejercicio completo #{completeExercises}");
+        //        flexionCompleted = false;
+        //        extensionCompleted = false;
+        //        ThrowPotion();
+        //    }
+        //    else
+        //    {
+        //        flexionCompleted = false;
+        //        extensionCompleted = false;
+        //    }
+        //    
+        //}
 
         if (timerIsRunning)
         {
-            if(timer > 0)
+            if (timer > 0)
             {
                 timer -= Time.deltaTime;
                 DisplayTime(timer);
@@ -219,15 +256,35 @@ public class CauldronManager : MonoBehaviour
         Debug.Log($"Flexion: {flexionAngle:F1}° | Extension: {extensionAngle:F1}°");
     }
 
+    void SpawnPotion()
+    {
+        if(prefabPotion != null && spawnPoint != null)
+        {
+            currentPotion = Instantiate(prefabPotion, spawnPoint.position, spawnPoint.rotation, spawnPoint);
+            currentPotion.transform.localScale = prefabPotion.transform.localScale;
+            currentState = ExerciseState.WaitingForFlexion;
+            StartReminder("Flexiona tu mano para lanzar la poción");
+            Debug.Log("Extensión completa, poción tomada");
+        }
+    }
+
     void ThrowPotion()
     { 
-        if(prefabPotion != null && spawnPoint != null && cauldronEndpoint != null)
+        if(prefabPotion != null && cauldronEndpoint != null)
         {
-            currentPotion = Instantiate(prefabPotion, spawnPoint.position, Quaternion.identity);
+            /*currentPotion = Instantiate(prefabPotion, spawnPoint.position, Quaternion.identity);
             //GameObject potion = Instantiate(prefabPotion, spawnPoint.position, Quaternion.identity);
             //Parabola parabola = potion.AddComponent<Parabola>();
+            */
+            completeExercises++;
+            currentPotion.transform.SetParent(null);
             Parabola parabola = currentPotion.GetComponent<Parabola>();
+            if(parabola == null)
+            {
+                parabola = currentPotion.AddComponent<Parabola>();
+            }
             parabola.Launch(spawnPoint.position, cauldronEndpoint.position, launchSpeed, launchHeight);
+            currentState = ExerciseState.WatingForPotionToLand;
             StartCoroutine(CheckPotionLanded(currentPotion));
         }        
     }
@@ -249,6 +306,11 @@ public class CauldronManager : MonoBehaviour
                 timerIsRunning = false;
                 VictoryAchieved();
             }
+            else
+            {
+                currentState = ExerciseState.WaitingForExtension;
+                StartReminder("Extiende tu muñeca para tomar la poción");
+            }
         }
     }
 
@@ -258,8 +320,8 @@ public class CauldronManager : MonoBehaviour
         if(activeWrist != null)
         {
             neutralRotation = transform.rotation;
-            flexionCompleted = false;
-            extensionCompleted = false;
+            //flexionCompleted = false;
+            //extensionCompleted = false;
             Debug.Log("Neutral recalibrado");
         }
     }
@@ -283,7 +345,8 @@ public class CauldronManager : MonoBehaviour
     
     public void OnClickYesD()
     {
-        StartReminder();
+        StopReminder();
+        StartReminder("Extiende tu muñeca para lanzar la poción");
         yesD.SetActive(false);
         noD.SetActive(false);
         defeat.SetActive(false);
@@ -297,7 +360,8 @@ public class CauldronManager : MonoBehaviour
 
     public void OnClickYesV()
     {
-        StartReminder();
+        StopReminder();
+        StartReminder("Extiende tu muñeca para lanzar la poción");
         cauldron++;
         yesV.SetActive(false);
         noV.SetActive(false);
@@ -338,10 +402,10 @@ public class CauldronManager : MonoBehaviour
         }
     }
 
-    public void StartReminder()
+    public void StartReminder(string message)
     {
         if (warningCoroutine != null) StopCoroutine(warningCoroutine);
-        warningCoroutine = StartCoroutine(WarningAnimationRoutine("Flexiona y extiende tu muñeca para lanzar el ingrediente"));
+        warningCoroutine = StartCoroutine(WarningAnimationRoutine(message));
     }
 
     public void StopReminder()
