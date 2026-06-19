@@ -5003,6 +5003,7 @@ MonoBehaviour:
   vrCamera: {fileID: 566137485}
   vrRig: {fileID: 1455508692}
   targetHeadPosition: {fileID: 1751244247}
+  fadeOutTime: 1
   delayBeforeCalibration: 0.5
 --- !u!4 &658462628
 Transform:

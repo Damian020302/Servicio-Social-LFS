@@ -67,6 +67,9 @@ public class CauldronManager : MonoBehaviour
     public bool timerIsRunning = false;
     public float initialTimerValue;
 
+    [Header("Wand Manager")]
+    public WandManager wandManager;
+
     public int basePotionsNeeded = 1;
     private int currentPotionsNeeded;
     private int potionsThrown = 0;
@@ -148,6 +151,10 @@ public class CauldronManager : MonoBehaviour
         StartReminder("Extiende tu muñeca para tomar la poción");
         //flexionCompleted = false;
         //extensionCompleted = false;
+        if(wandManager != null)
+        {
+            wandManager.UpdateRotation(0.0f);
+        }
         UpdateUI();
     }
 
@@ -185,8 +192,10 @@ public class CauldronManager : MonoBehaviour
         {
             extensionAngle = Mathf.Abs(flexExtAngle);
         }
+        float currentProgress = 0.0f;
         if (currentState == ExerciseState.WaitingForExtension)
         {
+            currentProgress = Mathf.Clamp01(extensionAngle / extensionThreshold);
             if (extensionAngle >= extensionThreshold)
             {
                 SpawnPotion();
@@ -198,6 +207,7 @@ public class CauldronManager : MonoBehaviour
         }
         else if (currentState == ExerciseState.WaitingForFlexion)
         {
+            currentProgress = Mathf.Clamp01(flexionAngle / flexionThreshold);
             if (flexionAngle >= flexionThreshold)
             {
                 ThrowPotion();
@@ -206,6 +216,14 @@ public class CauldronManager : MonoBehaviour
                 Debug.Log("Flexión completa");
                 ThrowPotion();*/
             }
+        }
+        else if (currentState == ExerciseState.WatingForPotionToLand)
+        {
+            currentProgress = 0.0f; // No se muestra progreso mientras la poción está en el aire
+        }
+        if(wandManager != null)
+        {
+            wandManager.UpdateRotation(currentProgress);
         }
         //if(flexionAngle >= flexionThreshold/* && !flexionCompleted*/)
         //{
@@ -319,7 +337,7 @@ public class CauldronManager : MonoBehaviour
         UpdateActiveWrist();
         if(activeWrist != null)
         {
-            neutralRotation = transform.rotation;
+            neutralRotation = activeWrist.rotation;
             //flexionCompleted = false;
             //extensionCompleted = false;
             Debug.Log("Neutral recalibrado");

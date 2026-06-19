@@ -5024,8 +5024,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PuzzleManager, Assembly-CSharp
+      - m_Target: {fileID: 629680552}
+        m_TargetAssemblyTypeName: CauldronManager, Assembly-CSharp
         m_MethodName: MenuGeneral
         m_Mode: 1
         m_Arguments:
@@ -6094,7 +6094,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 629680552}
         m_TargetAssemblyTypeName: CauldronManager, Assembly-CSharp
-        m_MethodName: Game3
+        m_MethodName: MainScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6591,6 +6591,7 @@ MonoBehaviour:
   vrCamera: {fileID: 1984156590}
   vrRig: {fileID: 1812633101}
   targetHeadPosition: {fileID: 30683475}
+  fadeOutTime: 1
   delayBeforeCalibration: 0.5
 --- !u!4 &958639504
 Transform:
