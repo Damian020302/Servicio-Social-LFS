@@ -5586,6 +5586,7 @@ MonoBehaviour:
   timer: 120
   timerIsRunning: 1
   initialTimerValue: 0
+  actualPhase: 0
   victoryMargin: 12
   doorManager: {fileID: 1013593309}
 --- !u!4 &634323023
@@ -9005,7 +9006,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1461198043}
@@ -11453,7 +11454,7 @@ GameObject:
   - component: {fileID: 1314162117}
   - component: {fileID: 1314162116}
   m_Layer: 5
-  m_Name: Warning
+  m_Name: Int
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11498,7 +11499,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Rota tu mu\xF1eca en la pieza deseada"
+  m_text: "Rota tu mu\xF1eca en la runa interior"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

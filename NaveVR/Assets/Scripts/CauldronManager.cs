@@ -192,10 +192,10 @@ public class CauldronManager : MonoBehaviour
         {
             extensionAngle = Mathf.Abs(flexExtAngle);
         }
-        float currentProgress = 0.0f;
+        float targetWandState = 0.0f;
         if (currentState == ExerciseState.WaitingForExtension)
         {
-            currentProgress = Mathf.Clamp01(extensionAngle / extensionThreshold);
+            targetWandState = 0.0f;
             if (extensionAngle >= extensionThreshold)
             {
                 SpawnPotion();
@@ -207,7 +207,7 @@ public class CauldronManager : MonoBehaviour
         }
         else if (currentState == ExerciseState.WaitingForFlexion)
         {
-            currentProgress = Mathf.Clamp01(flexionAngle / flexionThreshold);
+            targetWandState = 1.0f;
             if (flexionAngle >= flexionThreshold)
             {
                 ThrowPotion();
@@ -219,11 +219,11 @@ public class CauldronManager : MonoBehaviour
         }
         else if (currentState == ExerciseState.WatingForPotionToLand)
         {
-            currentProgress = 0.0f; // No se muestra progreso mientras la poción está en el aire
+            targetWandState = 0.0f; // No se muestra progreso mientras la poción está en el aire
         }
         if(wandManager != null)
         {
-            wandManager.UpdateRotation(currentProgress);
+            wandManager.UpdateRotation(targetWandState);
         }
         //if(flexionAngle >= flexionThreshold/* && !flexionCompleted*/)
         //{

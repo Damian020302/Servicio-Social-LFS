@@ -1,7 +1,9 @@
+using NUnit.Framework;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
+using static Unity.Collections.Unicode;
 
 public class PuzzleManager : MonoBehaviour
 {
@@ -35,7 +37,7 @@ public class PuzzleManager : MonoBehaviour
     private System.Collections.Generic.Dictionary<Collider, Quaternion> perfectRotations = new System.Collections.Generic.Dictionary<Collider, Quaternion>(); // Dictionary to store perfect rotations for each piece
     [Header("Phases")]
     private System.Collections.Generic.List<Collider[]> puzzlePhases = new System.Collections.Generic.List<Collider[]>(); // Dictionary to store puzzles for each phase
-    private int actualPhase = 0; // Variable to track the current phase of the puzzle
+    public int actualPhase = 0; // Variable to track the current phase of the puzzle
 
     [Header("Victory configuration")]
     [Tooltip("Margin of error")]
@@ -86,7 +88,7 @@ public class PuzzleManager : MonoBehaviour
                 warningOriginalScale = Vector3.one; // Fallback to a default scale if the original scale is not set
             }
         }
-        StartReminder(); // Start the reminder animation
+        UpdateReminderMessage();
     }
 
     void DinamicPuzzle()
@@ -225,6 +227,7 @@ public class PuzzleManager : MonoBehaviour
                         }
                     }
                 }
+                UpdateReminderMessage();
             }
         }
         if (timerIsRunning)
@@ -285,7 +288,6 @@ public class PuzzleManager : MonoBehaviour
 
     public void OnClickYesD()
     {
-        StartReminder();
         yesD.SetActive(false); // Deactivate the yes object
         noD.SetActive(false); // Deactivate the no object
         derrota.SetActive(false); // Deactivate the defeat object
@@ -301,11 +303,11 @@ public class PuzzleManager : MonoBehaviour
         }
         Debug.Log("Restarting puzzle after defeat.");
         UpdateUI(); // Update the UI to reflect the reset state
+        UpdateReminderMessage();
     }
 
     public void OnClickYesV()
     {
-        StartReminder();
         dungeon++;
         yesV.SetActive(false); // Deactivate the yes object
         noV.SetActive(false); // Deactivate the no object
@@ -333,6 +335,34 @@ public class PuzzleManager : MonoBehaviour
         }
         Debug.Log("Avanzando al calabozo " + dungeon + " después de la victoria.");
         UpdateUI(); // Update the UI to reflect the new dungeon level*/
+        UpdateReminderMessage();
+    }
+
+    void UpdateReminderMessage()
+    {
+        StopReminder();
+        if(actualPhase == 0)
+        {
+            if (difficulty > 0)
+            {
+                StartReminder("Rota tu muñeca en las runas interiores");
+            }
+            else
+            {
+                StartReminder("Rota tu muñeca en la runa interior");
+            }
+        }
+        else
+        {
+            if (difficulty > 0)
+            {
+                StartReminder("Rota tu muñeca en las runas exteriores");
+            }
+            else
+            {
+                StartReminder("Rota tu muñeca en la runa exterior");
+            }
+        }
     }
 
     void UpdateUI()
@@ -363,10 +393,14 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
-    public void StartReminder()
+    public void StartReminder(string message)
     {
         if (warningCoroutine != null) StopCoroutine(warningCoroutine);
-        warningCoroutine = StartCoroutine(WarningAnimationRoutine("Rota tu muñeca en la pieza deseada"));
+        warningCoroutine = StartCoroutine(WarningAnimationRoutine(message));
+        /*if(dungeon > 1)
+        {
+            warningCoroutine = StartCoroutine(WarningAnimationRoutine("Rota tu muñeca en las runas exteriores"));
+        }*/
     }
 
     public void StopReminder()
