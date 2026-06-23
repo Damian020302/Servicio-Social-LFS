@@ -60,7 +60,7 @@ public class PuzzleManager : MonoBehaviour
 
     public void MainScene()
     {
-        SceneManager.LoadScene("Juego2");
+        SceneManager.LoadScene("Calibracion2");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
 
@@ -264,9 +264,15 @@ public class PuzzleManager : MonoBehaviour
             {
                 Quaternion target = perfectRotations[pieces[i]];
                 float angleDifference = Quaternion.Angle(pieces[i].transform.rotation, target);
-                if(angleDifference <= victoryMargin)
+                bool isCorrect = (angleDifference <= victoryMargin);
+                RotatePuzzle scriptRotation = pieces[i].GetComponent<RotatePuzzle>();
+                if(scriptRotation != null)
                 {
-                    count++; // Increment count if the piece is aligned within the margin
+                    scriptRotation.ToggleLights(isCorrect); // Increment count if the piece is aligned within the margin
+                }
+                if(isCorrect)
+                {
+                    count++;
                 }
             }
         }

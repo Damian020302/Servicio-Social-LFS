@@ -16,11 +16,16 @@ public class RotatePuzzle : MonoBehaviour
     [Tooltip("Set the maximum rotation angle for each interaction")]
     public float maxRotationPerInteraction = 90.0f;
 
+    [Header("Victory Lights")]
+    private Light[] runeLights;
+
     private void Start()
     {
         pos = transform.position;
         xRotation = transform.localEulerAngles.x;
         yRotation = transform.localEulerAngles.y;
+        runeLights = GetComponentsInChildren<Light>(true);
+        ToggleLights(false);
     }
 
     private void Update()
@@ -58,6 +63,21 @@ public class RotatePuzzle : MonoBehaviour
             isGrabbed = false;
             handInteraction = null;
             Debug.Log("Released. 90 degrees accomplished.");
+        }
+    }
+
+    public void ToggleLights(bool isOn)
+    {
+        if(runeLights == null)
+        {
+            return;
+        }
+        foreach(Light l in runeLights)
+        {
+            if (l != null)
+            {
+                l.enabled = isOn;
+            }
         }
     }
 }
