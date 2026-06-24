@@ -26,6 +26,7 @@ public class RotatePuzzle : MonoBehaviour
         yRotation = transform.localEulerAngles.y;
         runeLights = GetComponentsInChildren<Light>(true);
         ToggleLights(false);
+        maxRotationPerInteraction = PlayerPrefs.GetFloat("MaxPuzzleRotation", maxRotationPerInteraction);
     }
 
     private void Update()
