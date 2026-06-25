@@ -122,7 +122,7 @@ public class PuzzleWristCalibrator : MonoBehaviour
             instructionText.text = $"Buen trabajo. ({currentReps}/{totalReps})\nAhora relaja y baja tu mano.";
             if (currentAngle <= neutralThreshHold)
             {
-                neutralRotation = activeHand.rotation;
+                //neutralRotation = activeHand.rotation;
                 calibrationState = CalibrationState.WaitingForRotation;
                 UpdateUI();
             }

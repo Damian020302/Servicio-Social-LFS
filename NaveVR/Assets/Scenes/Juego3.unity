@@ -2717,7 +2717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9686275, g: 0.7294118, b: 0.27058825, a: 0.64705884}
+  m_Color: {r: 0.91764706, g: 0.4627451, b: 0.64705884, a: 0.64705884}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12857,7 +12857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9686275, g: 0.7294118, b: 0.27058825, a: 0.64705884}
+  m_Color: {r: 0.9150943, g: 0.46186364, b: 0.64602727, a: 0.64705884}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -14355,7 +14355,7 @@ MonoBehaviour:
   cauldron: 1
   difficulty: 0
   winningStreak: 0
-  timer: 60
+  timer: 120
   timerIsRunning: 0
   initialTimerValue: 0
   wandManager: {fileID: 62377624}

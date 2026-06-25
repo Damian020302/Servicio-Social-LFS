@@ -119,6 +119,8 @@ public class CauldronManager : MonoBehaviour
         {
             Debug.LogError("No se ha asignado ninguna muñeca activa. Por favor, asigna una muñeca en el inspector.");
         }
+        extensionThreshold = PlayerPrefs.GetFloat("CauldronMaxExtension", extensionThreshold);
+        flexionThreshold = PlayerPrefs.GetFloat("CauldronMaxFlexion", flexionThreshold);
         LevelConfig();
     }
 

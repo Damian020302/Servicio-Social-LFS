@@ -21,6 +21,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Calibracion.unity
     guid: 154363a38c6e49d4ea72569813eb7e6f
   - enabled: 1
+    path: Assets/Scenes/Calibracion2.unity
+    guid: cd57bd745554f6947ad97fb8e0001f70
+  - enabled: 1
+    path: Assets/Scenes/Calibracion3.unity
+    guid: 6398af85cff33624588979c8ef126a6c
+  - enabled: 1
     path: Assets/Scenes/Enemigos.unity
     guid: b3aaf3dee1df21f4d8e6dabc29a031ad
   - enabled: 1
