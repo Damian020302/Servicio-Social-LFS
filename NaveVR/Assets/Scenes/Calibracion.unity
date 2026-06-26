@@ -1847,11 +1847,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45a11b7c1622bb4cb682dd1f6252cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VRCalibration
-  playerCenter: {fileID: 1522613781}
-  referencePointL: {fileID: 189375424}
-  referencePointR: {fileID: 832431407}
-  ovrHandL: {fileID: 1393791415}
-  ovrHandR: {fileID: 1024035917}
+  playerCenter: {fileID: 1751244247}
+  leftWrist: {fileID: 189375424}
+  rightWrist: {fileID: 832431407}
+  totalReps: 5
+  holdTimeRequired: 3
+  minDist: 0.3
   instructionText: {fileID: 1202485354}
 --- !u!114 &205337464
 MonoBehaviour:
