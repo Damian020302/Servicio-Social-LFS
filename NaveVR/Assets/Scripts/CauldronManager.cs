@@ -14,6 +14,8 @@ public class CauldronManager : MonoBehaviour
 
     private ExerciseState currentState = ExerciseState.WaitingForExtension;
 
+    public WandSpawner spawner;
+
     [Header("Wrist tracking")]
     public Transform leftWrist;
     public Transform rightWrist;
@@ -91,6 +93,7 @@ public class CauldronManager : MonoBehaviour
     }
     void Start()
     {
+        spawner.SpawnWand();
         initialTimerValue = timer;
         yesV.SetActive(false);
         noV.SetActive(false);
