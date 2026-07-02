@@ -3999,6 +3999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537f74f53a028f44ca5a14a78d67c49c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CauldronManager
+  spawner: {fileID: 0}
   leftWrist: {fileID: 0}
   rightWrist: {fileID: 0}
   victory: {fileID: 0}
@@ -4027,6 +4028,7 @@ MonoBehaviour:
   timer: 60
   timerIsRunning: 0
   initialTimerValue: 0
+  wandManager: {fileID: 0}
   basePotionsNeeded: 1
 --- !u!1 &639625403
 GameObject:
@@ -6094,7 +6096,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 629680552}
         m_TargetAssemblyTypeName: CauldronManager, Assembly-CSharp
-        m_MethodName: MainScene
+        m_MethodName: Calibrate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

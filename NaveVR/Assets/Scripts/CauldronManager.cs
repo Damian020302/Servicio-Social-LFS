@@ -91,9 +91,17 @@ public class CauldronManager : MonoBehaviour
         SceneManager.LoadScene("Juego3");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
+
+    public void Calibrate()
+    {
+        SceneManager.LoadScene("Calibracion3");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
     void Start()
     {
         spawner.SpawnWand();
+        wandManager = Object.FindFirstObjectByType<WandManager>();
         initialTimerValue = timer;
         yesV.SetActive(false);
         noV.SetActive(false);

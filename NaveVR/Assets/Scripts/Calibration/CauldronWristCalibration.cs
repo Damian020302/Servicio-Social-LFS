@@ -216,7 +216,7 @@ public class CauldronWristCalibration : MonoBehaviour
 
     void LoadNextScene()
     {
-        SceneManager.LoadScene("Juego3");
+        SceneManager.LoadScene("Varitas");
         Time.timeScale = 1.0f;
     }
 }
