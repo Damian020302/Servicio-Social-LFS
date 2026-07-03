@@ -166,7 +166,7 @@ public class CauldronManager : MonoBehaviour
         //extensionCompleted = false;
         if(wandManager != null)
         {
-            wandManager.UpdateRotation(0.0f);
+            wandManager.UpdateRotation(90.0f);
         }
         UpdateUI();
     }
