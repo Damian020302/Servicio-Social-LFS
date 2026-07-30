@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 69e10e886d52d20478f9ed5424126be8, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 16bc8a9d5451ca44d8f70575adbece3a, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -3950,7 +3950,6 @@ GameObject:
   m_Component:
   - component: {fileID: 629680550}
   - component: {fileID: 629680551}
-  - component: {fileID: 629680552}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3987,49 +3986,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RealityManager
   mainCamera: {fileID: 159029307}
   passthroughLayer: {fileID: 591693384}
---- !u!114 &629680552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 629680548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 537f74f53a028f44ca5a14a78d67c49c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CauldronManager
-  spawner: {fileID: 0}
-  leftWrist: {fileID: 0}
-  rightWrist: {fileID: 0}
-  victory: {fileID: 0}
-  defeat: {fileID: 0}
-  yesD: {fileID: 0}
-  noD: {fileID: 0}
-  yesV: {fileID: 0}
-  noV: {fileID: 0}
-  cauldronText: {fileID: 0}
-  timeRemainingText: {fileID: 0}
-  flexionThreshold: 30
-  extensionThreshold: 30
-  flexionAngle: 0
-  extensionAngle: 0
-  warning: {fileID: 0}
-  warningBlinkSpeed: 5
-  warningScaleMultiplier: 1.2
-  prefabPotion: {fileID: 0}
-  spawnPoint: {fileID: 0}
-  cauldronEndpoint: {fileID: 0}
-  launchSpeed: 10
-  launchHeight: 2
-  cauldron: 1
-  difficulty: 0
-  winningStreak: 0
-  timer: 60
-  timerIsRunning: 0
-  initialTimerValue: 0
-  wandManager: {fileID: 0}
-  basePotionsNeeded: 1
 --- !u!1 &639625403
 GameObject:
   m_ObjectHideFlags: 0
@@ -5026,7 +4982,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 629680552}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CauldronManager, Assembly-CSharp
         m_MethodName: MenuGeneral
         m_Mode: 1
@@ -6094,7 +6050,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 629680552}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CauldronManager, Assembly-CSharp
         m_MethodName: Calibrate
         m_Mode: 1
