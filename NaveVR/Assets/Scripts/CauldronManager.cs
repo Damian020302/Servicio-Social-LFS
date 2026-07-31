@@ -42,8 +42,8 @@ public class CauldronManager : MonoBehaviour
     public float extensionAngle = 0.0f;
     private Quaternion neutralRotation;
     private int completeExercises = 0;
-    private bool flexionCompleted = false;
-    private bool extensionCompleted = false;
+    //private bool flexionCompleted = false;
+    //private bool extensionCompleted = false;
 
     [Header("Constant Warning")]
     public TextMeshProUGUI warning;

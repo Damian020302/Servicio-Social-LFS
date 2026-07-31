@@ -3950,6 +3950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 629680550}
   - component: {fileID: 629680551}
+  - component: {fileID: 629680552}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3986,6 +3987,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RealityManager
   mainCamera: {fileID: 159029307}
   passthroughLayer: {fileID: 591693384}
+--- !u!114 &629680552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629680548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3d8515367956d540a4ff852e85dd4e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleGrabManager
+  victory: {fileID: 0}
+  defeat: {fileID: 0}
+  yesD: {fileID: 0}
+  noD: {fileID: 0}
+  yesV: {fileID: 0}
+  noV: {fileID: 0}
+  clawText: {fileID: 0}
+  timeRemainingText: {fileID: 0}
+  leftHand: {fileID: 0}
+  rightHand: {fileID: 0}
+  leftPalm: {fileID: 0}
+  rightPalm: {fileID: 0}
+  grabRadius: 0.15
+  grabbableTag: Grabbable
 --- !u!1 &639625403
 GameObject:
   m_ObjectHideFlags: 0
@@ -4982,8 +5009,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CauldronManager, Assembly-CSharp
+      - m_Target: {fileID: 629680552}
+        m_TargetAssemblyTypeName: SimpleGrabManager, Assembly-CSharp
         m_MethodName: MenuGeneral
         m_Mode: 1
         m_Arguments:
@@ -6050,8 +6077,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CauldronManager, Assembly-CSharp
+      - m_Target: {fileID: 629680552}
+        m_TargetAssemblyTypeName: SimpleGrabManager, Assembly-CSharp
         m_MethodName: Calibrate
         m_Mode: 1
         m_Arguments:

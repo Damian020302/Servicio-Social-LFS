@@ -1,7 +1,22 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class SimpleGrabManager : MonoBehaviour
 {
+    [Header("Buttons")]
+    public GameObject victory;
+    public GameObject defeat;
+    public GameObject yesD;
+    public GameObject noD;
+    public GameObject yesV;
+    public GameObject noV;
+
+    [Header("UI")]
+    public TextMeshProUGUI clawText;
+    public TextMeshProUGUI timeRemainingText;
+
     [Header("Hand Setup")]
     public OVRHand leftHand;
     public OVRHand rightHand;
@@ -20,6 +35,30 @@ public class SimpleGrabManager : MonoBehaviour
     private float releaseThreshold = 0.2f;
     private bool isGrabbing = false;
     private Rigidbody grabbedObject;
+
+    public void OnClickNo()
+    {
+        SceneManager.LoadScene("Menu4");
+        Time.timeScale = 1.0f;
+    }
+
+    public void MenuGeneral()
+    {
+        SceneManager.LoadScene("MenuGeneral");
+        Time.timeScale = 1.0f;
+    }
+
+    public void MainScene()
+    {
+        SceneManager.LoadScene("Juego4");
+        Time.timeScale = 1.0f;
+    }
+
+    public void Calibrate()
+    {
+        SceneManager.LoadScene("Calibracion4");
+        Time.timeScale = 1.0f;
+    }
 
     private void Start()
     {
