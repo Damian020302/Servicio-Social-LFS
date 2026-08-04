@@ -17,6 +17,13 @@ public class SimpleGrabManager : MonoBehaviour
     public TextMeshProUGUI clawText;
     public TextMeshProUGUI timeRemainingText;
 
+    [Header("Constant Warning")]
+    public TextMeshProUGUI warning;
+    public float warningBlinkSpeed = 5.0f;
+    public float warningScaleMultiplier = 1.2f;
+    private Coroutine warningCoroutine;
+    private Vector3 warningOriginalScale;
+
     [Header("Hand Setup")]
     public OVRHand leftHand;
     public OVRHand rightHand;
@@ -35,6 +42,16 @@ public class SimpleGrabManager : MonoBehaviour
     private float releaseThreshold = 0.2f;
     private bool isGrabbing = false;
     private Rigidbody grabbedObject;
+
+    [Header("Level Variables")]
+    public int stage = 1;
+    public int difficulty = 0;
+    public int winningStreak = 0;
+    private bool isVictoryAchieved = false;
+    public float timer = 60.0f;
+    public bool timerIsRunning = false;
+    public float initialTimerValue;
+    public int actualPhase = 0;//0 cuando tiene que cerrar la mano, 1 cuando tiene que abrirla
 
     public void OnClickNo()
     {
@@ -81,6 +98,16 @@ public class SimpleGrabManager : MonoBehaviour
         float maxGrabStrength = PlayerPrefs.GetFloat("MaxGrabStrength", 0.7f);
         grabThreshold = maxGrabStrength * 0.8f; // 80% of the max grab strength
         Debug.Log($"Meta de agarre: {(grabThreshold * 100):F0}% | Meta para soltar: {(releaseThreshold * 100):F0}%");
+        UpdateReminderMessage();
+    }
+
+    void DefeatAchieved()
+    {
+        StopReminder();
+        yesD.SetActive(true);
+        noD.SetActive(true);
+        defeat.SetActive(true);
+        Debug.Log("¡Derrota! No has recogido todos los robots.");
     }
 
     float GetCurrentGrip()
@@ -98,6 +125,7 @@ public class SimpleGrabManager : MonoBehaviour
 
     void Update()
     {
+        if(isVictoryAchieved) return;
         if(activeHand == null || !activeHand.IsTracked) return;
         float currentGrip = GetCurrentGrip();
         if(!isGrabbing && currentGrip >= grabThreshold)
@@ -107,6 +135,128 @@ public class SimpleGrabManager : MonoBehaviour
         else if(isGrabbing && currentGrip <= releaseThreshold)
         {
             ReleaseObject();
+        }
+    }
+
+    void DisplayTime(float timeToDisplay)
+    {
+        timeToDisplay += 1;
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+        timeRemainingText.text = "Tiempo restante: " + string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    void VictoryAchieves()
+    {
+        yesV.SetActive(true);
+        noV.SetActive(true);
+        victory.SetActive(true);
+    }
+
+    public void OnClickYesD()
+    {
+        yesD.SetActive(false);
+        noD.SetActive(false);
+        defeat.SetActive(false);
+        timer = initialTimerValue;
+        timerIsRunning = true;
+        isVictoryAchieved = false;
+        winningStreak = 0;
+        difficulty--;
+        UpdateUI();
+        UpdateReminderMessage();
+    }
+
+    public void OnClickYesV()
+    {
+        stage++;
+        yesV.SetActive(false);
+        noV.SetActive(false);
+        victory.SetActive(false);
+        if (timer >= (initialTimerValue * 0.5f))
+        {
+            winningStreak++;
+            if (winningStreak >= 3)
+            {
+                difficulty++;
+                winningStreak = 0;
+            }
+        }
+        else
+        {
+            winningStreak = 0;
+        }
+        timer = initialTimerValue;
+        timerIsRunning = true;
+        isVictoryAchieved = false;
+        UpdateUI();
+        UpdateReminderMessage();
+    }
+
+    void UpdateReminderMessage()
+    {
+        StopReminder();
+        if(actualPhase == 0)
+        {
+            StartReminder("Cierra tu puño para agarrar al robot");
+        }
+        else
+        {
+            StartReminder("Abre tu puño para soltar al robot en el contenedor rojo");
+        }
+    }
+
+    void UpdateUI()
+    {
+        if(clawText != null)
+        {
+            clawText.text = "Stage: " + stage;
+        }
+    }
+
+    IEnumerator WarningAnimationRoutine(string message)
+    {
+        if(warning == null) yield break;
+        warning.text = message;
+        warning.gameObject.SetActive(true);
+        Color originalColor = warning.color;
+        float time = 0.0f;
+        while(true)
+        {
+            time += Time.deltaTime * warningBlinkSpeed;
+            float alpha = (Mathf.Sin(time) + 1.0f) / 2.0f;
+            Color nuevoColor = originalColor;
+            nuevoColor.a = Mathf.Lerp(0.5f, 1.0f, alpha); // Cambia la transparencia entre 50% y 100%
+            warning.color = nuevoColor;
+            float scaleMultiplier = Mathf.Lerp(1.0f, warningScaleMultiplier, alpha); // Cambia el tamaño entre 100% y el multiplicador
+            warning.transform.localScale = warningOriginalScale * scaleMultiplier;
+            yield return null;
+        }
+    }
+
+    public void StartReminder(string message)
+    {
+        if(warningCoroutine != null)
+        {
+            StopCoroutine(warningCoroutine);
+        }
+        warningOriginalScale = warning.transform.localScale;
+        warningCoroutine = StartCoroutine(WarningAnimationRoutine(message));
+    }
+
+    public void StopReminder()
+    {
+        if(warningCoroutine != null)
+        {
+            StopCoroutine(warningCoroutine);
+            warningCoroutine = null;
+        }
+        if(warning != null)
+        {
+            warning.gameObject.SetActive(false);
+            Color c = warning.color;
+            c.a = 1.0f; // Reset alpha to fully opaque
+            warning.color = c;
         }
     }
 
@@ -168,5 +318,13 @@ public class SimpleGrabManager : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(activePalm.position, grabRadius);
         }
+    }
+
+    public void VictoryAchieved()
+    {
+        if(victory != null) victory.SetActive(true);
+        if(yesV != null) yesV.SetActive(true);
+        if(noV != null) noV.SetActive(true);
+        Debug.Log("¡Victoria! Has recogido todos los robots.");
     }
 }

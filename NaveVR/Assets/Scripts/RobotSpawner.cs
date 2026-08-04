@@ -1,36 +1,32 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+
 public class RobotSpawner : MonoBehaviour
 {
     [SerializeField]
     [Tooltip("Drag the Robot Prefabs")] public GameObject[] robotPrefabs;
     public Transform robotDeployer;
+    private GameObject currentRobot;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (robotPrefabs != null)
-        {
-            if (robotPrefabs.Length == 0)
-            {
-                Debug.LogWarning("No robot prefabs assigned!");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Robot prefabs array is not assigned!");
-        }
+        SpawnSingleRobot();
     }
 
-    void SpawnSingleRobot()
+    public void SpawnSingleRobot()
     {
-        if(robotPrefabs.Length == 0)
+        if(robotPrefabs.Length == 0 || robotDeployer == null)
         {
             Debug.LogWarning("No robot prefabs assigned or no deployer assigned!");
             return;
         }
+        if(currentRobot != null) return; // Prevent spawning if a robot already exists
         int randomIndex = Random.Range(0, robotPrefabs.Length);
         GameObject selectedRobot = robotPrefabs[randomIndex];
-        Instantiate(selectedRobot, robotDeployer.position, robotDeployer.rotation);
+        currentRobot = Instantiate(selectedRobot, robotDeployer.position, robotDeployer.rotation);
+    }
+
+    public void ClearCurrentRobot()
+    { 
+        currentRobot = null;
     }
 }
