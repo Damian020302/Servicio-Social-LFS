@@ -81,4 +81,18 @@ public class RobotContainer : MonoBehaviour
             spawner.SpawnSingleRobot();
         }
     }
+
+    public void ResetContainer()
+    {
+        foreach(Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        robotsCollected = 0;
+        MoveToNewPosition();
+        if(gameManager != null && gameManager.clawText != null)
+        {
+            gameManager.clawText.text = $"Robots\nRecogidos: {robotsCollected}/{maxRobotsPerRound}";
+        }
+    }
 }

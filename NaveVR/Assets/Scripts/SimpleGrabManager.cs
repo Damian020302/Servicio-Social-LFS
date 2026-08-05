@@ -43,11 +43,15 @@ public class SimpleGrabManager : MonoBehaviour
     private bool isGrabbing = false;
     private Rigidbody grabbedObject;
 
-    [Header("Level Variables")]
+    [Header("Level Variables and Manager")]
     public int stage = 1;
     public int difficulty = 0;
     public int winningStreak = 0;
     private bool isVictoryAchieved = false;
+    public RobotContainer robotContainer;
+    public RobotSpawner robotSpawner;
+
+    [Header("Timer Settings")]
     public float timer = 60.0f;
     public bool timerIsRunning = false;
     public float initialTimerValue;
@@ -98,16 +102,25 @@ public class SimpleGrabManager : MonoBehaviour
         float maxGrabStrength = PlayerPrefs.GetFloat("MaxGrabStrength", 0.7f);
         grabThreshold = maxGrabStrength * 0.8f; // 80% of the max grab strength
         Debug.Log($"Meta de agarre: {(grabThreshold * 100):F0}% | Meta para soltar: {(releaseThreshold * 100):F0}%");
+        if(warning != null)
+        {
+            warningOriginalScale = warning.transform.localScale;
+            if(warningOriginalScale == Vector3.zero)
+            {
+                warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
+            }
+        }
+        victory.SetActive(false);
+        defeat.SetActive(false);
+        yesV.SetActive(false);
+        yesD.SetActive(false);
+        noV.SetActive(false);
+        noD.SetActive(false);
+        initialTimerValue = timer;
+        timerIsRunning = true;
+        isVictoryAchieved = false;
+        UpdateUI();
         UpdateReminderMessage();
-    }
-
-    void DefeatAchieved()
-    {
-        StopReminder();
-        yesD.SetActive(true);
-        noD.SetActive(true);
-        defeat.SetActive(true);
-        Debug.Log("¡Derrota! No has recogido todos los robots.");
     }
 
     float GetCurrentGrip()
@@ -126,7 +139,21 @@ public class SimpleGrabManager : MonoBehaviour
     void Update()
     {
         if(isVictoryAchieved) return;
-        if(activeHand == null || !activeHand.IsTracked) return;
+        if(timerIsRunning)
+        {
+            if(timer > 0)
+            {
+                timer -= Time.deltaTime;
+                DisplayTime(timer);
+            }
+            else
+            {
+                timer = 0;
+                timerIsRunning = false;
+                DefeatAchieved();
+            }
+        }
+        if (activeHand == null || !activeHand.IsTracked) return;
         float currentGrip = GetCurrentGrip();
         if(!isGrabbing && currentGrip >= grabThreshold)
         {
@@ -146,25 +173,91 @@ public class SimpleGrabManager : MonoBehaviour
         timeRemainingText.text = "Tiempo restante: " + string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    void VictoryAchieves()
+    void TryGrabObject()
     {
-        yesV.SetActive(true);
-        noV.SetActive(true);
-        victory.SetActive(true);
+        if (activePalm == null) return;
+        Collider[] hits = Physics.OverlapSphere(activePalm.position, grabRadius);
+        float closestDistance = float.MaxValue;
+        Rigidbody bestTarget = null;
+        /*if (hits.Length > 0)
+        {
+            Debug.Log($"Cerraste el puño, objeto dentro de los 15 cm: {hits.Length}");
+        }*/
+        foreach (Collider hit in hits)
+        {
+            //Debug.Log($"Objeto detectado: {hit.gameObject.name} con tag {hit.tag}");
+            if (hit.CompareTag(grabbableTag))
+            {
+                Rigidbody rb = hit.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    float distance = Vector3.Distance(activePalm.position, hit.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        bestTarget = rb;
+                    }
+                }
+                /*else
+                {
+                    Debug.LogWarning($"El objeto {hit.name} tiene el tag {grabbableTag} pero no tiene un Rigidbody.");
+                }*/
+            }
+        }
+        if (bestTarget != null)
+        {
+            isGrabbing = true;
+            grabbedObject = bestTarget;
+            grabbedObject.isKinematic = true;
+            grabbedObject.transform.SetParent(activePalm);
+            actualPhase = 1;
+            UpdateReminderMessage();
+        }
     }
 
+    void ReleaseObject()
+    {
+        if (grabbedObject != null)
+        {
+            grabbedObject.transform.SetParent(null);
+            grabbedObject.isKinematic = false;
+            grabbedObject = null;
+        }
+        isGrabbing = false;
+        actualPhase = 0;
+        UpdateReminderMessage();
+    }
+
+    public void VictoryAchieved()
+    {
+        isVictoryAchieved = true;
+        timerIsRunning = false;
+        StopReminder();
+        victory.SetActive(true);
+        yesV.SetActive(true);
+        noV.SetActive(true);
+        Debug.Log("¡Victoria! Has recogido todos los robots.");
+    }
+
+    void DefeatAchieved()
+    {
+        isVictoryAchieved = false;
+        timerIsRunning = false;
+        StopReminder();
+        yesD.SetActive(true);
+        noD.SetActive(true);
+        defeat.SetActive(true);
+        Debug.Log("¡Derrota! No has recogido todos los robots.");
+    }
+   
     public void OnClickYesD()
     {
         yesD.SetActive(false);
         noD.SetActive(false);
         defeat.SetActive(false);
-        timer = initialTimerValue;
-        timerIsRunning = true;
-        isVictoryAchieved = false;
         winningStreak = 0;
         difficulty--;
-        UpdateUI();
-        UpdateReminderMessage();
+        ResetRound();
     }
 
     public void OnClickYesV()
@@ -186,9 +279,20 @@ public class SimpleGrabManager : MonoBehaviour
         {
             winningStreak = 0;
         }
+        ResetRound();
+    }
+
+    void ResetRound()
+    {
         timer = initialTimerValue;
         timerIsRunning = true;
         isVictoryAchieved = false;
+        robotContainer.ResetContainer();
+        if(robotSpawner != null)
+        {
+            robotSpawner.ClearCurrentRobot();
+            robotSpawner.SpawnSingleRobot();
+        }
         UpdateUI();
         UpdateReminderMessage();
     }
@@ -240,7 +344,11 @@ public class SimpleGrabManager : MonoBehaviour
         {
             StopCoroutine(warningCoroutine);
         }
-        warningOriginalScale = warning.transform.localScale;
+        if(warningOriginalScale == Vector3.zero)
+        {
+            warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
+        }
+        
         warningCoroutine = StartCoroutine(WarningAnimationRoutine(message));
     }
 
@@ -257,58 +365,8 @@ public class SimpleGrabManager : MonoBehaviour
             Color c = warning.color;
             c.a = 1.0f; // Reset alpha to fully opaque
             warning.color = c;
+            warningOriginalScale = warning.transform.localScale;
         }
-    }
-
-    void TryGrabObject()
-    {
-        if(activePalm == null) return;
-        Collider[] hits = Physics.OverlapSphere(activePalm.position, grabRadius);
-        if(hits.Length > 0)
-        {
-            Debug.Log($"Cerraste el puño, objeto dentro de los 15 cm: {hits.Length}");
-        }
-        float closestDistance = float.MaxValue;
-        Rigidbody bestTarget = null;
-        foreach(Collider hit in hits)
-        {
-            Debug.Log($"Objeto detectado: {hit.gameObject.name} con tag {hit.tag}");
-            if (hit.CompareTag(grabbableTag))
-            {
-                Rigidbody rb = hit.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    float distance = Vector3.Distance(activePalm.position, hit.transform.position);
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        bestTarget = rb;
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning($"El objeto {hit.name} tiene el tag {grabbableTag} pero no tiene un Rigidbody.");
-                }
-            }
-        }
-        if(bestTarget != null)
-        {
-            isGrabbing = true;
-            grabbedObject = bestTarget;
-            grabbedObject.isKinematic = true;
-            grabbedObject.transform.SetParent(activePalm);
-        }
-    }
-
-    void ReleaseObject()
-    {
-        if(grabbedObject != null)
-        {
-            grabbedObject.transform.SetParent(null);
-            grabbedObject.isKinematic = false;
-            grabbedObject = null;
-        }
-        isGrabbing = false;
     }
 
     private void OnDrawGizmosSelected()
@@ -318,13 +376,5 @@ public class SimpleGrabManager : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(activePalm.position, grabRadius);
         }
-    }
-
-    public void VictoryAchieved()
-    {
-        if(victory != null) victory.SetActive(true);
-        if(yesV != null) yesV.SetActive(true);
-        if(noV != null) noV.SetActive(true);
-        Debug.Log("¡Victoria! Has recogido todos los robots.");
     }
 }
