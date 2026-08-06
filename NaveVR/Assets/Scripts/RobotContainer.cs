@@ -65,7 +65,7 @@ public class RobotContainer : MonoBehaviour
         robotsCollected++;
         if(gameManager != null && gameManager.clawText != null)
         {
-            gameManager.clawText.text = $"Robots\nRecogidos: {robotsCollected}/{maxRobotsPerRound}";
+            gameManager.clawText.text = $"Robots\nrecolectados: {robotsCollected}/{maxRobotsPerRound}";
         }
         if(robotsCollected >= maxRobotsPerRound)
         {

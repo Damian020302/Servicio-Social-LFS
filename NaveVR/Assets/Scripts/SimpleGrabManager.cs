@@ -16,6 +16,7 @@ public class SimpleGrabManager : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI clawText;
     public TextMeshProUGUI timeRemainingText;
+    public TextMeshProUGUI stageText;
 
     [Header("Constant Warning")]
     public TextMeshProUGUI warning;
@@ -206,6 +207,7 @@ public class SimpleGrabManager : MonoBehaviour
         }
         if (bestTarget != null)
         {
+            robotSpawner.ClearPlatform();
             isGrabbing = true;
             grabbedObject = bestTarget;
             grabbedObject.isKinematic = true;
@@ -312,9 +314,9 @@ public class SimpleGrabManager : MonoBehaviour
 
     void UpdateUI()
     {
-        if(clawText != null)
+        if(stageText != null)
         {
-            clawText.text = "Stage: " + stage;
+            stageText.text = "Stage: " + stage;
         }
     }
 
@@ -344,10 +346,10 @@ public class SimpleGrabManager : MonoBehaviour
         {
             StopCoroutine(warningCoroutine);
         }
-        if(warningOriginalScale == Vector3.zero)
+        /*if(warningOriginalScale == Vector3.zero)
         {
             warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
-        }
+        }*/
         
         warningCoroutine = StartCoroutine(WarningAnimationRoutine(message));
     }
@@ -365,7 +367,7 @@ public class SimpleGrabManager : MonoBehaviour
             Color c = warning.color;
             c.a = 1.0f; // Reset alpha to fully opaque
             warning.color = c;
-            warningOriginalScale = warning.transform.localScale;
+            //warningOriginalScale = warning.transform.localScale;
         }
     }
 
