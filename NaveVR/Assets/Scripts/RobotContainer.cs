@@ -18,21 +18,54 @@ public class RobotContainer : MonoBehaviour
     public float spacing = 0.01f;
     public float verticalOffset = 0.1f;
 
-    private void Start()
+    private void Awake()
     {
         maxReachRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.4f);
         maxReachRadius = Mathf.Max(maxReachRadius - 0.05f, 0.2f); // Ensure a minimum radius
         MoveToNewPosition();
+        
     }
 
     void MoveToNewPosition()
     {
-        float randomAngle = Random.Range(-60.0f, 60.0f);
+        int currentDiff = gameManager != null ? gameManager.difficulty : 0;
+        float diffFactor = Mathf.Clamp01(currentDiff / 5.0f);
+        float currentMaxAngle = Mathf.Lerp(20.0f, 60.0f, diffFactor); // Adjust the range based on difficulty
+        float minD = 0.15f;
+        float currentMaxDist = Mathf.Lerp(0.20f, maxReachRadius, diffFactor); // Adjust the range based on difficulty
+        currentMaxDist = Mathf.Min(currentMaxDist, maxReachRadius); // Ensure it doesn't exceed the player's reach
+        Vector3 newPosition = transform.position;
+        bool validPosition = false;
+        int attempts = 0;
+        while(!validPosition && attempts < 10)
+        {
+            float randomAngle = Random.Range(-currentMaxAngle, currentMaxAngle);
+            float randomDistance = Random.Range(minD, currentMaxDist);
+            Vector3 offset = Quaternion.Euler(0, randomAngle, 0) * playerCenter.forward * randomDistance;
+            newPosition = playerCenter.position + offset;
+            newPosition.y = containerHeight; // Set the fixed height
+            if(spawner != null && spawner.robotDeployer != null)
+            {
+                Vector2 posContainer = new Vector2(newPosition.x, newPosition.z);
+                Vector2 posPlatform = new Vector2(spawner.robotDeployer.position.x, spawner.robotDeployer.position.z);
+                if(Vector2.Distance(posContainer, posPlatform) > 0.3f) // Ensure a minimum distance from the deployer
+                {
+                    validPosition = true;
+                }
+            }
+            else
+            {
+                validPosition = true; // Assume it's valid for now
+            }   
+            attempts++;
+        }
+        transform.position = newPosition;
+        /*float randomAngle = Random.Range(-60.0f, 60.0f);
         float randomDistance = Random.Range(0.15f, maxReachRadius);
         Vector3 offset = Quaternion.Euler(0, randomAngle, 0) * playerCenter.forward * randomDistance;
         Vector3 newPosition = playerCenter.position + offset;
         newPosition.y = containerHeight; // Set the fixed height
-        transform.position = newPosition;
+        transform.position = newPosition;*/
     }
 
     private void OnTriggerStay(Collider other)
