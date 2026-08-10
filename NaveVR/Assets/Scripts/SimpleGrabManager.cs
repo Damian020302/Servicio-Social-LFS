@@ -308,7 +308,7 @@ public class SimpleGrabManager : MonoBehaviour
         }
         else
         {
-            StartReminder("Abre tu puño para soltar al robot en el contenedor rojo");
+            StartReminder("Abre tu puño para soltar al robot en el contenedor <color=red>rojo</color>");
         }
     }
 

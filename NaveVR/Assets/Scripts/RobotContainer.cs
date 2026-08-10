@@ -30,33 +30,36 @@ public class RobotContainer : MonoBehaviour
     {
         int currentDiff = gameManager != null ? gameManager.difficulty : 0;
         float diffFactor = Mathf.Clamp01(currentDiff / 5.0f);
-        float currentMaxAngle = Mathf.Lerp(20.0f, 60.0f, diffFactor); // Adjust the range based on difficulty
-        float minD = 0.15f;
-        float currentMaxDist = Mathf.Lerp(0.20f, maxReachRadius, diffFactor); // Adjust the range based on difficulty
+        float currentMaxAngle = Mathf.Lerp(35.0f, 70.0f, diffFactor); // Adjust the range based on difficulty
+        float minD = 0.25f;
+        float currentMaxDist = Mathf.Lerp(Mathf.Max(0.30f, maxReachRadius*0.7f),maxReachRadius, diffFactor); // Adjust the range based on difficulty
         currentMaxDist = Mathf.Min(currentMaxDist, maxReachRadius); // Ensure it doesn't exceed the player's reach
         Vector3 newPosition = transform.position;
         bool validPosition = false;
         int attempts = 0;
-        while(!validPosition && attempts < 10)
+        while(!validPosition && attempts < 20)
         {
             float randomAngle = Random.Range(-currentMaxAngle, currentMaxAngle);
             float randomDistance = Random.Range(minD, currentMaxDist);
             Vector3 offset = Quaternion.Euler(0, randomAngle, 0) * playerCenter.forward * randomDistance;
             newPosition = playerCenter.position + offset;
             newPosition.y = containerHeight; // Set the fixed height
-            if(spawner != null && spawner.robotDeployer != null)
+            validPosition = true; // Assume it's valid for now
+            if (spawner != null && spawner.robotDeployer != null)
             {
                 Vector2 posContainer = new Vector2(newPosition.x, newPosition.z);
                 Vector2 posPlatform = new Vector2(spawner.robotDeployer.position.x, spawner.robotDeployer.position.z);
-                if(Vector2.Distance(posContainer, posPlatform) > 0.3f) // Ensure a minimum distance from the deployer
+                if(Vector2.Distance(posContainer, posPlatform) < 0.2f) // Ensure a minimum distance from the deployer
                 {
                     validPosition = true;
                 }
             }
-            else
+            Vector2 currentPos2D = new Vector2(newPosition.x, newPosition.z);
+            Vector2 newPos2D = new Vector2(newPosition.x, newPosition.z);
+            if(Vector2.Distance(currentPos2D, newPos2D) < 0.15f) // Ensure a minimum distance from the previous position
             {
-                validPosition = true; // Assume it's valid for now
-            }   
+                validPosition = false;
+            }
             attempts++;
         }
         transform.position = newPosition;
