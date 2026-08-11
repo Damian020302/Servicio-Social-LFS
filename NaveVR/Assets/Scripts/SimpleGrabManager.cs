@@ -49,6 +49,7 @@ public class SimpleGrabManager : MonoBehaviour
     public int difficulty = 0;
     public int winningStreak = 0;
     private bool isVictoryAchieved = false;
+    public int droppedRobots = 0;
     public RobotContainer robotContainer;
     public RobotSpawner robotSpawner;
 
@@ -268,7 +269,9 @@ public class SimpleGrabManager : MonoBehaviour
         yesV.SetActive(false);
         noV.SetActive(false);
         victory.SetActive(false);
-        if (timer >= (initialTimerValue * 0.5f))
+        bool wasFast = timer >= (initialTimerValue * 0.25f);
+        bool goodMotorControl = droppedRobots <= 1;
+        if (wasFast && goodMotorControl)
         {
             winningStreak++;
             if (winningStreak >= 3)
@@ -289,11 +292,12 @@ public class SimpleGrabManager : MonoBehaviour
         timer = initialTimerValue;
         timerIsRunning = true;
         isVictoryAchieved = false;
+        droppedRobots = 0;
         robotContainer.ResetContainer();
         if(robotSpawner != null)
         {
             robotSpawner.ClearCurrentRobot();
-            robotSpawner.SpawnSingleRobot();
+            robotSpawner.SpawnRandomRobot();
         }
         UpdateUI();
         UpdateReminderMessage();
@@ -316,7 +320,7 @@ public class SimpleGrabManager : MonoBehaviour
     {
         if(stageText != null)
         {
-            stageText.text = "Stage: " + stage;
+            stageText.text = "Stage " + stage;
         }
     }
 

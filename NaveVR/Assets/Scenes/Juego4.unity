@@ -4908,9 +4908,10 @@ MonoBehaviour:
   stage: 1
   difficulty: 0
   winningStreak: 0
+  droppedRobots: 0
   robotContainer: {fileID: 2001156173}
   robotSpawner: {fileID: 1505822579}
-  timer: 60
+  timer: 180
   timerIsRunning: 0
   initialTimerValue: 0
   actualPhase: 0
@@ -10706,6 +10707,7 @@ MonoBehaviour:
   platform: {fileID: 287892682}
   robotDeployer: {fileID: 1505822578}
   robotContainer: {fileID: 2001156173}
+  gameManager: {fileID: 0}
   fallThreshold: 0
 --- !u!1 &1537782052
 GameObject:

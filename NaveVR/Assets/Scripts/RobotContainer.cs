@@ -86,18 +86,7 @@ public class RobotContainer : MonoBehaviour
     void CollectRobot(GameObject robot)
     {
         robot.tag = "Untagged"; // Prevent further collection
-        Rigidbody rb = robot.GetComponent<Rigidbody>();
-        if(rb != null)
-        {
-            rb.isKinematic = true; // Stop physics interactions
-        }
-        robot.transform.SetParent(this.transform); // Parent to the container
-        int row = robotsCollected / 5; // Determine the row
-        int col = robotsCollected % 5; // Determine the column
-        float xPos = (col * spacing) - (spacing * 2); // Center the robots in the container
-        float zPos = (row * spacing) - (spacing * 2); // Center the robots in the container
-        robot.transform.localPosition = new Vector3(xPos, verticalOffset, zPos); // Position the robot in the container
-        robot.transform.localRotation = Quaternion.Euler(0,180,0); // Reset rotation
+        Destroy(robot);
         robotsCollected++;
         if(gameManager != null && gameManager.clawText != null)
         {
@@ -114,21 +103,17 @@ public class RobotContainer : MonoBehaviour
         {
             MoveToNewPosition();
             spawner.ClearCurrentRobot();
-            spawner.SpawnSingleRobot();
+            spawner.SpawnRandomRobot();
         }
     }
 
     public void ResetContainer()
     {
-        foreach(Transform child in transform)
-        {
-            Destroy(child.gameObject);
-        }
         robotsCollected = 0;
         MoveToNewPosition();
         if(gameManager != null && gameManager.clawText != null)
         {
-            gameManager.clawText.text = $"Robots\nRecogidos: {robotsCollected}/{maxRobotsPerRound}";
+            gameManager.clawText.text = $"Robots\nrecolectados: {robotsCollected}/{maxRobotsPerRound}";
         }
     }
 }

@@ -8,6 +8,8 @@ public class RobotSpawner : MonoBehaviour
     public Transform robotDeployer;
     private GameObject currentRobot;
     public RobotContainer robotContainer;
+    public SimpleGrabManager gameManager;
+    private int currentRobotIndex = -1; // To track the index of the currently spawned robot
     public float fallThreshold;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,7 +22,7 @@ public class RobotSpawner : MonoBehaviour
         {
             fallThreshold = -5.0f; // Default threshold if deployer is not assigned
         }
-        SpawnSingleRobot();
+        SpawnRandomRobot();
     }
 
     private void Update()
@@ -32,29 +34,48 @@ public class RobotSpawner : MonoBehaviour
                 Rigidbody rb = currentRobot.GetComponent<Rigidbody>();
                 if(rb != null && !rb.isKinematic)
                 {
+                    if(gameManager != null)
+                    {
+                        gameManager.droppedRobots++;
+                    }
                     Destroy(currentRobot);
                     ClearCurrentRobot();
-                    SpawnSingleRobot();
+                    RespawnCurrentRobot();
                 }
             }
         }
     }
 
-    public void SpawnSingleRobot()
+    public void SpawnRandomRobot()
     {
-        platform.SetActive(true); // Deactivate the current robot if it exists
+        if(robotPrefabs.Length > 0)
+        {
+            currentRobotIndex = Random.Range(0, robotPrefabs.Length);
+        }
+        RespawnCurrentRobot();
+    }
+
+    public void RespawnCurrentRobot()
+    {
+        platform.SetActive(true); // Activate the platform when respawning a robot
         if(robotContainer != null)
         {
-            robotContainer.gameObject.SetActive(false);
+            robotContainer.gameObject.SetActive(false); // Deactivate the container when respawning a robot
         }
-        if (robotPrefabs.Length == 0 || robotDeployer == null)
+        if(robotPrefabs.Length == 0 || robotDeployer == null)
         {
             Debug.LogWarning("No robot prefabs assigned or no deployer assigned!");
             return;
         }
-        if(currentRobot != null) return; // Prevent spawning if a robot already exists
-        int randomIndex = Random.Range(0, robotPrefabs.Length);
-        GameObject selectedRobot = robotPrefabs[randomIndex];
+        if(currentRobot != null)
+        {
+            return;
+        }
+        if(currentRobotIndex == -1)
+        {
+            currentRobotIndex = Random.Range(0, robotPrefabs.Length);
+        }
+        GameObject selectedRobot = robotPrefabs[currentRobotIndex];
         currentRobot = Instantiate(selectedRobot, robotDeployer.position, robotDeployer.rotation);
     }
 
