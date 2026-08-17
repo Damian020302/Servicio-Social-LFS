@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class RealityManager : MonoBehaviour
@@ -5,8 +6,9 @@ public class RealityManager : MonoBehaviour
     [Header("References")]
     [Tooltip("Camara principal del Jugador")] public Camera mainCamera;
     [Tooltip("Componente de OVRCameraRig")] public OVRPassthroughLayer passthroughLayer;
-
     private bool isMixedReality = false;
+    public GameObject vrSign;
+    public GameObject mrSign;
 
     private void Start()
     {
@@ -39,6 +41,8 @@ public class RealityManager : MonoBehaviour
 
     void ActivateMR()
     {
+        vrSign.SetActive(false);
+        mrSign.SetActive(true);
         if(OVRManager.instance != null)
         {
             OVRManager.instance.isInsightPassthroughEnabled = true;
@@ -57,6 +61,8 @@ public class RealityManager : MonoBehaviour
 
     void ActivateVR()
     {
+        mrSign.SetActive(false);
+        vrSign.SetActive(true);
         if(OVRManager.instance != null)
         {
             OVRManager.instance.isInsightPassthroughEnabled = false;

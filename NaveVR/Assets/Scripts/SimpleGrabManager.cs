@@ -59,11 +59,11 @@ public class SimpleGrabManager : MonoBehaviour
     public float initialTimerValue;
     public int actualPhase = 0;//0 cuando tiene que cerrar la mano, 1 cuando tiene que abrirla
 
-    public void OnClickNo()
+    /*public void OnClickNo()
     {
         SceneManager.LoadScene("Menu4");
         Time.timeScale = 1.0f;
-    }
+    }*/
 
     public void MenuGeneral()
     {

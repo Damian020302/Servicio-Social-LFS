@@ -46,11 +46,11 @@ public class PuzzleManager : MonoBehaviour
     [Header("Door Manager")]
     public DoorManager doorManager; // Reference to the DoorManager script
 
-    public void OnClickNo()
+    /*public void OnClickNo()
     {
         SceneManager.LoadScene("Menu2");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
-    }
+    }*/
 
     public void MenuGeneral()
     {

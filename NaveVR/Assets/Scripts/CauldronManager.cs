@@ -32,6 +32,7 @@ public class CauldronManager : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI cauldronText;
     public TextMeshProUGUI timeRemainingText;
+    public TextMeshProUGUI potionsText;
 
     [Header("Flexion/Extension Thresholds")]
     public float flexionThreshold = 30.0f; // Ángulo mínimo para considerar una flexión
@@ -72,15 +73,14 @@ public class CauldronManager : MonoBehaviour
     [Header("Wand Manager")]
     public WandManager wandManager;
 
-    public int basePotionsNeeded = 1;
-    private int currentPotionsNeeded;
+    public int maxPotionsPerRound = 10;
     private int potionsThrown = 0;
 
-    public void OnClickNo()
+    /*public void OnClickNo()
     {
-        SceneManager.LoadScene("Menu3");
+        SceneManager.LoadScene("MenuGeneral");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
-    }
+    }*/
     public void MenuGeneral()
     {
         SceneManager.LoadScene("MenuGeneral");
@@ -154,7 +154,6 @@ public class CauldronManager : MonoBehaviour
 
     void LevelConfig()
     {
-        currentPotionsNeeded = basePotionsNeeded + difficulty;
         potionsThrown = 0;
         timer = initialTimerValue;
         timerIsRunning = true;
@@ -333,7 +332,7 @@ public class CauldronManager : MonoBehaviour
             potionsThrown++;
             Debug.Log($"Poción lanzada #{potionsThrown}");
             UpdateUI();
-            if (potionsThrown >= currentPotionsNeeded)
+            if (potionsThrown >= maxPotionsPerRound)
             {
                 isVictoryAchieved = true;
                 timerIsRunning = false;
@@ -462,6 +461,7 @@ public class CauldronManager : MonoBehaviour
         if(cauldronText != null)
         {
             cauldronText.text = "Caldero " + cauldron;
+            potionsText.text = "Pociones\nrestantes: " + (maxPotionsPerRound - potionsThrown);
         }
     }
 }

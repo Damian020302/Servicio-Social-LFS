@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
         continuePanel.SetActive(true);
         // Aquí podrías agregar lógica para terminar el juego o volver al menú principal
         Debug.Log("Juego terminado. Gracias por jugar.");
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("MenuGeneral");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
 
