@@ -1,15 +1,20 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections;
 
 public class SimpleGrabManager : MonoBehaviour
 {
+    [Header("Timer Configuration")]
+    public GameObject timerPanel;
+    public TextMeshProUGUI timeDisplay;
+    public Toggle useTimerToggle;
+    public GameObject timerControls;
+    private float selectedTime = 60.0f;
+
     [Header("Buttons")]
     public GameObject victory;
-    public GameObject defeat;
-    public GameObject yesD;
-    public GameObject noD;
     public GameObject yesV;
     public GameObject noV;
 
@@ -53,17 +58,58 @@ public class SimpleGrabManager : MonoBehaviour
     public RobotContainer robotContainer;
     public RobotSpawner robotSpawner;
 
-    [Header("Timer Settings")]
-    public float timer = 60.0f;
+    [Header("Timer Configuration")]
+    public float timer;
     public bool timerIsRunning = false;
     public float initialTimerValue;
+    private bool useTimerConfig;
     public int actualPhase = 0;//0 cuando tiene que cerrar la mano, 1 cuando tiene que abrirla
 
-    /*public void OnClickNo()
+    public void IncreaseTime()
     {
-        SceneManager.LoadScene("Menu4");
+        selectedTime += 30.0f;
+        UpdateTimeDisplay();
+    }
+
+    public void DecreaseTime()
+    {
+        if(selectedTime > 30.0f)
+        {
+            selectedTime -= 30.0f;
+        }
+        UpdateTimeDisplay();
+    }
+
+    private void UpdateTimeDisplay()
+    {
+        if (timeDisplay != null)
+        {
+            float minutes = Mathf.FloorToInt(selectedTime / 60);
+            float seconds = Mathf.FloorToInt(selectedTime % 60);
+            timeDisplay.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+    }
+
+    public void OnToggleTimer()
+    {
+        if(timerControls != null)
+        {
+            timerControls.SetActive(useTimerToggle.isOn);
+        }
+    }
+
+    public void ConfirmAndStartGame()
+    {
+        PlayerPrefs.SetInt("UseTimer", useTimerToggle.isOn ? 1 : 0);
+        PlayerPrefs.SetFloat("SessionTime", selectedTime);
+        PlayerPrefs.Save();
+        if (timerPanel != null)
+        {
+            timerPanel.SetActive(false);
+        }
+        SceneManager.LoadScene("Calibracion4");
         Time.timeScale = 1.0f;
-    }*/
+    }
 
     public void MenuGeneral()
     {
@@ -79,8 +125,20 @@ public class SimpleGrabManager : MonoBehaviour
 
     public void Calibrate()
     {
-        SceneManager.LoadScene("Calibracion4");
-        Time.timeScale = 1.0f;
+        if (timerPanel != null)
+        {
+            timerPanel.SetActive(true);
+            UpdateTimeDisplay();
+            if (timerControls != null)
+            {
+                timerControls.SetActive(useTimerToggle.isOn);
+            }
+        }
+        else
+        {
+            SceneManager.LoadScene("Calibracion4");
+            Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+        }
     }
 
     private void Start()
@@ -101,28 +159,36 @@ public class SimpleGrabManager : MonoBehaviour
             Debug.Log("No se encontro una mano activa");
         }
 
-        float maxGrabStrength = PlayerPrefs.GetFloat("MaxGrabStrength", 0.7f);
-        grabThreshold = maxGrabStrength * 0.8f; // 80% of the max grab strength
-        Debug.Log($"Meta de agarre: {(grabThreshold * 100):F0}% | Meta para soltar: {(releaseThreshold * 100):F0}%");
-        if(warning != null)
+        if(SceneManager.GetActiveScene().name == "Juego4")
         {
-            warningOriginalScale = warning.transform.localScale;
-            if(warningOriginalScale == Vector3.zero)
+            float maxGrabStrength = PlayerPrefs.GetFloat("MaxGrabStrength", 0.7f);
+            grabThreshold = maxGrabStrength * 0.8f; // 80% of the max grab strength
+            Debug.Log($"Meta de agarre: {(grabThreshold * 100):F0}% | Meta para soltar: {(releaseThreshold * 100):F0}%");
+            if (warning != null)
             {
-                warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
+                warningOriginalScale = warning.transform.localScale;
+                if (warningOriginalScale == Vector3.zero)
+                {
+                    warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
+                }
             }
+            victory.SetActive(false);
+            yesV.SetActive(false);
+            noV.SetActive(false);
+            initialTimerValue = timer;
+            timerIsRunning = true;
+            isVictoryAchieved = false;
+            UpdateUI();
+            UpdateReminderMessage();
         }
-        victory.SetActive(false);
-        defeat.SetActive(false);
-        yesV.SetActive(false);
-        yesD.SetActive(false);
-        noV.SetActive(false);
-        noD.SetActive(false);
-        initialTimerValue = timer;
-        timerIsRunning = true;
-        isVictoryAchieved = false;
-        UpdateUI();
-        UpdateReminderMessage();
+        useTimerConfig = PlayerPrefs.GetInt("UseTimer", 1) == 1;
+        initialTimerValue = PlayerPrefs.GetFloat("SessionTime", 60.0f);
+        timer = initialTimerValue;
+        timerIsRunning = useTimerConfig;
+        if(!useTimerConfig && timeRemainingText != null)
+        {
+            timeRemainingText.gameObject.SetActive(false);
+        }
     }
 
     float GetCurrentGrip()
@@ -133,15 +199,13 @@ public class SimpleGrabManager : MonoBehaviour
         grips[2] = activeHand.GetFingerPinchStrength(OVRHand.HandFinger.Ring);
         grips[3] = activeHand.GetFingerPinchStrength(OVRHand.HandFinger.Pinky);
         System.Array.Sort(grips);
-        //float thumbGrip = activeHand.GetFingerPinchStrength(OVRHand.HandFinger.Thumb);
-        //return Mathf.Max(indexGrip, middleGrip, ringGrip, pinkyGrip/*, thumbGrip*/);
         return (grips[2] + grips[3]) / 2.0f;
     }
 
     void Update()
     {
         if(isVictoryAchieved) return;
-        if(timerIsRunning)
+        if(useTimerConfig && timerIsRunning)
         {
             if(timer > 0)
             {
@@ -152,7 +216,8 @@ public class SimpleGrabManager : MonoBehaviour
             {
                 timer = 0;
                 timerIsRunning = false;
-                DefeatAchieved();
+                isVictoryAchieved = true;
+                VictoryAchieved();
             }
         }
         if (activeHand == null || !activeHand.IsTracked) return;
@@ -172,7 +237,7 @@ public class SimpleGrabManager : MonoBehaviour
         timeToDisplay += 1;
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-        timeRemainingText.text = "Tiempo restante: " + string.Format("{0:00}:{1:00}", minutes, seconds);
+        timeRemainingText.text = string.Format("Tiempo: {0:00}:{1:00}", minutes, seconds);
     }
 
     void TryGrabObject()
@@ -181,13 +246,8 @@ public class SimpleGrabManager : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(activePalm.position, grabRadius);
         float closestDistance = float.MaxValue;
         Rigidbody bestTarget = null;
-        /*if (hits.Length > 0)
-        {
-            Debug.Log($"Cerraste el puño, objeto dentro de los 15 cm: {hits.Length}");
-        }*/
         foreach (Collider hit in hits)
         {
-            //Debug.Log($"Objeto detectado: {hit.gameObject.name} con tag {hit.tag}");
             if (hit.CompareTag(grabbableTag))
             {
                 Rigidbody rb = hit.GetComponent<Rigidbody>();
@@ -200,10 +260,6 @@ public class SimpleGrabManager : MonoBehaviour
                         bestTarget = rb;
                     }
                 }
-                /*else
-                {
-                    Debug.LogWarning($"El objeto {hit.name} tiene el tag {grabbableTag} pero no tiene un Rigidbody.");
-                }*/
             }
         }
         if (bestTarget != null)
@@ -242,34 +298,13 @@ public class SimpleGrabManager : MonoBehaviour
         Debug.Log("¡Victoria! Has recogido todos los robots.");
     }
 
-    void DefeatAchieved()
-    {
-        isVictoryAchieved = false;
-        timerIsRunning = false;
-        StopReminder();
-        yesD.SetActive(true);
-        noD.SetActive(true);
-        defeat.SetActive(true);
-        Debug.Log("¡Derrota! No has recogido todos los robots.");
-    }
-   
-    public void OnClickYesD()
-    {
-        yesD.SetActive(false);
-        noD.SetActive(false);
-        defeat.SetActive(false);
-        winningStreak = 0;
-        difficulty--;
-        ResetRound();
-    }
-
     public void OnClickYesV()
     {
         stage++;
         yesV.SetActive(false);
         noV.SetActive(false);
         victory.SetActive(false);
-        bool wasFast = timer >= (initialTimerValue * 0.25f);
+        bool wasFast = timer >= (initialTimerValue * 0.25f) && timer > 0;
         bool goodMotorControl = droppedRobots <= 1;
         if (wasFast && goodMotorControl)
         {
@@ -290,7 +325,7 @@ public class SimpleGrabManager : MonoBehaviour
     void ResetRound()
     {
         timer = initialTimerValue;
-        timerIsRunning = true;
+        timerIsRunning = useTimerConfig;
         isVictoryAchieved = false;
         droppedRobots = 0;
         robotContainer.ResetContainer();
@@ -350,11 +385,6 @@ public class SimpleGrabManager : MonoBehaviour
         {
             StopCoroutine(warningCoroutine);
         }
-        /*if(warningOriginalScale == Vector3.zero)
-        {
-            warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
-        }*/
-        
         warningCoroutine = StartCoroutine(WarningAnimationRoutine(message));
     }
 
@@ -371,7 +401,6 @@ public class SimpleGrabManager : MonoBehaviour
             Color c = warning.color;
             c.a = 1.0f; // Reset alpha to fully opaque
             warning.color = c;
-            //warningOriginalScale = warning.transform.localScale;
         }
     }
 

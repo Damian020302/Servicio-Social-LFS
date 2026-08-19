@@ -1,38 +1,50 @@
-using NUnit.Framework;
+//using NUnit.Framework;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static Unity.Collections.Unicode;
+using UnityEngine.UI;
+//using static Unity.Collections.Unicode;
 
 public class PuzzleManager : MonoBehaviour
 {
+    [Header("Timer Configuration")]
+    public GameObject timerPanel;
+    public TextMeshProUGUI timeDisplay;
+    public Toggle useTimerToggle;
+    public GameObject timerControls;
+    private float selectedTime = 60.0f;
+
     [Header("Buttons")]
     public GameObject victoria;
-    public GameObject derrota;
-    public GameObject yesD;
-    public GameObject noD;
     public GameObject yesV;
     public GameObject noV;
+
     [Header("UI")]
     public TextMeshProUGUI dungeonText;
     public TextMeshProUGUI timeRemainingText;
+
     [Header("Constant Warning")]
     public TextMeshProUGUI warning;
     public float warningBlinkSpeed = 5.0f;
     public float warningScaleMultiplier = 1.2f;
     private Coroutine warningCoroutine;
     private Vector3 warningOriginalScale;
+
     [Header("Puzzle Administrator")]
     public GameObject puzzleAdmin;
+
     [Header("Level Variables")]
     public int dungeon = 1;
     public int difficulty = 0; // Variable to track the current difficulty level
     public int winningStreak = 0;
     private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
+
+    [Header("Timer Variables")]
     public float timer = 60.0f; // Timer for defeat condition (if needed)
     public bool timerIsRunning = false; // Flag to track if the timer is running
     public float initialTimerValue;
+    private bool useTimerConfig;
     [Header("Puzzle Pieces")]
     private System.Collections.Generic.Dictionary<Collider, Quaternion> perfectRotations = new System.Collections.Generic.Dictionary<Collider, Quaternion>(); // Dictionary to store perfect rotations for each piece
     [Header("Phases")]
@@ -46,11 +58,51 @@ public class PuzzleManager : MonoBehaviour
     [Header("Door Manager")]
     public DoorManager doorManager; // Reference to the DoorManager script
 
-    /*public void OnClickNo()
+    public void IncreaseTime()
     {
-        SceneManager.LoadScene("Menu2");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
-    }*/
+        selectedTime += 30.0f; // Incrementa en 10 segundos
+        UpdateTimeDisplay();
+    }
+
+    public void DecreaseTime()
+    {
+        if (selectedTime > 30.0f) // Evita que el tiempo sea menor a 10 segundos
+        {
+            selectedTime -= 30.0f; // Decrementa en 10 segundos
+        }
+        UpdateTimeDisplay();
+    }
+
+    private void UpdateTimeDisplay()
+    {
+        if (timeDisplay != null)
+        {
+            float minutes = Mathf.FloorToInt(selectedTime / 60);
+            float seconds = Mathf.FloorToInt(selectedTime % 60);
+            timeDisplay.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+    }
+
+    public void OnToggleTimer()
+    {
+        if (timerControls != null)
+        {
+            timerControls.SetActive(useTimerToggle.isOn);
+        }
+    }
+
+    public void ConfirmAndStartGame()
+    {
+        PlayerPrefs.SetInt("UseTimer", useTimerToggle.isOn ? 1 : 0);
+        PlayerPrefs.SetFloat("SessionTime", selectedTime);
+        PlayerPrefs.Save();
+        if (timerPanel != null)
+        {
+            timerPanel.SetActive(false);
+        }
+        SceneManager.LoadScene("Calibracion2");
+        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el juego
+    }
 
     public void MenuGeneral()
     {
@@ -60,35 +112,60 @@ public class PuzzleManager : MonoBehaviour
 
     public void MainScene()
     {
-        SceneManager.LoadScene("Calibracion2");
+        SceneManager.LoadScene("Juego3");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+    }
+
+    public void Calibrate()
+    {
+        if (timerPanel != null)
+        {
+            timerPanel.SetActive(true);
+            UpdateTimeDisplay();
+            if (timerControls != null)
+            {
+                timerControls.SetActive(useTimerToggle.isOn);
+            }
+        }
+        else
+        {
+            SceneManager.LoadScene("Calibracion2");
+            Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+        }
     }
 
     void Start()
     {
-        Collider[] allPieces = puzzleAdmin.GetComponentsInChildren<Collider>(true); // Get all colliders from the puzzle pieces
-        foreach(Collider piece in allPieces)
+        if(SceneManager.GetActiveScene().name == "Juego2")
         {
-            perfectRotations.Add(piece, piece.transform.rotation); // Store the initial rotation as the perfect rotation for each piece
-        }
-        initialTimerValue = timer; // Store the initial timer value for potential resets
-        yesV.SetActive(false); // Ensure the yes object is initially inactive
-        noV.SetActive(false);
-        yesD.SetActive(false); // Ensure the yes object is initially inactive
-        noD.SetActive(false); // Ensure the no object is initially inactive
-        victoria.SetActive(false); // Ensure the victory object is initially inactive
-        derrota.SetActive(false); // Ensure the defeat object is initially inactive
-        timerIsRunning = true; // Start the timer
-        DinamicPuzzle();
-        if (warning != null)
-        {
-            warningOriginalScale = warning.transform.localScale;
-            if(warningOriginalScale == Vector3.zero)
+            Collider[] allPieces = puzzleAdmin.GetComponentsInChildren<Collider>(true); // Get all colliders from the puzzle pieces
+            foreach (Collider piece in allPieces)
             {
-                warningOriginalScale = Vector3.one; // Fallback to a default scale if the original scale is not set
+                perfectRotations.Add(piece, piece.transform.rotation); // Store the initial rotation as the perfect rotation for each piece
             }
+            yesV.SetActive(false); // Ensure the yes object is initially inactive
+            noV.SetActive(false);
+            victoria.SetActive(false); // Ensure the victory object is initially inactive
+            DinamicPuzzle();
+            if (warning != null)
+            {
+                warningOriginalScale = warning.transform.localScale;
+                if (warningOriginalScale == Vector3.zero)
+                {
+                    warningOriginalScale = Vector3.one; // Fallback to a default scale if the original scale is not set
+                }
+            }
+            UpdateReminderMessage();
+            isVictoryAchieved = false;
         }
-        UpdateReminderMessage();
+        useTimerConfig = PlayerPrefs.GetInt("UseTimer", 1) == 1;
+        initialTimerValue = PlayerPrefs.GetFloat("SessionTime", 60.0f);
+        timer = initialTimerValue;
+        timerIsRunning = useTimerConfig;
+        if (!useTimerConfig && timeRemainingText != null)
+        {
+            timeRemainingText.gameObject.SetActive(false);
+        }
     }
 
     void DinamicPuzzle()
@@ -138,36 +215,31 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
-    void DefeatAchieved()
-    {
-        StopReminder(); // Stop any active reminders when defeat is achieved
-        yesD.SetActive(true); // Activate the yes object
-        noD.SetActive(true); // Activate the no object
-        derrota.SetActive(true); // Activate the defeat object
-
-        foreach(Collider[] phase in puzzlePhases)
-        {
-            foreach(Collider piece in phase)
-            {
-                if(piece != null)
-                {
-                    piece.gameObject.SetActive(false); // Deactivate all puzzle pieces
-                }
-            }
-        }
-
-        Debug.Log("Defeat logic executed.");
-    }
-
     public void Update()
     {
         if(isVictoryAchieved)
         {
             return; // Exit if victory has already been achieved
         }
+        if (useTimerConfig && timerIsRunning)
+        {
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+                DisplayTime(timer);
+                //UpdateUI();
+            }
+            else
+            {
+                timer = 0;
+                timerIsRunning = false;
+                isVictoryAchieved = true;
+                VictoryAchieved();
+            }
+        }
         Collider[] currentPhasePieces = puzzlePhases[actualPhase]; // Get the pieces for the current phase
         int correctPieces = GetCorrectPiecesCount(currentPhasePieces);
-        if(doorManager != null/* && currentPhasePieces.Length > 0*/)
+        if(doorManager != null)
         {
             int totalLevelPieces = 0;
             int totalCorrectPieces = 0;
@@ -209,6 +281,7 @@ public class PuzzleManager : MonoBehaviour
             {
                 Debug.Log("All pieces are correctly aligned! Checking for victory condition...");
                 isVictoryAchieved = true; // Set victory flag to true
+                timerIsRunning = false;
                 VictoryAchieved();
                 Debug.Log("Victory Achieved! All pieces are aligned.");
             }
@@ -228,21 +301,6 @@ public class PuzzleManager : MonoBehaviour
                     }
                 }
                 UpdateReminderMessage();
-            }
-        }
-        if (timerIsRunning)
-        {
-            if(timer > 0)
-            {
-                timer -= Time.deltaTime; // Decrease the timer by the time elapsed since the last frame
-                DisplayTime(timer); // Update the UI text with the remaining time
-            }
-            else
-            {
-                timer = 0;
-                timerIsRunning = false; // Stop the timer
-                DefeatAchieved(); // Trigger defeat logic
-                Debug.Log("Defeat Achieved! Time has run out.");
             }
         }
     }
@@ -281,6 +339,8 @@ public class PuzzleManager : MonoBehaviour
 
     void VictoryAchieved()
     {
+        isVictoryAchieved = true;
+        timerIsRunning = false;
         yesV.SetActive(true); // Activate the yes object
         noV.SetActive(true); // Activate the no object
         victoria.SetActive(true); // Activate the victory object
@@ -292,33 +352,13 @@ public class PuzzleManager : MonoBehaviour
         Debug.Log("Victory logic executed.");
     }
 
-    public void OnClickYesD()
-    {
-        yesD.SetActive(false); // Deactivate the yes object
-        noD.SetActive(false); // Deactivate the no object
-        derrota.SetActive(false); // Deactivate the defeat object
-        timer = initialTimerValue; // Reset the timer to its initial value
-        timerIsRunning = true; // Restart the timer
-        isVictoryAchieved = false; // Reset victory flag
-        winningStreak = 0; // Reset winning streak on defeat
-        difficulty--;
-        DinamicPuzzle(); // Regenerate the puzzle with the updated difficulty level
-        if(doorManager != null)
-        {
-            doorManager.UpdateOpening(0.0f); // Reset the door to closed position
-        }
-        Debug.Log("Restarting puzzle after defeat.");
-        UpdateUI(); // Update the UI to reflect the reset state
-        UpdateReminderMessage();
-    }
-
     public void OnClickYesV()
     {
         dungeon++;
         yesV.SetActive(false); // Deactivate the yes object
         noV.SetActive(false); // Deactivate the no object
         victoria.SetActive(false); // Deactivate the victory object
-        if(timer >= (initialTimerValue * 0.5f))
+        if(timer >= (initialTimerValue * 0.5f) && timer > 0)
         {
             winningStreak++;
             if(winningStreak >= 2)
@@ -332,7 +372,7 @@ public class PuzzleManager : MonoBehaviour
             winningStreak = 0; // Reset winning streak if the player won with less than 50% of the time remaining
         }
         timer = initialTimerValue; // Reset the timer to its initial value
-        timerIsRunning = true; // Restart the timer
+        timerIsRunning = useTimerConfig; // Restart the timer
         isVictoryAchieved = false; // Reset victory flag
         DinamicPuzzle(); // Regenerate the puzzle with the updated difficulty level
         if(doorManager != null)
@@ -403,10 +443,6 @@ public class PuzzleManager : MonoBehaviour
     {
         if (warningCoroutine != null) StopCoroutine(warningCoroutine);
         warningCoroutine = StartCoroutine(WarningAnimationRoutine(message));
-        /*if(dungeon > 1)
-        {
-            warningCoroutine = StartCoroutine(WarningAnimationRoutine("Rota tu muñeca en las runas exteriores"));
-        }*/
     }
 
     public void StopReminder()
