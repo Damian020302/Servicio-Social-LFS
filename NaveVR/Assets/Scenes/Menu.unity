@@ -3080,7 +3080,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 629680549}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: OnToggleTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &458102408
 GameObject:
@@ -4448,10 +4460,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c4dc88133923554e98f4aa7c50b10ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  timerPanel: {fileID: 1343627197}
+  timeDisplay: {fileID: 1060617606}
+  useTimerToggle: {fileID: 455288796}
+  timerControls: {fileID: 731553377}
   scoreText: {fileID: 0}
-  missText: {fileID: 0}
   roundText: {fileID: 0}
   countdownText: {fileID: 0}
+  timeRemainingText: {fileID: 0}
   warning: {fileID: 0}
   warningBlinkSpeed: 5
   warningScaleMultiplier: 1.2
@@ -4464,6 +4480,9 @@ MonoBehaviour:
   enemySize: 1
   actualRadius: 0
   roundOver: 0
+  timer: 0
+  timerIsRunning: 0
+  initialTimerValue: 0
 --- !u!4 &629680550
 Transform:
   m_ObjectHideFlags: 0
@@ -6596,7 +6615,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 922557495}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 629680549}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: IncreaseTime
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &922557495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8126,7 +8157,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1070951841}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 629680549}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: DecreaseTime
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1070951841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11498,7 +11541,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1453772409}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 629680549}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ConfirmAndStartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1453772409
 MonoBehaviour:
   m_ObjectHideFlags: 0

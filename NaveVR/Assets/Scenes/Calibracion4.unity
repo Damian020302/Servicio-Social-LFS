@@ -1352,7 +1352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9150943, g: 0.11333534, b: 0.07338022, a: 0.392}
+  m_Color: {r: 0.5803922, g: 0.07450981, b: 0.91764706, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3874,6 +3874,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RealityManager
   mainCamera: {fileID: 159029307}
   passthroughLayer: {fileID: 591693384}
+  vrSign: {fileID: 0}
+  mrSign: {fileID: 0}
 --- !u!114 &629680552
 MonoBehaviour:
   m_ObjectHideFlags: 0

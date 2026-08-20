@@ -131,6 +131,7 @@ public class CauldronManager : MonoBehaviour
         SceneManager.LoadScene("MenuGeneral");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
     }
+
     public void MainScene()
     {
         SceneManager.LoadScene("Juego3");
@@ -230,7 +231,6 @@ public class CauldronManager : MonoBehaviour
         UpdateUI();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isVictoryAchieved || activeWrist == null)
@@ -282,7 +282,6 @@ public class CauldronManager : MonoBehaviour
             {
                 timer -= Time.deltaTime;
                 DisplayTime(timer);
-                //UpdateUI();
             }
             else
             {

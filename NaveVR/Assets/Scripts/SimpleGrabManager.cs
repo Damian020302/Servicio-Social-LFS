@@ -38,6 +38,10 @@ public class SimpleGrabManager : MonoBehaviour
     public Transform leftPalm;
     public Transform rightPalm;
     private Transform activePalm;
+    [Header("Visual Feedback")]
+    public Light leftPalmLight;
+    public Light rightPalmLight;
+    private Light activePalmLight;
 
     [Header("Grab Settings")]
     public float grabRadius = 0.15f;
@@ -148,18 +152,22 @@ public class SimpleGrabManager : MonoBehaviour
         {
             activeHand = leftHand;
             activePalm = leftPalm != null ? leftPalm : leftHand.transform;
+            activePalmLight = leftPalmLight;
         }
         else if(selectedHand == 1 && rightHand != null)
         {
             activeHand = rightHand;
             activePalm = rightPalm != null ? rightPalm : rightHand.transform;
+            activePalmLight = rightPalmLight;
         }
         else
         {
             Debug.Log("No se encontro una mano activa");
         }
+        if(leftPalmLight != null) leftPalmLight.enabled = false;
+        if (rightPalmLight != null) rightPalmLight.enabled = false;
 
-        if(SceneManager.GetActiveScene().name == "Juego4")
+        if (SceneManager.GetActiveScene().name == "Juego4")
         {
             float maxGrabStrength = PlayerPrefs.GetFloat("MaxGrabStrength", 0.7f);
             grabThreshold = maxGrabStrength * 0.8f; // 80% of the max grab strength
@@ -266,6 +274,7 @@ public class SimpleGrabManager : MonoBehaviour
         {
             robotSpawner.ClearPlatform();
             isGrabbing = true;
+            if (activePalmLight != null) activePalmLight.enabled = true;
             grabbedObject = bestTarget;
             grabbedObject.isKinematic = true;
             grabbedObject.transform.SetParent(activePalm);
@@ -283,6 +292,7 @@ public class SimpleGrabManager : MonoBehaviour
             grabbedObject = null;
         }
         isGrabbing = false;
+        if(activePalmLight != null) activePalmLight.enabled = false;
         actualPhase = 0;
         UpdateReminderMessage();
     }
@@ -328,6 +338,7 @@ public class SimpleGrabManager : MonoBehaviour
         timerIsRunning = useTimerConfig;
         isVictoryAchieved = false;
         droppedRobots = 0;
+        if(activePalmLight != null) activePalmLight.enabled = false;
         robotContainer.ResetContainer();
         if(robotSpawner != null)
         {

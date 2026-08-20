@@ -4190,7 +4190,7 @@ GameObject:
   - component: {fileID: 560204170}
   - component: {fileID: 560204169}
   m_Layer: 3
-  m_Name: Miss
+  m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4235,7 +4235,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Fallos:'
+  m_text: 'Tiempo: '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fd776498105942e4e8eaa269251c0e45, type: 2}
   m_sharedMaterial: {fileID: 6264901535176047496, guid: fd776498105942e4e8eaa269251c0e45, type: 2}
@@ -11437,10 +11437,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c4dc88133923554e98f4aa7c50b10ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  timerPanel: {fileID: 0}
+  timeDisplay: {fileID: 0}
+  useTimerToggle: {fileID: 0}
+  timerControls: {fileID: 0}
   scoreText: {fileID: 1942070465}
-  missText: {fileID: 560204169}
   roundText: {fileID: 160287255}
   countdownText: {fileID: 885100525}
+  timeRemainingText: {fileID: 560204169}
   warning: {fileID: 199705107}
   warningBlinkSpeed: 5
   warningScaleMultiplier: 1.2
@@ -11453,6 +11457,9 @@ MonoBehaviour:
   enemySize: 1
   actualRadius: 0
   roundOver: 0
+  timer: 0
+  timerIsRunning: 0
+  initialTimerValue: 0
 --- !u!4 &1617407036
 Transform:
   m_ObjectHideFlags: 0
