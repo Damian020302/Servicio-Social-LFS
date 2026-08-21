@@ -4661,6 +4661,12 @@ MonoBehaviour:
   timerIsRunning: 0
   initialTimerValue: 0
   actualPhase: 0
+  averageTimeToGrab: 0
+  averageHoldTime: 0
+  totalRoundTime: 0
+  averageTimeToGrabText: {fileID: 640854863}
+  averageHoldTimeText: {fileID: 1094569542}
+  totalRoundTimeText: {fileID: 927271117}
 --- !u!1 &639625403
 GameObject:
   m_ObjectHideFlags: 0
@@ -5317,7 +5323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &712873918
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13712,7 +13718,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1830701458
 RectTransform:
   m_ObjectHideFlags: 0

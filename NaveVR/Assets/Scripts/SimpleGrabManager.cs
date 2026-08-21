@@ -69,6 +69,21 @@ public class SimpleGrabManager : MonoBehaviour
     private bool useTimerConfig;
     public int actualPhase = 0;//0 cuando tiene que cerrar la mano, 1 cuando tiene que abrirla
 
+    [Header("Average Times")]
+    public float averageTimeToGrab = 0.0f;
+    public float averageHoldTime = 0.0f;
+    public float totalRoundTime = 0.0f;
+    public TextMeshProUGUI averageTimeToGrabText;
+    public TextMeshProUGUI averageHoldTimeText;
+    public TextMeshProUGUI totalRoundTimeText;
+    private float totalTimeToGrab = 0.0f;
+    private float totalHoldTime = 0.0f;
+    private int grabCount = 0;
+    private int holdCount = 0;
+    private float timeRobotAppeared = 0.0f;
+    private float timeRobotGrabbed = 0.0f;
+    private float roundStartTime = 0.0f;
+
     public void IncreaseTime()
     {
         selectedTime += 30.0f;
@@ -166,7 +181,6 @@ public class SimpleGrabManager : MonoBehaviour
         }
         if(leftPalmLight != null) leftPalmLight.enabled = false;
         if (rightPalmLight != null) rightPalmLight.enabled = false;
-
         if (SceneManager.GetActiveScene().name == "Juego4")
         {
             float maxGrabStrength = PlayerPrefs.GetFloat("MaxGrabStrength", 0.7f);
@@ -186,6 +200,9 @@ public class SimpleGrabManager : MonoBehaviour
             initialTimerValue = timer;
             timerIsRunning = true;
             isVictoryAchieved = false;
+            timeRobotAppeared = Time.time;
+            roundStartTime = Time.time;
+            totalRoundTime = 0.0f;
             UpdateUI();
             UpdateReminderMessage();
         }
@@ -213,6 +230,7 @@ public class SimpleGrabManager : MonoBehaviour
     void Update()
     {
         if(isVictoryAchieved) return;
+        totalRoundTime = Time.time - roundStartTime;
         if(useTimerConfig && timerIsRunning)
         {
             if(timer > 0)
@@ -226,6 +244,16 @@ public class SimpleGrabManager : MonoBehaviour
                 timerIsRunning = false;
                 isVictoryAchieved = true;
                 VictoryAchieved();
+            }
+        }
+        else if(!useTimerConfig)
+        {
+            //totalRoundTime = Time.time - roundStartTime;
+            if(totalRoundTimeText != null)
+            {
+                float minutes = Mathf.FloorToInt(totalRoundTime / 60);
+                float seconds = Mathf.FloorToInt(totalRoundTime % 60);
+                totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}", minutes, seconds);
             }
         }
         if (activeHand == null || !activeHand.IsTracked) return;
@@ -279,6 +307,12 @@ public class SimpleGrabManager : MonoBehaviour
             grabbedObject.isKinematic = true;
             grabbedObject.transform.SetParent(activePalm);
             actualPhase = 1;
+            float timeTakenToGrab = Time.time - timeRobotAppeared;
+            totalTimeToGrab += timeTakenToGrab;
+            grabCount++;
+            averageTimeToGrab = totalTimeToGrab / grabCount;
+            timeRobotGrabbed = Time.time;
+            UpdateMetricsUI();
             UpdateReminderMessage();
         }
     }
@@ -294,13 +328,38 @@ public class SimpleGrabManager : MonoBehaviour
         isGrabbing = false;
         if(activePalmLight != null) activePalmLight.enabled = false;
         actualPhase = 0;
+        float holdDuration = Time.time - timeRobotGrabbed;
+        totalHoldTime += holdDuration;
+        holdCount++;
+        averageHoldTime = totalHoldTime / holdCount;
+        timeRobotAppeared = Time.time;
+        UpdateMetricsUI();
         UpdateReminderMessage();
+    }
+
+    public void UpdateMetricsUI()
+    {
+        if(averageHoldTimeText != null)
+        {
+            averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
+        }
+        if(averageTimeToGrabText != null)
+        {
+            averageTimeToGrabText.text = string.Format("Tiempo Promedio entre Agarre: {0:F1}s", averageTimeToGrab);
+        }
     }
 
     public void VictoryAchieved()
     {
         isVictoryAchieved = true;
         timerIsRunning = false;
+        if(totalRoundTimeText != null)
+        {
+            //float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
+            float minutes = Mathf.FloorToInt(totalRoundTime / 60);
+            float seconds = Mathf.FloorToInt(totalRoundTime % 60);
+            totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}", minutes, seconds);
+        }
         StopReminder();
         victory.SetActive(true);
         yesV.SetActive(true);
@@ -338,6 +397,16 @@ public class SimpleGrabManager : MonoBehaviour
         timerIsRunning = useTimerConfig;
         isVictoryAchieved = false;
         droppedRobots = 0;
+        totalTimeToGrab = 0.0f;
+        totalHoldTime = 0.0f;
+        grabCount = 0;
+        holdCount = 0;
+        averageTimeToGrab = 0.0f;
+        averageHoldTime = 0.0f;
+        timeRobotAppeared = Time.time;
+        roundStartTime = Time.time;
+        totalRoundTime = 0.0f;
+        UpdateMetricsUI();
         if(activePalmLight != null) activePalmLight.enabled = false;
         robotContainer.ResetContainer();
         if(robotSpawner != null)
