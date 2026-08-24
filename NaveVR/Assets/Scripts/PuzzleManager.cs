@@ -34,8 +34,10 @@ public class PuzzleManager : MonoBehaviour
 
     [Header("Level Variables")]
     public int dungeon = 1;
-    public int difficulty = 0; // Variable to track the current difficulty level
-    public int winningStreak = 0;
+    public int currentPuzzleIndex = 0;
+    private int totalPuzzles = 0;
+    //public int difficulty = 0; // Variable to track the current difficulty level
+    //public int winningStreak = 0;
     private bool isVictoryAchieved = false; // Flag to track if victory has been achieved
 
     [Header("Timer Variables")]
@@ -51,7 +53,7 @@ public class PuzzleManager : MonoBehaviour
 
     [Header("Victory configuration")]
     [Tooltip("Margin of error")]
-    public float victoryMargin = 12.0f; // Margin of error for victory condition
+    public float victoryMargin = 20.0f; // Margin of error for victory condition
 
     [Header("Door Manager")]
     public DoorManager doorManager; // Reference to the DoorManager script
@@ -136,6 +138,7 @@ public class PuzzleManager : MonoBehaviour
     {
         if(SceneManager.GetActiveScene().name == "Juego2")
         {
+            totalPuzzles = puzzleAdmin.transform.childCount;
             Collider[] allPieces = puzzleAdmin.GetComponentsInChildren<Collider>(true); // Get all colliders from the puzzle pieces
             foreach (Collider piece in allPieces)
             {
@@ -144,7 +147,9 @@ public class PuzzleManager : MonoBehaviour
             yesV.SetActive(false); // Ensure the yes object is initially inactive
             noV.SetActive(false);
             victoria.SetActive(false); // Ensure the victory object is initially inactive
-            DinamicPuzzle();
+            currentPuzzleIndex = 0;
+            LoadCurrentPuzzle();
+            //DinamicPuzzle();
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
@@ -166,7 +171,55 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
-    void DinamicPuzzle()
+    void LoadCurrentPuzzle()
+    {
+        GameObject activePuzzle = null;
+        for(int i = 0; i < totalPuzzles; i++)
+        {
+            bool isSelected = (i == currentPuzzleIndex);
+            puzzleAdmin.transform.GetChild(i).gameObject.SetActive(isSelected);
+            if(isSelected)
+            {
+                activePuzzle = puzzleAdmin.transform.GetChild(i).gameObject;
+            }
+        }
+        puzzlePhases.Clear();
+        actualPhase = 0;
+        if(activePuzzle == null) return;
+        int phases = activePuzzle.transform.childCount;
+        for(int j = 0; j < phases; j++)
+        {
+            Transform nPuzzle = activePuzzle.transform.GetChild(j);
+            int piecesInPhase = nPuzzle.childCount;
+            Collider[] phasePieces = new Collider[piecesInPhase];
+            for (int k = 0; k < piecesInPhase; k++)
+            {
+                Collider pieceCollider = nPuzzle.GetChild(k).GetComponent<Collider>();
+                phasePieces[k] = pieceCollider; // Store the collider for each piece in the current phase
+                pieceCollider.gameObject.SetActive(true); // Ensure the piece is active in the scene
+                Rigidbody rb = pieceCollider.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = false; // Make the pieces non-physical to prevent them from falling or being interacted with
+                    rb.angularVelocity = Vector3.zero; // Stop any existing angular velocity to prevent pieces from spinning
+                    rb.angularDamping = 15.0f; // Apply angular damping to gradually stop rotation
+                }
+                pieceCollider.transform.rotation = perfectRotations[pieceCollider]; // Reset the piece to its perfect rotation
+                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
+                pieceCollider.transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
+                pieceCollider.enabled = (j == 0); // Enable only the pieces of the first phase
+                RotatePuzzle scriptRotation = pieceCollider.GetComponent<RotatePuzzle>();
+                if (scriptRotation != null)
+                {
+                    scriptRotation.enabled = (j == 0); // Enable the RotatePuzzle script only for the pieces of the first phase
+                }
+            }
+            puzzlePhases.Add(phasePieces); // Add the current phase pieces to the list of phases
+        }
+        UpdateReminderMessage();
+    }
+
+    /*void DinamicPuzzle()
     {
         difficulty = Mathf.Clamp(difficulty, 0, puzzleAdmin.transform.childCount - 1); // Increase difficulty every 3 dungeons
         GameObject activePuzzle = null;
@@ -211,7 +264,7 @@ public class PuzzleManager : MonoBehaviour
             }
             puzzlePhases.Add(phasePieces); // Add the current phase pieces to the list of phases
         }
-    }
+    }*/
 
     public void Update()
     {
@@ -237,9 +290,22 @@ public class PuzzleManager : MonoBehaviour
         }
         Collider[] currentPhasePieces = puzzlePhases[actualPhase]; // Get the pieces for the current phase
         int correctPieces = GetCorrectPiecesCount(currentPhasePieces);
-        if(doorManager != null)
+        if(doorManager != null && totalPuzzles > 0)
         {
-            int totalLevelPieces = 0;
+            int totalPiecesInCurrentPuzzle = 0;
+            int correctPiecesInCurrentPuzzle = 0;
+            foreach (Collider[] phase in puzzlePhases)
+            {
+                totalPiecesInCurrentPuzzle += phase.Length;
+                correctPiecesInCurrentPuzzle += GetCorrectPiecesCount(phase);
+            }
+            if(totalPiecesInCurrentPuzzle > 0)
+            {
+                float baseProgress = (float)currentPuzzleIndex / totalPuzzles;
+                float currentPuzzleProgress = ((float)correctPiecesInCurrentPuzzle / totalPiecesInCurrentPuzzle) / totalPuzzles;
+                doorManager.UpdateOpening(baseProgress + currentPuzzleProgress);
+            }
+            /*int totalLevelPieces = 0;
             int totalCorrectPieces = 0;
             foreach (Collider[] phase in puzzlePhases)
             {
@@ -250,7 +316,7 @@ public class PuzzleManager : MonoBehaviour
             {
                 float progress = (float)totalCorrectPieces / totalLevelPieces; // Calculate overall progress as a percentage
                 doorManager.UpdateOpening(progress); // Update the door opening based on overall progress
-            }
+            }*/
         }
         if (correctPieces == currentPhasePieces.Length)
         {
@@ -277,11 +343,19 @@ public class PuzzleManager : MonoBehaviour
             actualPhase++; // Move to the next phase
             if (actualPhase >= puzzlePhases.Count)
             {
-                Debug.Log("All pieces are correctly aligned! Checking for victory condition...");
-                isVictoryAchieved = true; // Set victory flag to true
-                timerIsRunning = false;
-                VictoryAchieved();
-                Debug.Log("Victory Achieved! All pieces are aligned.");
+                currentPuzzleIndex++;
+                if(currentPuzzleIndex >= totalPuzzles)
+                {
+                    Debug.Log("All pieces are correctly aligned! Checking for victory condition...");
+                    isVictoryAchieved = true; // Set victory flag to true
+                    timerIsRunning = false;
+                    VictoryAchieved();
+                    Debug.Log("Victory Achieved! All pieces are aligned.");
+                }
+                else
+                {
+                    LoadCurrentPuzzle();
+                }
             }
             else
             {
@@ -356,7 +430,7 @@ public class PuzzleManager : MonoBehaviour
         yesV.SetActive(false); // Deactivate the yes object
         noV.SetActive(false); // Deactivate the no object
         victoria.SetActive(false); // Deactivate the victory object
-        if(timer >= (initialTimerValue * 0.5f) && timer > 0)
+        /*if(timer >= (initialTimerValue * 0.5f) && timer > 0)
         {
             winningStreak++;
             if(winningStreak >= 2)
@@ -368,11 +442,12 @@ public class PuzzleManager : MonoBehaviour
         else
         {
             winningStreak = 0; // Reset winning streak if the player won with less than 50% of the time remaining
-        }
+        }*/
         timer = initialTimerValue; // Reset the timer to its initial value
         timerIsRunning = useTimerConfig; // Restart the timer
         isVictoryAchieved = false; // Reset victory flag
-        DinamicPuzzle(); // Regenerate the puzzle with the updated difficulty level
+        //DinamicPuzzle(); // Regenerate the puzzle with the updated difficulty level
+        currentPuzzleIndex = 0;
         if(doorManager != null)
         {
             doorManager.UpdateOpening(0.0f); // Reset the door to closed position
@@ -387,7 +462,7 @@ public class PuzzleManager : MonoBehaviour
         StopReminder();
         if(actualPhase == 0)
         {
-            if (difficulty > 0)
+            if (currentPuzzleIndex > 0)
             {
                 StartReminder("Rota tu muñeca en las runas interiores");
             }
@@ -398,7 +473,7 @@ public class PuzzleManager : MonoBehaviour
         }
         else
         {
-            if (difficulty > 0)
+            if (currentPuzzleIndex > 0)
             {
                 StartReminder("Rota tu muñeca en las runas exteriores");
             }
@@ -413,7 +488,7 @@ public class PuzzleManager : MonoBehaviour
     {
         if(dungeonText != null)
         {
-            dungeonText.text = "Calabozo " + dungeon; // Update the dungeon level text
+            dungeonText.text = "Catacumba " + dungeon; // Update the dungeon level text
         }
     }
 
