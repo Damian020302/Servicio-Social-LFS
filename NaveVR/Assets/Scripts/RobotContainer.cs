@@ -11,7 +11,7 @@ public class RobotContainer : MonoBehaviour
 
     [Header("Configuracion del Nivel")]
     public int maxRobotsPerRound = 10;
-    private int robotsCollected = 0;
+    public int robotsCollected = 0;
     [Tooltip("Altura fija del contenedor de robots")]
     public float containerHeight = 0.75f;
     private float maxReachRadius;
@@ -23,7 +23,6 @@ public class RobotContainer : MonoBehaviour
         maxReachRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.4f);
         maxReachRadius = Mathf.Max(maxReachRadius - 0.05f, 0.2f); // Ensure a minimum radius
         MoveToNewPosition();
-        
     }
 
     void MoveToNewPosition()
@@ -37,7 +36,7 @@ public class RobotContainer : MonoBehaviour
         Vector3 newPosition = transform.position;
         bool validPosition = false;
         int attempts = 0;
-        while(!validPosition && attempts < 20)
+        while(!validPosition && attempts < 100)
         {
             float randomAngle = Random.Range(-currentMaxAngle, currentMaxAngle);
             float randomDistance = Random.Range(minD, currentMaxDist);

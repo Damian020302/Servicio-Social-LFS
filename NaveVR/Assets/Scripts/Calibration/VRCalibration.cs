@@ -24,10 +24,13 @@ public class VRCalibration : MonoBehaviour
     [Header("Calibration Maths")]
     //private Quaternion neutralRotation;
     private int currentReps = 0;
-    [Tooltip("Distancia minima en metros para empezar a medir")] public float minDist = 0.3f;
+    [Tooltip("Distancia minima en metros para empezar a medir")] public float minDist = 0.4f;
     private float holdTimer = 0.0f;
     private float maxDistanceThisRep = 0.0f;
     private List<float> recordedDistances = new List<float>();
+    [Header("Rastreadores de altura")]
+    private float maxHeightThisRep = -100.0f;
+    private List<float> recordedHeights = new List<float>();
     [Header("UI Elements")]
     public TextMeshProUGUI instructionText;
     //private bool isCalibrated = false;
@@ -40,7 +43,7 @@ public class VRCalibration : MonoBehaviour
             instructionText.text = "Estira tu brazo sano lo más que puedas y mantén la posición...";
         }
         DetermineActiveHand();
-        Invoke("SetNeutralRotation", 10.0f);
+        Invoke("SetNeutralRotation", 5.0f);
     }
 
     void DetermineActiveHand()
@@ -78,6 +81,7 @@ public class VRCalibration : MonoBehaviour
         Vector3 handFlat = new Vector3(activeHand.position.x, 0, activeHand.position.z);
         float currentDistance = Vector3.Distance(centerFlat, handFlat);*/
         float currentDistance = Vector3.Distance(playerCenter.position, activeHand.position);
+        float currentHeight = activeHand.position.y - playerCenter.position.y;
         if(calibrationState == CalibrationState.WaitingForStretch)
         {
             if (currentDistance > minDist)
@@ -86,6 +90,10 @@ public class VRCalibration : MonoBehaviour
                 {
                     maxDistanceThisRep = currentDistance;
                 }
+                if(currentHeight > maxHeightThisRep)
+                {
+                    maxHeightThisRep = currentHeight;
+                }
                 if (currentDistance >= (maxDistanceThisRep - 0.05f))
                 {
                     holdTimer += Time.deltaTime;
@@ -93,9 +101,11 @@ public class VRCalibration : MonoBehaviour
                     if (holdTimer >= holdTimeRequired)
                     {
                         recordedDistances.Add(maxDistanceThisRep);
+                        recordedHeights.Add(maxHeightThisRep);
                         currentReps++;
                         holdTimer = 0;
                         maxDistanceThisRep = 0.0f;
+                        maxHeightThisRep = -100.0f;
                         if(currentReps >= totalReps)
                         {
                             SaveMeanDistance();
@@ -121,6 +131,7 @@ public class VRCalibration : MonoBehaviour
                 {
                     holdTimer = 0.0f;
                     maxDistanceThisRep = 0.0f;
+                    maxHeightThisRep = -100.0f;
                     UpdateUI();
                 }
             }
@@ -134,28 +145,9 @@ public class VRCalibration : MonoBehaviour
                 UpdateUI();
             }
         }
-        
-        /*if (ovrHandL != null && ovrHandL.IsTracked)
-        {
-            bool isPinchingL = ovrHandL.GetFingerIsPinching(OVRHand.HandFinger.Index);
-            if (isPinchingL)
-            {
-                Debug.Log("Pellizco detectado en mano izquierda");
-                SaveMaxDistance(1);
-            }
-        }
-        if (ovrHandR != null && ovrHandR.IsTracked)
-        {
-            bool isPinchingR = ovrHandR.GetFingerIsPinching(OVRHand.HandFinger.Index);
-            if(isPinchingR)
-            {
-                Debug.Log("Pellizco detectado en mano derecha");
-                SaveMaxDistance(2);
-            }
-        }*/
     }
 
-    void SaveMeanDistance(/*int hand*/)
+    void SaveMeanDistance()
     {
         calibrationState = CalibrationState.Completed;
         float sum = 0;
@@ -167,40 +159,20 @@ public class VRCalibration : MonoBehaviour
         /*isCalibrated = true;*/
         float finalRadio = meanDistance - 0.05f;
         finalRadio = Mathf.Max(finalRadio, 0.2f);
+        float sumHeight = 0;
+        foreach(float height in recordedHeights)
+        {
+            sumHeight += height;
+        }
+        float meanHeight = sumHeight / recordedHeights.Count;
         PlayerPrefs.SetFloat("PlayerRadius", finalRadio);
+        PlayerPrefs.SetFloat("PlayerMaxHeight", meanHeight);
         PlayerPrefs.Save();
         if(instructionText != null )
         {
-            instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\nIniciando terapia...";
+            instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\nAltura detectada: {meanHeight:F2}m\nIniciando terapia...";
         }
         Invoke("LoadNextScene", 3.0f);
-        /*if (hand == 1)
-        {
-            float extensionDistance = Vector3.Distance(playerCenter.position, referencePointL.position);
-            float finalRadio = extensionDistance - 0.05f;
-            PlayerPrefs.SetFloat("PlayerRadius", finalRadio);
-            PlayerPrefs.Save();
-            if(instructionText != null)
-            {
-                instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
-                Debug.Log($"Calibraci�n completa. Radio guardado: {finalRadio:F2}m");
-                Invoke("LoadNextScene", 3f); // Espera 3 segundos antes de cargar la siguiente escena)
-            }
-        }
-        else if (hand == 2)
-        {
-            float extensionDistance = Vector3.Distance(playerCenter.position, referencePointR.position);
-            float finalRadio = extensionDistance - 0.05f;
-            PlayerPrefs.SetFloat("PlayerRadius", finalRadio);
-            PlayerPrefs.Save();
-            if (instructionText != null)
-            {
-                instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\n\nIniciando terapia...";
-                Debug.Log($"Calibraci�n completa. Radio guardado: {finalRadio:F2}m");
-                Invoke("LoadNextScene", 3f); // Espera 3 segundos antes de cargar la siguiente escena)
-            }
-        }*/
-        
     }
 
     void LoadNextScene()

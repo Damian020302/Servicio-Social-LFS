@@ -73,9 +73,13 @@ public class SimpleGrabManager : MonoBehaviour
     public float averageTimeToGrab = 0.0f;
     public float averageHoldTime = 0.0f;
     public float totalRoundTime = 0.0f;
+    public float initialReactionTime = 0.0f;
     public TextMeshProUGUI averageTimeToGrabText;
     public TextMeshProUGUI averageHoldTimeText;
     public TextMeshProUGUI totalRoundTimeText;
+    public TextMeshProUGUI totalGrabsText;
+    public TextMeshProUGUI successGrabsText;
+    public TextMeshProUGUI failGrabsText;
     private float totalTimeToGrab = 0.0f;
     private float totalHoldTime = 0.0f;
     private int grabCount = 0;
@@ -339,13 +343,13 @@ public class SimpleGrabManager : MonoBehaviour
 
     public void UpdateMetricsUI()
     {
-        if(averageHoldTimeText != null)
+        if(averageHoldTimeText != null && averageHoldTimeText != null && totalGrabsText != null && successGrabsText != null && failGrabsText != null)
         {
             averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
-        }
-        if(averageTimeToGrabText != null)
-        {
             averageTimeToGrabText.text = string.Format("Tiempo Promedio entre Agarre: {0:F1}s", averageTimeToGrab);
+            totalGrabsText.text = string.Format("Total de Agarres: {0:F1}", (droppedRobots+robotContainer.robotsCollected));
+            successGrabsText.text = string.Format("Aciertos: {0:F1}", robotContainer.robotsCollected);
+            failGrabsText.text = string.Format("Fallos: {0:F1}", droppedRobots);
         }
     }
 
