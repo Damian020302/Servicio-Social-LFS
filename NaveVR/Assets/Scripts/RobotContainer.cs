@@ -62,12 +62,6 @@ public class RobotContainer : MonoBehaviour
             attempts++;
         }
         transform.position = newPosition;
-        /*float randomAngle = Random.Range(-60.0f, 60.0f);
-        float randomDistance = Random.Range(0.15f, maxReachRadius);
-        Vector3 offset = Quaternion.Euler(0, randomAngle, 0) * playerCenter.forward * randomDistance;
-        Vector3 newPosition = playerCenter.position + offset;
-        newPosition.y = containerHeight; // Set the fixed height
-        transform.position = newPosition;*/
     }
 
     private void OnTriggerStay(Collider other)
@@ -91,6 +85,7 @@ public class RobotContainer : MonoBehaviour
         {
             gameManager.clawText.text = $"Robots\nrestantes: {maxRobotsPerRound - robotsCollected}";
         }
+        gameManager.UpdateMetricsUI();
         if(robotsCollected >= maxRobotsPerRound)
         {
             if(gameManager != null)

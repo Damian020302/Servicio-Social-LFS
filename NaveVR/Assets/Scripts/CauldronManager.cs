@@ -79,6 +79,24 @@ public class CauldronManager : MonoBehaviour
     public float initialTimerValue;
     private bool useTimerConfig;
 
+    [Header("Average Times")]
+    public float averageTimeToFlex = 0.0f;
+    public float averageTimeToExt = 0.0f;
+    public float totalRoundTime = 0.0f;
+    public float initialReactionTime = 0.0f;
+    public float maxAngleFlex = 0.0f;
+    public float maxAngleExt = 0.0f;
+    public float averageAngleExt = 0.0f;
+    public float averageAngleFlex = 0.0f;
+    public TextMeshProUGUI initialReactionTimeText;
+    public TextMeshProUGUI totalRoundTimeText;
+    public TextMeshProUGUI averageTimeToFlexText;
+    public TextMeshProUGUI averageTimeToExtText;
+    public TextMeshProUGUI maxAngleFlexText;
+    public TextMeshProUGUI maxAngleExtText;
+    public TextMeshProUGUI averageAngleFlexText;
+    public TextMeshProUGUI averageAngleExtText;
+
     public void IncreaseTime()
     {
         selectedTime += 30.0f; // Incrementa en 10 segundos

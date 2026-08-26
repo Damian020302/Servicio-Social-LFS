@@ -36,11 +36,16 @@ public class RobotSpawner : MonoBehaviour
                 {
                     if(gameManager != null)
                     {
-                        gameManager.droppedRobots++;
+                        gameManager.RegisterDroppedRobot();
+                        Debug.Log("Se debe de llevar esta cantidad de caidos " + gameManager.droppedRobots);
                     }
+                    
                     Destroy(currentRobot);
                     ClearCurrentRobot();
                     RespawnCurrentRobot();
+                    //gameManager.RegisterDroppedRobot();
+                    //gameManager.RegisterDroppedRobot();
+                    
                 }
             }
         }

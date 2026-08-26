@@ -58,6 +58,20 @@ public class PuzzleManager : MonoBehaviour
     [Header("Door Manager")]
     public DoorManager doorManager; // Reference to the DoorManager script
 
+    [Header("Average Times")]
+    public float totalRoundTime = 0.0f;
+    public float initialReactionTime = 0.0f;
+    public float averageRotationTime = 0.0f;
+    public float averageSolvingTime = 0.0f;
+    public float averageRotationAngle = 0.0f;
+    public float maxRotationAngle = 0.0f;
+    public TextMeshProUGUI totalRoundTimeText;
+    public TextMeshProUGUI initialReactionTimeText;
+    public TextMeshProUGUI averageRotationTimeText;
+    public TextMeshProUGUI averageSolvingTimeText;
+    public TextMeshProUGUI averageRotationAngleText;
+    public TextMeshProUGUI maxRotationAngleText;
+
     public void IncreaseTime()
     {
         selectedTime += 30.0f; // Incrementa en 10 segundos

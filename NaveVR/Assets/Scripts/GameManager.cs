@@ -49,6 +49,17 @@ public class GameManager : MonoBehaviour
     public bool timerIsRunning = false;
     public float initialTimerValue;
     private bool useTimerConfig;
+    [Header("AverageTimes")]
+    public float totalRoundTime = 0.0f;
+    public float maxSpeedAchieved = 0.0f;
+    public float maxRadiusAchieved = 0.0f;
+    public float averageInteractionTime = 0.0f;
+    public float averageArmAngle = 0.0f;
+    public TextMeshProUGUI totalRoundTimeText;
+    public TextMeshProUGUI maxSpeedAchievedText;
+    public TextMeshProUGUI maxRadiusAchievedText;
+    public TextMeshProUGUI averageInteractionTimeText;
+    public TextMeshProUGUI averageArmAngleText;
 
     public void IncreaseTime()
     {

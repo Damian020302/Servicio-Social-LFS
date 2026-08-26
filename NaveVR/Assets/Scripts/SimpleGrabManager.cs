@@ -74,6 +74,7 @@ public class SimpleGrabManager : MonoBehaviour
     public float averageHoldTime = 0.0f;
     public float totalRoundTime = 0.0f;
     public float initialReactionTime = 0.0f;
+    public TextMeshProUGUI initialReactionTimeText;
     public TextMeshProUGUI averageTimeToGrabText;
     public TextMeshProUGUI averageHoldTimeText;
     public TextMeshProUGUI totalRoundTimeText;
@@ -252,7 +253,6 @@ public class SimpleGrabManager : MonoBehaviour
         }
         else if(!useTimerConfig)
         {
-            //totalRoundTime = Time.time - roundStartTime;
             if(totalRoundTimeText != null)
             {
                 float minutes = Mathf.FloorToInt(totalRoundTime / 60);
@@ -312,6 +312,10 @@ public class SimpleGrabManager : MonoBehaviour
             grabbedObject.transform.SetParent(activePalm);
             actualPhase = 1;
             float timeTakenToGrab = Time.time - timeRobotAppeared;
+            if(grabCount == 0)
+            {
+                initialReactionTime = timeTakenToGrab;
+            }
             totalTimeToGrab += timeTakenToGrab;
             grabCount++;
             averageTimeToGrab = totalTimeToGrab / grabCount;
@@ -341,15 +345,33 @@ public class SimpleGrabManager : MonoBehaviour
         UpdateReminderMessage();
     }
 
+    public void RegisterDroppedRobot()
+    {
+        droppedRobots++;
+        UpdateMetricsUI();
+    }
+
     public void UpdateMetricsUI()
     {
-        if(averageHoldTimeText != null && averageHoldTimeText != null && totalGrabsText != null && successGrabsText != null && failGrabsText != null)
+        if(averageHoldTimeText != null)
         {
             averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
+        }
+        if (initialReactionTimeText != null)
+        {
+            initialReactionTimeText.text = string.Format("Tiempo de Reacción: {0:F1}s", initialReactionTime);
+        }
+        if (averageHoldTimeText != null)
+        {
             averageTimeToGrabText.text = string.Format("Tiempo Promedio entre Agarre: {0:F1}s", averageTimeToGrab);
-            totalGrabsText.text = string.Format("Total de Agarres: {0:F1}", (droppedRobots+robotContainer.robotsCollected));
-            successGrabsText.text = string.Format("Aciertos: {0:F1}", robotContainer.robotsCollected);
-            failGrabsText.text = string.Format("Fallos: {0:F1}", droppedRobots);
+        }
+        if(totalGrabsText != null)
+        {
+            totalGrabsText.text = string.Format("Total de Agarres: {0}", (droppedRobots + robotContainer.robotsCollected));
+            Debug.Log("Aciertos " + robotContainer.robotsCollected);
+            Debug.Log("Fallos " + droppedRobots);
+            successGrabsText.text = string.Format("Aciertos: {0}", robotContainer.robotsCollected);
+            failGrabsText.text = string.Format("Fallos: {0}", droppedRobots);
         }
     }
 
@@ -359,7 +381,6 @@ public class SimpleGrabManager : MonoBehaviour
         timerIsRunning = false;
         if(totalRoundTimeText != null)
         {
-            //float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
             float minutes = Mathf.FloorToInt(totalRoundTime / 60);
             float seconds = Mathf.FloorToInt(totalRoundTime % 60);
             totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}", minutes, seconds);
@@ -368,6 +389,7 @@ public class SimpleGrabManager : MonoBehaviour
         victory.SetActive(true);
         yesV.SetActive(true);
         noV.SetActive(true);
+        UpdateMetricsUI();
         Debug.Log("¡Victoria! Has recogido todos los robots.");
     }
 
@@ -407,6 +429,7 @@ public class SimpleGrabManager : MonoBehaviour
         holdCount = 0;
         averageTimeToGrab = 0.0f;
         averageHoldTime = 0.0f;
+        initialReactionTime = 0.0f;
         timeRobotAppeared = Time.time;
         roundStartTime = Time.time;
         totalRoundTime = 0.0f;

@@ -4665,12 +4665,13 @@ MonoBehaviour:
   averageHoldTime: 0
   totalRoundTime: 0
   initialReactionTime: 0
+  initialReactionTimeText: {fileID: 640143898}
   averageTimeToGrabText: {fileID: 640854863}
   averageHoldTimeText: {fileID: 1094569542}
   totalRoundTimeText: {fileID: 927271117}
-  totalGrabsText: {fileID: 0}
-  successGrabsText: {fileID: 0}
-  failGrabsText: {fileID: 0}
+  totalGrabsText: {fileID: 1774541136}
+  successGrabsText: {fileID: 809685405}
+  failGrabsText: {fileID: 1178121781}
 --- !u!1 &639625403
 GameObject:
   m_ObjectHideFlags: 0
@@ -11843,7 +11844,7 @@ MonoBehaviour:
   platform: {fileID: 287892682}
   robotDeployer: {fileID: 1505822578}
   robotContainer: {fileID: 2001156173}
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 629680552}
   fallThreshold: 0
 --- !u!1 &1537782052
 GameObject:
