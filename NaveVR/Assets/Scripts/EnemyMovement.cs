@@ -38,10 +38,8 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(player == null)
-        {
-            return;
-        }
+        if(player == null) return;
+        if(GameManager.Instance != null) speed = GameManager.Instance.enemySpeed;
         if (!isStopped)
         {
             transform.LookAt(player);
@@ -76,9 +74,6 @@ public class EnemyMovement : MonoBehaviour
 
     public void Pieces()
     {
-        if(destroyedEnemyPrefab != null)
-        {
-            Instantiate(destroyedEnemyPrefab, transform.position, transform.rotation);
-        }
+        if(destroyedEnemyPrefab != null) Instantiate(destroyedEnemyPrefab, transform.position, transform.rotation);
     }
 }

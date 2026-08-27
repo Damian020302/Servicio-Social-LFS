@@ -50,5 +50,4 @@ public class EnemyDifficulty : MonoBehaviour
         SceneManager.LoadScene("Juego");
         Time.timeScale = 1.0f;
     }
-
 }

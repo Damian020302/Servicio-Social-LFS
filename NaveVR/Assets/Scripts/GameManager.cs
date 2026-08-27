@@ -33,8 +33,8 @@ public class GameManager : MonoBehaviour
     private int misses = 0;
     private int round = 1;
     public int enemiesPerRound = 10;
-    private int enemiesTouched = 0;
-    private int enemiesExpired = 0;
+    public int enemiesTouched = 0;
+    public int enemiesExpired = 0;
     [Header("Dificultad Dinamica")]
     public float enemyLifetime = 10.0f;
     public float timeSpawnInterval = 2.0f;
@@ -55,11 +55,22 @@ public class GameManager : MonoBehaviour
     public float maxRadiusAchieved = 0.0f;
     public float averageInteractionTime = 0.0f;
     public float averageArmAngle = 0.0f;
+    public float averageSpawningTimeAchieved = 0.0f;
+    public TextMeshProUGUI averageSpawningTimeAchievedText;
     public TextMeshProUGUI totalRoundTimeText;
     public TextMeshProUGUI maxSpeedAchievedText;
     public TextMeshProUGUI maxRadiusAchievedText;
     public TextMeshProUGUI averageInteractionTimeText;
     public TextMeshProUGUI averageArmAngleText;
+    public TextMeshProUGUI enemiesExpiredText;
+    public TextMeshProUGUI enemiesTouchedText;
+
+    private float lastTouchTime = 0.0f;
+    private float totalInteractionTime = 0.0f;
+    private int interactionCount = 0;
+    private float totalSpawnIntervals = 0.0f;
+    private int spawnCount = 0;
+    private float roundStartTime = 0.0f;
 
     public void IncreaseTime()
     {
@@ -171,15 +182,12 @@ public class GameManager : MonoBehaviour
             timeSpawnInterval = PlayerPrefs.GetFloat("TimeSpawnInterval", 2.0f);
             enemySize = PlayerPrefs.GetFloat("EnemySize", 1.0f);
             maxRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.7f);
+            averageArmAngle = PlayerPrefs.GetFloat("PlayerShoulderAngle", 0.0f);
             actualRadius = 0.3f; // Comenzamos con un radio más pequeño para aumentar la dificultad gradualmente
-            if (continuePanel != null)
-            {
-                continuePanel.SetActive(false);
-            }
-            if (countdownText != null)
-            {
-                countdownText.gameObject.SetActive(false);
-            }
+            maxSpeedAchieved = enemySpeed;
+            maxRadiusAchieved = actualRadius;
+            if (continuePanel != null) continuePanel.SetActive(false);
+            if (countdownText != null) countdownText.gameObject.SetActive(false);
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
@@ -192,15 +200,14 @@ public class GameManager : MonoBehaviour
         initialTimerValue = PlayerPrefs.GetFloat("SessionTime", 60.0f);
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
-        if(!useTimerConfig && timeRemainingText != null)
-        {
-            timeRemainingText.gameObject.SetActive(false);
-        }
+        if(!useTimerConfig && timeRemainingText != null) timeRemainingText.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        if(useTimerConfig && timerIsRunning && !roundOver)
+        if (roundOver) return;
+        totalRoundTime = Time.time - roundStartTime;
+        if(useTimerConfig && timerIsRunning)
         {
             if (timer > 0)
             {
@@ -213,9 +220,15 @@ public class GameManager : MonoBehaviour
                 timer = 0;
                 timerIsRunning = false;
                 roundOver = true;
-                EvaluateDifficulty();
+                //EvaluateDifficulty();
                 ShowContinuePrompt();
             }
+        }
+        else if(!useTimerConfig && totalRoundTimeText != null)
+        {
+            float minutes = Mathf.FloorToInt(totalRoundTime / 60);
+            float seconds = Mathf.FloorToInt(totalRoundTime % 60);
+            totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}", minutes, seconds);
         }
     }
 
@@ -224,10 +237,7 @@ public class GameManager : MonoBehaviour
         timeToDisplay += 1;
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-        if(timeRemainingText != null)
-        {
-            timeRemainingText.text = string.Format("Tiempo: {0:00}:{1:00}", minutes, seconds);
-        }
+        if(timeRemainingText != null) timeRemainingText.text = string.Format("Tiempo: {0:00}:{1:00}", minutes, seconds);
     }
 
     IEnumerator CoundownRutine()
@@ -251,6 +261,9 @@ public class GameManager : MonoBehaviour
         roundOver = false;
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
+        roundStartTime = Time.time;
+        lastTouchTime = Time.time;
+        totalRoundTime = 0.0f;
         StartReminder();
         StartCoroutine(SpawnWaveRoutine());
     }
@@ -260,10 +273,11 @@ public class GameManager : MonoBehaviour
         EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
         while(!roundOver)
         {
-            if (spawner != null)
-            {
-                spawner.SpawnSingleEnemy();
-            }
+            if (spawner != null) spawner.SpawnSingleEnemy();
+            totalSpawnIntervals += timeSpawnInterval;
+            spawnCount++;
+            averageSpawningTimeAchieved = totalSpawnIntervals / spawnCount;
+            UpdateMetricsUI();
             yield return new WaitForSeconds(timeSpawnInterval);
         }
     }
@@ -272,6 +286,15 @@ public class GameManager : MonoBehaviour
     {
         score += points;
         enemiesTouched++;
+        float interaction = Time.time - lastTouchTime;
+        totalInteractionTime += interaction;
+        interactionCount++;
+        averageInteractionTime = totalInteractionTime / interactionCount;
+        lastTouchTime = Time.time;
+        enemySpeed = Mathf.Min(enemySpeed + 0.1f, 10.0f);
+        timeSpawnInterval = Mathf.Max(timeSpawnInterval - 0.05f, 0.5f);
+        actualRadius = Mathf.Min(actualRadius + 0.2f, 3.0f);
+        UpdateMetricsUI();
         UpdateUI();
         CheckRoundEnd();
     }
@@ -280,6 +303,12 @@ public class GameManager : MonoBehaviour
     {
         misses++;
         enemiesExpired++;
+        lastTouchTime = Time.time;
+        enemySpeed = Mathf.Max(enemySpeed - 0.1f, 1.0f);
+        timeSpawnInterval = Mathf.Min(timeSpawnInterval + 0.05f, 5.0f);
+        actualRadius = Mathf.Max(actualRadius - 0.02f, 0.2f);
+        enemyLifetime = Mathf.Min(enemyLifetime + 0.2f, 10.0f);
+        UpdateMetricsUI();
         UpdateUI();
        // CheckRoundEnd();
     }
@@ -291,12 +320,16 @@ public class GameManager : MonoBehaviour
         {
             roundOver = true;
             timerIsRunning = false;
-            EvaluateDifficulty();
+            PlayerPrefs.SetFloat("TimeSpawnInterval", timeSpawnInterval);
+            PlayerPrefs.SetFloat("EnemySpeed", enemySpeed);
+            PlayerPrefs.SetFloat("EnemyLifetime", enemyLifetime);
+            PlayerPrefs.Save();
+            //EvaluateDifficulty();
             ShowContinuePrompt();
         }
     }
 
-    void EvaluateDifficulty()
+    /*void EvaluateDifficulty()
     {
         // Calculamos el porcentaje de éxito (0.0 a 1.0)
         int totalEnemiesSpawned = enemiesTouched + enemiesExpired;
@@ -328,6 +361,40 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Manteniendo dificultad para la próxima ronda.");
         }
+    }*/
+
+    void UpdateMetricsUI()
+    {
+        maxSpeedAchieved = Mathf.Max(maxSpeedAchieved, enemySpeed);
+        maxRadiusAchieved = Mathf.Max(maxRadiusAchieved, actualRadius);
+        if(maxSpeedAchievedText != null)
+        {
+            maxSpeedAchievedText.text = string.Format("Velocidad Máxima alcanzada\npor las Naves: {0:F1}", maxSpeedAchieved);
+        }
+        if (maxRadiusAchievedText != null)
+        {
+            maxRadiusAchievedText.text = string.Format("Radio Máximo \nalcanzado: {0:F1}", maxRadiusAchieved);
+        }
+        if (averageInteractionTimeText != null)
+        {
+            averageInteractionTimeText.text = string.Format("Tiempo Promedio\nentre Interacción: {0:F1}s", averageInteractionTime);
+        }
+        if (averageSpawningTimeAchievedText != null)
+        {
+            averageSpawningTimeAchievedText.text = string.Format("Tiempo de Aparición\nde las Naves: {0:F1}s", averageSpawningTimeAchieved);
+        }
+        if (averageArmAngleText != null)
+        {
+            averageArmAngleText.text = string.Format("Angulo Promedio\ndel Brazo: {0:F1}", averageArmAngle);
+        }
+        if(enemiesTouchedText != null)
+        {
+            enemiesTouchedText.text = string.Format("Aciertos: {0}", enemiesTouched);
+        }
+        if(enemiesExpiredText != null)
+        {
+            enemiesExpiredText.text = string.Format("Fallos: {0}", enemiesExpired);
+        }
     }
 
     void ShowContinuePrompt()
@@ -335,6 +402,13 @@ public class GameManager : MonoBehaviour
         if (continuePanel != null)
         {
             StopReminder();
+            if(totalRoundTimeText != null)
+            {
+                float finalTime = useTimerConfig ? initialTimerValue : totalRoundTime;
+                float minutes = Mathf.FloorToInt(finalTime / 60);
+                float seconds = Mathf.FloorToInt(finalTime % 60);
+                totalRoundTimeText.text = string.Format("Tiempo total: {0:00}:{1:00}", minutes, seconds);
+            }
             continuePanel.SetActive(true);
         }
     }
