@@ -14,7 +14,8 @@ public class RotatePuzzle : MonoBehaviour
 
     [Header("Therapeutic Restriction")]
     [Tooltip("Set the maximum rotation angle for each interaction")]
-    public float maxRotationPerInteraction = 90.0f;
+    public float physicalRotationLimit = 90.0f;
+    public float rotationMultiplier = 1.0f;
 
     [Header("Victory Lights")]
     private Light[] runeLights;
@@ -26,7 +27,17 @@ public class RotatePuzzle : MonoBehaviour
         yRotation = transform.localEulerAngles.y;
         runeLights = GetComponentsInChildren<Light>(true);
         ToggleLights(false);
-        maxRotationPerInteraction = PlayerPrefs.GetFloat("MaxPuzzleRotation", maxRotationPerInteraction);
+        physicalRotationLimit = PlayerPrefs.GetFloat("MaxPuzzleRotation", physicalRotationLimit);
+        physicalRotationLimit = Mathf.Max(physicalRotationLimit, 5.0f);
+        float virtualRotationNeeded = 120.0f;
+        PuzzleManager puzzleManager = Object.FindFirstObjectByType<PuzzleManager>();
+        if(puzzleManager != null)
+        {
+            virtualRotationNeeded = puzzleManager.predefinedScrambleAngle;
+        }
+        rotationMultiplier = virtualRotationNeeded / physicalRotationLimit;
+        Debug.Log($"RotatePuzzle: Limite Fisico = {physicalRotationLimit}, Meta virtual = {virtualRotationNeeded}, Multiplicador = {rotationMultiplier:F2}");
+        //maxRotationPerInteraction = PlayerPrefs.GetFloat("MaxPuzzleRotation", maxRotationPerInteraction);
     }
 
     private void Update()
@@ -35,8 +46,13 @@ public class RotatePuzzle : MonoBehaviour
         {
             // Calculate the rotation based on the hand's movement
             Quaternion difRotation = handInteraction.rotation * Quaternion.Inverse(initialHandRotation);
-            Quaternion targetRotation = difRotation * initialPuzzleRotation;
-            transform.rotation = Quaternion.RotateTowards(initialPuzzleRotation, targetRotation, maxRotationPerInteraction);
+            difRotation.ToAngleAxis(out float handAngle, out Vector3 handAxis);
+            if (handAngle > 180.0f) handAngle += 360.0f;
+            float virtualAngle = handAngle * rotationMultiplier;
+            Quaternion scaledDifRotation = Quaternion.AngleAxis(virtualAngle, handAxis);
+            transform.rotation = scaledDifRotation * initialPuzzleRotation;
+            //Quaternion targetRotation = difRotation * initialPuzzleRotation;
+            //transform.rotation = Quaternion.RotateTowards(initialPuzzleRotation, targetRotation, maxRotationPerInteraction);
             transform.position = pos;
             Vector3 blockedRotation = transform.localEulerAngles;
             blockedRotation.x = xRotation;
