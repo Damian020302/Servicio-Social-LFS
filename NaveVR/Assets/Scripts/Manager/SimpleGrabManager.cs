@@ -116,10 +116,7 @@ public class SimpleGrabManager : MonoBehaviour
 
     public void OnToggleTimer()
     {
-        if(timerControls != null)
-        {
-            timerControls.SetActive(useTimerToggle.isOn);
-        }
+        if(timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
     }
 
     public void ConfirmAndStartGame()
@@ -127,10 +124,7 @@ public class SimpleGrabManager : MonoBehaviour
         PlayerPrefs.SetInt("UseTimer", useTimerToggle.isOn ? 1 : 0);
         PlayerPrefs.SetFloat("SessionTime", selectedTime);
         PlayerPrefs.Save();
-        if (timerPanel != null)
-        {
-            timerPanel.SetActive(false);
-        }
+        if (timerPanel != null) timerPanel.SetActive(false);
         SceneManager.LoadScene("Calibracion4");
         Time.timeScale = 1.0f;
     }
@@ -153,10 +147,7 @@ public class SimpleGrabManager : MonoBehaviour
         {
             timerPanel.SetActive(true);
             UpdateTimeDisplay();
-            if (timerControls != null)
-            {
-                timerControls.SetActive(useTimerToggle.isOn);
-            }
+            if (timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
         }
         else
         {
@@ -194,10 +185,7 @@ public class SimpleGrabManager : MonoBehaviour
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
-                if (warningOriginalScale == Vector3.zero)
-                {
-                    warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
-                }
+                if (warningOriginalScale == Vector3.zero) warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
             }
             victory.SetActive(false);
             yesV.SetActive(false);
@@ -215,10 +203,7 @@ public class SimpleGrabManager : MonoBehaviour
         initialTimerValue = PlayerPrefs.GetFloat("SessionTime", 60.0f);
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
-        if(!useTimerConfig && timeRemainingText != null)
-        {
-            timeRemainingText.gameObject.SetActive(false);
-        }
+        if(!useTimerConfig && timeRemainingText != null) timeRemainingText.gameObject.SetActive(false);
     }
 
     float GetCurrentGrip()
@@ -262,14 +247,8 @@ public class SimpleGrabManager : MonoBehaviour
         }
         if (activeHand == null || !activeHand.IsTracked) return;
         float currentGrip = GetCurrentGrip();
-        if(!isGrabbing && currentGrip >= grabThreshold)
-        {
-            TryGrabObject();
-        }
-        else if(isGrabbing && currentGrip <= releaseThreshold)
-        {
-            ReleaseObject();
-        }
+        if(!isGrabbing && currentGrip >= grabThreshold) TryGrabObject();
+        else if(isGrabbing && currentGrip <= releaseThreshold) ReleaseObject();
     }
 
     void DisplayTime(float timeToDisplay)
@@ -312,10 +291,7 @@ public class SimpleGrabManager : MonoBehaviour
             grabbedObject.transform.SetParent(activePalm);
             actualPhase = 1;
             float timeTakenToGrab = Time.time - timeRobotAppeared;
-            if(grabCount == 0)
-            {
-                initialReactionTime = timeTakenToGrab;
-            }
+            if(grabCount == 0) initialReactionTime = timeTakenToGrab;
             totalTimeToGrab += timeTakenToGrab;
             grabCount++;
             averageTimeToGrab = totalTimeToGrab / grabCount;
@@ -353,23 +329,12 @@ public class SimpleGrabManager : MonoBehaviour
 
     public void UpdateMetricsUI()
     {
-        if(averageHoldTimeText != null)
-        {
-            averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
-        }
-        if (initialReactionTimeText != null)
-        {
-            initialReactionTimeText.text = string.Format("Tiempo de Reacción: {0:F1}s", initialReactionTime);
-        }
-        if (averageHoldTimeText != null)
-        {
-            averageTimeToGrabText.text = string.Format("Tiempo Promedio entre Agarre: {0:F1}s", averageTimeToGrab);
-        }
+        if(averageHoldTimeText != null) averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
+        if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de Reacción: {0:F1}s", initialReactionTime);
+        if (averageHoldTimeText != null) averageTimeToGrabText.text = string.Format("Tiempo Promedio entre Agarre: {0:F1}s", averageTimeToGrab);
         if(totalGrabsText != null)
         {
             totalGrabsText.text = string.Format("Total de Agarres: {0}", (droppedRobots + robotContainer.robotsCollected));
-            Debug.Log("Aciertos " + robotContainer.robotsCollected);
-            Debug.Log("Fallos " + droppedRobots);
             successGrabsText.text = string.Format("Aciertos: {0}", robotContainer.robotsCollected);
             failGrabsText.text = string.Format("Fallos: {0}", droppedRobots);
         }
@@ -410,10 +375,7 @@ public class SimpleGrabManager : MonoBehaviour
                 winningStreak = 0;
             }
         }
-        else
-        {
-            winningStreak = 0;
-        }
+        else winningStreak = 0;
         ResetRound();
     }
 
@@ -448,22 +410,13 @@ public class SimpleGrabManager : MonoBehaviour
     void UpdateReminderMessage()
     {
         StopReminder();
-        if(actualPhase == 0)
-        {
-            StartReminder("Cierra tu puño para agarrar al robot");
-        }
-        else
-        {
-            StartReminder("Abre tu puño para soltar al robot en el contenedor <color=red>rojo</color>");
-        }
+        if(actualPhase == 0) StartReminder("Cierra tu puño para agarrar al robot");
+        else StartReminder("Abre tu puño para soltar al robot en el contenedor <color=red>rojo</color>");
     }
 
     void UpdateUI()
     {
-        if(stageText != null)
-        {
-            stageText.text = "Stage " + stage;
-        }
+        if(stageText != null) stageText.text = "Stage " + stage;
     }
 
     IEnumerator WarningAnimationRoutine(string message)
@@ -488,10 +441,7 @@ public class SimpleGrabManager : MonoBehaviour
 
     public void StartReminder(string message)
     {
-        if(warningCoroutine != null)
-        {
-            StopCoroutine(warningCoroutine);
-        }
+        if(warningCoroutine != null) StopCoroutine(warningCoroutine);
         warningCoroutine = StartCoroutine(WarningAnimationRoutine(message));
     }
 

@@ -97,6 +97,16 @@ public class CauldronManager : MonoBehaviour
     public TextMeshProUGUI averageAngleFlexText;
     public TextMeshProUGUI averageAngleExtText;
 
+    private float roundStartTime = 0.0f;
+    private float phaseStartTime = 0.0f;
+    private bool hasReacted = false;
+    private float totalFlexTime = 0.0f;
+    private int flexCount = 0;
+    private float totalFlexAngle = 0.0f;
+    private float totalExtTime = 0.0f;
+    private int extCount = 0;
+    private float totalExtAngle = 0.0f;
+
     public void IncreaseTime()
     {
         selectedTime += 30.0f; // Incrementa en 10 segundos
@@ -105,10 +115,7 @@ public class CauldronManager : MonoBehaviour
 
     public void DecreaseTime()
     {
-        if (selectedTime > 30.0f) // Evita que el tiempo sea menor a 10 segundos
-        {
-            selectedTime -= 30.0f; // Decrementa en 10 segundos
-        }
+        if (selectedTime > 30.0f) selectedTime -= 30.0f;
         UpdateTimeDisplay();
     }
 
@@ -124,10 +131,7 @@ public class CauldronManager : MonoBehaviour
 
     public void OnToggleTimer()
     {
-        if (timerControls != null)
-        {
-            timerControls.SetActive(useTimerToggle.isOn);
-        }
+        if (timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
     }
 
     public void ConfirmAndStartGame()
@@ -135,10 +139,7 @@ public class CauldronManager : MonoBehaviour
         PlayerPrefs.SetInt("UseTimer", useTimerToggle.isOn ? 1 : 0);
         PlayerPrefs.SetFloat("SessionTime", selectedTime);
         PlayerPrefs.Save();
-        if (timerPanel != null)
-        {
-            timerPanel.SetActive(false);
-        }
+        if (timerPanel != null) timerPanel.SetActive(false);
         SceneManager.LoadScene("Calibracion3");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el juego
     }
@@ -162,10 +163,7 @@ public class CauldronManager : MonoBehaviour
         {
             timerPanel.SetActive(true);
             UpdateTimeDisplay();
-            if(timerControls != null)
-            {
-                timerControls.SetActive(useTimerToggle.isOn);
-            }
+            if(timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
         }
         else
         {
@@ -187,45 +185,49 @@ public class CauldronManager : MonoBehaviour
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
-                if (warningOriginalScale == Vector3.zero)
-                {
-                    warningOriginalScale = Vector3.one;
-                }
+                if (warningOriginalScale == Vector3.zero) warningOriginalScale = Vector3.one;
             }
             UpdateActiveWrist();
 
-            if (activeWrist != null)
-            {
-                neutralRotation = activeWrist.rotation;
-            }
-            else
-            {
-                Debug.LogError("No se ha asignado ninguna muñeca activa. Por favor, asigna una muñeca en el inspector.");
-            }
+            if (activeWrist != null) neutralRotation = activeWrist.rotation;
+            else Debug.LogError("No se ha asignado ninguna muñeca activa. Por favor, asigna una muñeca en el inspector.");
             extensionThreshold = PlayerPrefs.GetFloat("CauldronMaxExtension", extensionThreshold);
             flexionThreshold = PlayerPrefs.GetFloat("CauldronMaxFlexion", flexionThreshold);
+            ResetMetrics();
             LevelConfig();
         }
         useTimerConfig = PlayerPrefs.GetInt("UseTimer", 1) == 1;
         initialTimerValue = PlayerPrefs.GetFloat("SessionTime", 60.0f);
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
-        if (!useTimerConfig && timeRemainingText != null)
-        {
-            timeRemainingText.gameObject.SetActive(false);
-        }
+        if (!useTimerConfig && timeRemainingText != null) timeRemainingText.gameObject.SetActive(false);
+    }
+
+    void ResetMetrics()
+    {
+        totalRoundTime = 0.0f;
+        initialReactionTime = 0.0f;
+        averageTimeToFlex = 0.0f;
+        averageTimeToExt = 0.0f;
+        maxAngleFlex = 0.0f;
+        maxAngleExt = 0.0f;
+        averageAngleFlex = 0.0f;
+        averageAngleExt = 0.0f;
+        totalFlexTime = 0.0f;
+        flexCount = 0;
+        totalFlexAngle = 0.0f;
+        totalExtTime = 0.0f;
+        extCount = 0;
+        totalExtAngle = 0.0f;
+        hasReacted = false;
+        roundStartTime = Time.time;
+        phaseStartTime = Time.time;
     }
 
     void UpdateActiveWrist()
     {
-        if (leftWrist != null && leftWrist.gameObject.activeInHierarchy)
-        {
-            activeWrist = leftWrist;
-        }
-        else if (rightWrist != null && rightWrist.gameObject.activeInHierarchy)
-        {
-            activeWrist = rightWrist;
-        }
+        if (leftWrist != null && leftWrist.gameObject.activeInHierarchy) activeWrist = leftWrist;
+        else if (rightWrist != null && rightWrist.gameObject.activeInHierarchy) activeWrist = rightWrist;
         else
         {
             activeWrist = null;
@@ -242,19 +244,14 @@ public class CauldronManager : MonoBehaviour
         if (currentPotion != null) Destroy(currentPotion);
         currentState = ExerciseState.WaitingForFlexion;
         StartReminder("Flexiona tu muñeca para tomar la poción");
-        if(wandManager != null)
-        {
-            wandManager.UpdateRotation(0.0f);//90.0f
-        }
+        if(wandManager != null) wandManager.UpdateRotation(0.0f);//90.0f
         UpdateUI();
     }
 
     void Update()
     {
-        if (isVictoryAchieved || activeWrist == null)
-        {
-            return; // Evita que se ejecute el código de actualización si ya se ha logrado la victoria
-        }
+        if (isVictoryAchieved || activeWrist == null) return; // Evita que se ejecute el código de actualización si ya se ha logrado la victoria
+        totalRoundTime = Time.time - roundStartTime;
         Vector3 forwardNeutral = neutralRotation * Vector3.forward;
         Vector3 rightNeutral = neutralRotation * Vector3.right;
         float flexExtAngle = Vector3.SignedAngle(forwardNeutral, activeWrist.forward, rightNeutral);
@@ -263,10 +260,18 @@ public class CauldronManager : MonoBehaviour
         if (flexExtAngle > 0)
         {
             flexionAngle = flexExtAngle;
+            if (flexionAngle > maxAngleFlex) maxAngleFlex = flexionAngle;
+            if (!hasReacted && flexionAngle > 3.0f)
+            {
+                initialReactionTime = Time.time - roundStartTime;
+                hasReacted = true;
+                UpdateMetricsUI();
+            }
         }
         else if (flexExtAngle < 0)
         {
             extensionAngle = Mathf.Abs(flexExtAngle);
+            if(extensionAngle > maxAngleExt) maxAngleExt = extensionAngle;
         }
         float targetWandState = 0.0f;
         if (currentState == ExerciseState.WaitingForFlexion)
@@ -274,6 +279,13 @@ public class CauldronManager : MonoBehaviour
             targetWandState = 0.0f;
             if (flexionAngle >= flexionThreshold)
             {
+                float timeTaken = Time.time - phaseStartTime;
+                totalFlexTime += timeTaken;
+                totalFlexAngle += flexionAngle;
+                flexCount++;
+                averageTimeToFlex = totalFlexTime / flexCount;
+                averageAngleFlex = totalFlexAngle / flexCount;
+                UpdateMetricsUI();
                 SpawnPotion();
             }
         }
@@ -282,18 +294,18 @@ public class CauldronManager : MonoBehaviour
             targetWandState = 1.0f;
             if (extensionAngle >= extensionThreshold)
             {
+                float timeTaken = Time.time - phaseStartTime;
+                totalExtTime += timeTaken;
+                totalExtAngle += extensionAngle;
+                extCount++;
+                averageTimeToExt = totalExtTime / extCount;
+                averageAngleExt = totalExtAngle / extCount;
+                UpdateMetricsUI();
                 ThrowPotion();
             }
         }
-        else if (currentState == ExerciseState.WatingForPotionToLand)
-        {
-            targetWandState = 0.0f; // No se muestra progreso mientras la poción está en el aire
-        }
-        if(wandManager != null)
-        {
-            wandManager.UpdateRotation(targetWandState);
-        }
-
+        else if (currentState == ExerciseState.WatingForPotionToLand) targetWandState = 0.0f; // No se muestra progreso mientras la poción está en el aire
+        if(wandManager != null) wandManager.UpdateRotation(targetWandState);
         if (useTimerConfig && timerIsRunning)
         {
             if (timer > 0)
@@ -309,6 +321,12 @@ public class CauldronManager : MonoBehaviour
                 VictoryAchieved();
             }
         }
+        else if(!useTimerConfig && totalRoundTimeText != null)
+        {
+            float minutes = Mathf.FloorToInt(totalRoundTime / 60);
+            float seconds = Mathf.FloorToInt(totalRoundTime % 60);
+            totalRoundTimeText.text = string.Format("Tiempo total: {0:00}:{1:00}s", minutes, seconds);
+        }
         Debug.Log($"Flexion: {flexionAngle:F1}° | Extension: {extensionAngle:F1}°");
     }
 
@@ -319,6 +337,7 @@ public class CauldronManager : MonoBehaviour
             currentPotion = Instantiate(prefabPotion, spawnPoint.position, spawnPoint.rotation, spawnPoint);
             currentPotion.transform.localScale = prefabPotion.transform.localScale;
             currentState = ExerciseState.WaitingForExtension;
+            phaseStartTime = Time.time;
             StartReminder("Flexiona tu mano para lanzar la poción");
             Debug.Log("Extensión completa, poción tomada");
         }
@@ -331,10 +350,7 @@ public class CauldronManager : MonoBehaviour
             completeExercises++;
             currentPotion.transform.SetParent(null);
             Parabola parabola = currentPotion.GetComponent<Parabola>();
-            if(parabola == null)
-            {
-                parabola = currentPotion.AddComponent<Parabola>();
-            }
+            if(parabola == null) parabola = currentPotion.AddComponent<Parabola>();
             parabola.Launch(spawnPoint.position, cauldronEndpoint.position, launchSpeed, launchHeight);
             currentState = ExerciseState.WatingForPotionToLand;
             StartCoroutine(CheckPotionLanded(currentPotion));
@@ -361,6 +377,7 @@ public class CauldronManager : MonoBehaviour
             else
             {
                 currentState = ExerciseState.WaitingForFlexion;
+                phaseStartTime = Time.time;
                 StartReminder("Flexiona tu muñeca para tomar la poción");
             }
         }
@@ -384,8 +401,50 @@ public class CauldronManager : MonoBehaviour
         timeRemainingText.text = string.Format("Tiempo Restante: {0:00}:{1:00}", minutes, seconds);
     }
 
+    void UpdateMetricsUI()
+    {
+        if(initialReactionTimeText != null)
+        {
+            initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
+        }
+        if (averageTimeToFlexText != null)
+        {
+            averageTimeToFlexText.text = string.Format("Tiempo Promedio\nde Flexión: {0:F1}s", averageTimeToFlex);
+        }
+        if (averageTimeToExtText != null)
+        {
+            averageTimeToExtText.text = string.Format("Tiempo Promedio\ndw Extensión: {0:F1}s", averageTimeToExt);
+        }
+        if (maxAngleFlexText != null)
+        {
+            maxAngleFlexText.text = string.Format("Ángulo Máximo\nde Flexión: {0:F1}º", maxAngleFlex);
+        }
+        if (maxAngleExtText != null)
+        {
+            maxAngleExtText.text = string.Format("Ángulo Máximo\nde Extensión: {0:F1}º", maxAngleExt);
+        }
+        if (averageAngleFlexText != null)
+        {
+            averageAngleFlexText.text = string.Format("Ángulo Promedio\nde Flexión: {0:F1}º", averageAngleFlex);
+        }
+        if (averageAngleExtText != null)
+        {
+            averageAngleExtText.text = string.Format("Ángulo Promedio\nde Extensión: {0:F1}º", averageAngleExt);
+        }
+    }
+
     void VictoryAchieved()
     {
+        isVictoryAchieved = true;
+        timerIsRunning = false;
+        if(totalRoundTimeText != null)
+        {
+            float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
+            float minutes = Mathf.FloorToInt(finalTimeToShow / 60);
+            float seconds = Mathf.FloorToInt(finalTimeToShow % 60);
+            totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}s", minutes, seconds);
+        }
+        UpdateMetricsUI();
         StopReminder();
         yesV.SetActive(true);
         noV.SetActive(true);
@@ -414,6 +473,7 @@ public class CauldronManager : MonoBehaviour
         {
             winningStreak = 0;
         }
+        ResetMetrics();
         LevelConfig();
     }
 

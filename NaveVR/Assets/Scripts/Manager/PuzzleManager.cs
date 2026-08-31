@@ -558,23 +558,23 @@ public class PuzzleManager : MonoBehaviour
     {
         if(initialReactionTimeText != null)
         {
-            initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}", initialReactionTime);
+            initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
         }
         if(averageRotationTimeText != null)
         {
-            averageRotationTimeText.text = string.Format("Tiempo Promedio\nde Rotación: {0:F1}", averageRotationTime);
+            averageRotationTimeText.text = string.Format("Tiempo Promedio\nde Rotación: {0:F1}s", averageRotationTime);
         }
         if(averageSolvingTimeText != null)
         {
-            averageSolvingTimeText.text = string.Format("Tiempo Promedio\nde Resolución: {0:F1}", averageSolvingTime);
+            averageSolvingTimeText.text = string.Format("Tiempo Promedio\nde Resolución: {0:F1}s", averageSolvingTime);
         }
         if(averageRotationAngleText != null)
         {
-            averageRotationAngleText.text = string.Format("Ángulo Promedio\nde Rotación: {0:F1}", averageRotationAngle);
+            averageRotationAngleText.text = string.Format("Ángulo Promedio\nde Rotación: {0:F1}º", averageRotationAngle);
         }
         if(maxRotationAngleText != null)
         {
-            maxRotationAngleText.text = string.Format("Ánglo Máximo\nde Rotación: {0:F1}", maxRotationAngle);
+            maxRotationAngleText.text = string.Format("Ánglo Máximo\nde Rotación: {0:F1}º", maxRotationAngle);
         }
     }
 

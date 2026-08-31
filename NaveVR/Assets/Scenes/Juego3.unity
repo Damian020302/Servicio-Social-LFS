@@ -2106,7 +2106,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Poci\xF3n"
+  m_text: Caldero
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -15251,6 +15251,22 @@ MonoBehaviour:
   timer: 120
   timerIsRunning: 0
   initialTimerValue: 0
+  averageTimeToFlex: 0
+  averageTimeToExt: 0
+  totalRoundTime: 0
+  initialReactionTime: 0
+  maxAngleFlex: 0
+  maxAngleExt: 0
+  averageAngleExt: 0
+  averageAngleFlex: 0
+  initialReactionTimeText: {fileID: 1387273668}
+  totalRoundTimeText: {fileID: 1462715054}
+  averageTimeToFlexText: {fileID: 1850429664}
+  averageTimeToExtText: {fileID: 769044171}
+  maxAngleFlexText: {fileID: 1882723630}
+  maxAngleExtText: {fileID: 2119846835}
+  averageAngleFlexText: {fileID: 1409093874}
+  averageAngleExtText: {fileID: 1056093997}
 --- !u!114 &2014849221
 MonoBehaviour:
   m_ObjectHideFlags: 0

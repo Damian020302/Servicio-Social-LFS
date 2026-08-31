@@ -258,6 +258,7 @@ public class GameManager : MonoBehaviour
     {
         enemiesTouched = 0;
         enemiesExpired = 0;
+        score = 0;
         roundOver = false;
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
@@ -293,7 +294,7 @@ public class GameManager : MonoBehaviour
         lastTouchTime = Time.time;
         enemySpeed = Mathf.Min(enemySpeed + 0.1f, 10.0f);
         timeSpawnInterval = Mathf.Max(timeSpawnInterval - 0.05f, 0.5f);
-        actualRadius = Mathf.Min(actualRadius + 0.2f, 3.0f);
+        actualRadius = Mathf.Min(actualRadius + 0.2f, maxRadius);
         UpdateMetricsUI();
         UpdateUI();
         CheckRoundEnd();
@@ -373,7 +374,7 @@ public class GameManager : MonoBehaviour
         }
         if (maxRadiusAchievedText != null)
         {
-            maxRadiusAchievedText.text = string.Format("Radio Máximo \nalcanzado: {0:F1}", maxRadiusAchieved);
+            maxRadiusAchievedText.text = string.Format("Radio Máximo \nalcanzado: {0:F1}m", maxRadiusAchieved);
         }
         if (averageInteractionTimeText != null)
         {
@@ -385,7 +386,7 @@ public class GameManager : MonoBehaviour
         }
         if (averageArmAngleText != null)
         {
-            averageArmAngleText.text = string.Format("Angulo Promedio\ndel Brazo: {0:F1}", averageArmAngle);
+            averageArmAngleText.text = string.Format("Ángulo Promedio\ndel Brazo: {0:F1}º", averageArmAngle);
         }
         if(enemiesTouchedText != null)
         {
@@ -432,7 +433,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateUI()
     {
-        scoreText.text = "Puntuacion: " + score;
+        scoreText.text = "Naves\nrestantes: " + (enemiesPerRound - score);
         //missText.text = "Fallos: " + misses;
         roundText.text = "Round " + round;
     }
