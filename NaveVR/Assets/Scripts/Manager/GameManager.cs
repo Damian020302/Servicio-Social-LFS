@@ -51,12 +51,14 @@ public class GameManager : MonoBehaviour
     private bool useTimerConfig;
     [Header("AverageTimes")]
     public float totalRoundTime = 0.0f;
+    public float initialReactionTime = 0.0f;
     public float maxSpeedAchieved = 0.0f;
     public float maxRadiusAchieved = 0.0f;
     public float averageInteractionTime = 0.0f;
     public float averageArmAngle = 0.0f;
     public float averageSpawningTimeAchieved = 0.0f;
     public TextMeshProUGUI averageSpawningTimeAchievedText;
+    public TextMeshProUGUI initialReactionTimeText;
     public TextMeshProUGUI totalRoundTimeText;
     public TextMeshProUGUI maxSpeedAchievedText;
     public TextMeshProUGUI maxRadiusAchievedText;
@@ -80,10 +82,7 @@ public class GameManager : MonoBehaviour
 
     public void DecreaseTime()
     {
-        if (selectedTime > 30.0f) // Evita que el tiempo sea menor a 10 segundos
-        {
-            selectedTime -= 30.0f; // Decrementa en 10 segundos
-        }
+        if (selectedTime > 30.0f) selectedTime -= 30.0f; // Decrementa en 10 segundos
         UpdateTimeDisplay();
     }
 
@@ -99,10 +98,7 @@ public class GameManager : MonoBehaviour
 
     public void OnToggleTimer()
     {
-        if (timerControls != null)
-        {
-            timerControls.SetActive(useTimerToggle.isOn);
-        }
+        if (timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
     }
 
     public void ConfirmAndStartGame()
@@ -110,10 +106,7 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("UseTimer", useTimerToggle.isOn ? 1 : 0);
         PlayerPrefs.SetFloat("SessionTime", selectedTime);
         PlayerPrefs.Save();
-        if (timerPanel != null)
-        {
-            timerPanel.SetActive(false);
-        }
+        if (timerPanel != null) timerPanel.SetActive(false);
         SceneManager.LoadScene("Calibracion");
         Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al iniciar el juego
     }
@@ -136,10 +129,7 @@ public class GameManager : MonoBehaviour
         {
             timerPanel.SetActive(true);
             UpdateTimeDisplay();
-            if (timerControls != null)
-            {
-                timerControls.SetActive(useTimerToggle.isOn);
-            }
+            if (timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
         }
         else
         {
@@ -162,14 +152,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -182,7 +166,7 @@ public class GameManager : MonoBehaviour
             timeSpawnInterval = PlayerPrefs.GetFloat("TimeSpawnInterval", 2.0f);
             enemySize = PlayerPrefs.GetFloat("EnemySize", 1.0f);
             maxRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.7f);
-            averageArmAngle = PlayerPrefs.GetFloat("PlayerShoulderAngle", 0.0f);
+            averageArmAngle = PlayerPrefs.GetFloat("PlayerElbowAngle", 0.0f);
             actualRadius = 0.3f; // Comenzamos con un radio más pequeño para aumentar la dificultad gradualmente
             maxSpeedAchieved = enemySpeed;
             maxRadiusAchieved = actualRadius;
@@ -265,6 +249,11 @@ public class GameManager : MonoBehaviour
         roundStartTime = Time.time;
         lastTouchTime = Time.time;
         totalRoundTime = 0.0f;
+        initialReactionTime = 0.0f;
+        totalInteractionTime = 0.0f;
+        interactionCount = 0;
+        totalSpawnIntervals = 0.0f;
+        spawnCount = 0;
         StartReminder();
         StartCoroutine(SpawnWaveRoutine());
     }
@@ -285,6 +274,7 @@ public class GameManager : MonoBehaviour
 
     public void EnemyTouched(int points)
     {
+        if(enemiesTouched == 0 && interactionCount == 0) initialReactionTime = Time.time - roundStartTime;
         score += points;
         enemiesTouched++;
         float interaction = Time.time - lastTouchTime;
@@ -371,6 +361,10 @@ public class GameManager : MonoBehaviour
         if(maxSpeedAchievedText != null)
         {
             maxSpeedAchievedText.text = string.Format("Velocidad Máxima alcanzada\npor las Naves: {0:F1}", maxSpeedAchieved);
+        }
+        if(initialReactionTimeText != null)
+        {
+            initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
         }
         if (maxRadiusAchievedText != null)
         {
