@@ -412,6 +412,7 @@ public class GameManager : MonoBehaviour
     {
         continuePanel.SetActive(false);
         round++;
+        initialReactionTime = 0.0f;
         UpdateUI();
         StartCoroutine(CoundownRutine());
     }

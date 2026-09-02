@@ -29,7 +29,8 @@ public class VRCalibration : MonoBehaviour
     [Header("Calibration Maths")]
     //private Quaternion neutralRotation;
     private int currentReps = 0;
-    [Tooltip("Distancia minima en metros para empezar a medir")] public float minDist = 0.6f;
+    [Tooltip("Distancia minima en metros para empezar a medir")] public float minDist = 0.30f;
+    [Tooltip("Distancia que debe retroceder para contar la repeticion")] public float returnDist = 0.15f;
     private float holdTimer = 0.0f;
     private float maxDistanceThisRep = 0.0f;
     private List<float> recordedDistances = new List<float>();
@@ -70,21 +71,25 @@ public class VRCalibration : MonoBehaviour
         if(activeHand != null)
         {
             calibrationState = CalibrationState.WaitingForStretch;
-            UpdateUI();
+            //UpdateUI();
+            Invoke("UpdateUI", 1.5f);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(calibrationState == CalibrationState.Completed || calibrationState == CalibrationState.SettingNeutral/*isCalibrated*/ || activeHand == null || playerCenter == null) return;
-        /*Vector3 centerFlat = new Vector3(playerCenter.position.x, 0, playerCenter.position.z);
-        Vector3 handFlat = new Vector3(activeHand.position.x, 0, activeHand.position.z);
-        float currentDistance = Vector3.Distance(centerFlat, handFlat);*/
+        if(calibrationState == CalibrationState.Completed || calibrationState == CalibrationState.SettingNeutral || activeHand == null || playerCenter == null) return;
         float currentDistance = Vector3.Distance(playerCenter.position, activeHand.position);
         float currentHeight = activeHand.position.y - playerCenter.position.y;
         float currentShoulderAngle = 0.0f;
         if(currentDistance > 0) currentShoulderAngle = Mathf.Asin(currentHeight / currentDistance) * Mathf.Rad2Deg;
+        if(currentDistance > (upperArmLength + forearmLength))
+        {
+            float scale = currentDistance / (upperArmLength + forearmLength);
+            upperArmLength *= scale;
+            forearmLength *= scale;
+        }
         float a = upperArmLength;
         float b = forearmLength;
         float c = currentDistance;
@@ -116,11 +121,7 @@ public class VRCalibration : MonoBehaviour
                         recordedElbowAngles.Add(elbowAngleAtMaxReach);
                         currentReps++;
                         holdTimer = 0;
-                        maxDistanceThisRep = 0.0f;
-                        maxHeightThisRep = -100.0f;
-                        maxShoulderAngleThisRep = -90.0f;
-                        elbowAngleAtMaxReach = 180.0f;
-                        if (currentReps >= totalReps) SaveMeanDistance();
+                        if(currentReps >= totalReps) SaveMeanDistance();
                         else calibrationState = CalibrationState.ReturningToNeutral;
                     }
                 }
@@ -129,7 +130,8 @@ public class VRCalibration : MonoBehaviour
                     if (holdTimer > 0)
                     {
                         holdTimer = 0.0f;
-                        UpdateUI();
+                        //UpdateUI();
+                        Invoke("UpdateUI", 1.5f);
                     }
                 }
             }
@@ -142,17 +144,23 @@ public class VRCalibration : MonoBehaviour
                     maxHeightThisRep = -100.0f;
                     maxShoulderAngleThisRep = -90.0f;
                     elbowAngleAtMaxReach = 180.0f;
-                    UpdateUI();
+                    //UpdateUI();
+                    Invoke("UpdateUI", 1.5f);
                 }
             }
         }
         else if(calibrationState == CalibrationState.ReturningToNeutral)
         {
-            instructionText.text = $"Bien. ({currentReps}/{totalReps})\nRegresa el brazo cerca de tu cuerpo.\n<size=50%>(Distancia actual: {currentDistance:F2}</size>)";
-            if(currentDistance < minDist)
+            instructionText.text = $"Bien. ({currentReps}/{totalReps})\nDobla tu brazo y regresa el brazo cerca de tu cuerpo.\n<size=50%>(Distancia actual: {currentDistance:F2}</size>)";
+            if(currentDistance <= (maxDistanceThisRep - returnDist) || currentDistance < minDist)
             {
+                maxDistanceThisRep = 0.0f;
+                maxHeightThisRep = -100.0f;
+                maxShoulderAngleThisRep = -90.0f;
+                elbowAngleAtMaxReach = 180.0f;
                 calibrationState = CalibrationState.WaitingForStretch;
-                UpdateUI();
+                Invoke("UpdateUI", 1.5f);
+                //UpdateUI();
             }
         }
     }
