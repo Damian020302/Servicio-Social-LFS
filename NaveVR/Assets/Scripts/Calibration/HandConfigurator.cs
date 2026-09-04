@@ -37,12 +37,22 @@ public class HandConfigurator : MonoBehaviour
             if (rightHandVisuals != null) rightHandVisuals.SetActive(false);
             if (rightHandAnchor != null) rightHandAnchor.SetActive(false);
         }
-        else
+        else if(selectedHand == 1)
         {
             // Configurar para mano derecha
             if (leftHandInteraction != null) leftHandInteraction.SetActive(false);
             if (leftHandVisuals != null) leftHandVisuals.SetActive(false);
             if (leftHandAnchor != null) leftHandAnchor.SetActive(false);
+            if (rightHandInteraction != null) rightHandInteraction.SetActive(true);
+            if (rightHandVisuals != null) rightHandVisuals.SetActive(true);
+            if (rightHandAnchor != null) rightHandAnchor.SetActive(true);
+        }
+        else
+        {
+            // Configurar para ambas manos
+            if (leftHandInteraction != null) leftHandInteraction.SetActive(true);
+            if (leftHandVisuals != null) leftHandVisuals.SetActive(true);
+            if (leftHandAnchor != null) leftHandAnchor.SetActive(true);
             if (rightHandInteraction != null) rightHandInteraction.SetActive(true);
             if (rightHandVisuals != null) rightHandVisuals.SetActive(true);
             if (rightHandAnchor != null) rightHandAnchor.SetActive(true);

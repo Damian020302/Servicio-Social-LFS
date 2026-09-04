@@ -31,6 +31,7 @@ public class SimpleGrabManager : MonoBehaviour
     private Vector3 warningOriginalScale;
 
     [Header("Hand Setup")]
+    public int selectedHand;
     public OVRHand leftHand;
     public OVRHand rightHand;
     private OVRHand activeHand;
@@ -81,6 +82,7 @@ public class SimpleGrabManager : MonoBehaviour
     public TextMeshProUGUI totalGrabsText;
     public TextMeshProUGUI successGrabsText;
     public TextMeshProUGUI failGrabsText;
+    public TextMeshProUGUI selectedArmText;
     private float totalTimeToGrab = 0.0f;
     private float totalHoldTime = 0.0f;
     private int grabCount = 0;
@@ -158,7 +160,7 @@ public class SimpleGrabManager : MonoBehaviour
 
     private void Start()
     {
-        int selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
+        selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
         if(selectedHand == 0 && leftHand != null)
         {
             activeHand = leftHand;
@@ -329,7 +331,15 @@ public class SimpleGrabManager : MonoBehaviour
 
     public void UpdateMetricsUI()
     {
-        if(averageHoldTimeText != null) averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
+        if (selectedHand == 0 && leftHand != null && selectedArmText != null)
+        {
+            selectedArmText.text = "Brazo\nTrabajado: Izquierdo";
+        }
+        else if (selectedHand == 1 && rightHand != null && selectedArmText != null)
+        {
+            selectedArmText.text = "Brazo\nTrabajado: Derecho";
+        }
+        if (averageHoldTimeText != null) averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
         if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de Reacción: {0:F1}s", initialReactionTime);
         if (averageHoldTimeText != null) averageTimeToGrabText.text = string.Format("Tiempo Promedio entre Agarre: {0:F1}s", averageTimeToGrab);
         if(totalGrabsText != null)
