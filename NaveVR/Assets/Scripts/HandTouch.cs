@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class HandTouch : MonoBehaviour
 {
+    [Header("Hand Configuration")]
+    public bool isLeftHand = true; // Configuración para determinar si es la mano izquierda o derecha
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))
@@ -14,7 +16,7 @@ public class HandTouch : MonoBehaviour
             }
             if (GameManager.Instance != null && !GameManager.Instance.roundOver)
             {
-                GameManager.Instance.EnemyTouched(1); // Incrementa el contador de enemigos tocados
+                GameManager.Instance.EnemyTouched(1, isLeftHand); // Incrementa el contador de enemigos tocados
             }
             Destroy(other.gameObject); // Destruye el objeto enemigo al tocarlo
         }

@@ -47,16 +47,12 @@ public class EnemyMovement : MonoBehaviour
             float playerRadius = 0.7f;
             if(GameManager.Instance != null)
             {
-                playerRadius = GameManager.Instance.actualRadius;
+                Vector3 localPos = player.InverseTransformPoint(transform.position);
+                if(localPos.x < 0) playerRadius = GameManager.Instance.actualRadiusL;
+                else playerRadius = GameManager.Instance.actualRadiusR;
             }
-            if (playerDistance > playerRadius)
-            {
-                transform.position += transform.forward * speed * Time.deltaTime;
-            }
-            else
-            {
-                isStopped = true;
-            }
+            if (playerDistance > playerRadius) transform.position += transform.forward * speed * Time.deltaTime;
+            else isStopped = true;
         }
         else
         { 

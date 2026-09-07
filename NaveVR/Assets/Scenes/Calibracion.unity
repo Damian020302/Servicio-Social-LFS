@@ -1093,6 +1093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24c9e128525e4f45801b03a143fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandTouch
+  isLeftHand: 1
 --- !u!135 &72733095
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1675,7 +1676,6 @@ GameObject:
   m_Component:
   - component: {fileID: 189375424}
   - component: {fileID: 189375426}
-  - component: {fileID: 189375425}
   m_Layer: 0
   m_Name: LeftHandAnchor
   m_TagString: Untagged
@@ -1703,18 +1703,6 @@ Transform:
   - {fileID: 72733093}
   m_Father: {fileID: 566137485}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &189375425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 189375423}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5304c7d76da012649b0190f5c4f7f603, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Shooting
 --- !u!114 &189375426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1941,22 +1929,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c4dc88133923554e98f4aa7c50b10ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  timerPanel: {fileID: 0}
+  timeDisplay: {fileID: 0}
+  useTimerToggle: {fileID: 0}
+  timerControls: {fileID: 0}
   scoreText: {fileID: 0}
-  missText: {fileID: 0}
   roundText: {fileID: 0}
   countdownText: {fileID: 0}
+  timeRemainingText: {fileID: 0}
   warning: {fileID: 0}
   warningBlinkSpeed: 5
   warningScaleMultiplier: 1.2
   continuePanel: {fileID: 0}
   continueText: {fileID: 0}
   enemiesPerRound: 10
+  enemiesTouchedL: 0
+  enemiesTouchedR: 0
+  enemiesExpired: 0
   enemyLifetime: 10
   timeSpawnInterval: 2
   enemySpeed: 2
   enemySize: 1
-  actualRadius: 0
+  actualRadiusL: 0
+  actualRadiusR: 0
+  maxRadiusAchievedL: 0
+  maxRadiusAchievedR: 0
   roundOver: 0
+  timer: 0
+  timerIsRunning: 0
+  initialTimerValue: 0
+  totalRoundTime: 0
+  initialReactionTimeL: 0
+  initialReactionTimeR: 0
+  maxSpeedAchieved: 0
+  averageInteractionTimeL: 0
+  averageInteractionTimeR: 0
+  averageArmAngleL: 0
+  averageArmAngleR: 0
+  averageSpawningTimeAchieved: 0
+  averageSpawningTimeAchievedText: {fileID: 0}
+  initialReactionTimeLText: {fileID: 0}
+  initialReactionTimeRText: {fileID: 0}
+  totalRoundTimeText: {fileID: 0}
+  maxSpeedAchievedText: {fileID: 0}
+  maxRadiusAchievedLText: {fileID: 0}
+  maxRadiusAchievedRText: {fileID: 0}
+  averageInteractionTimeLText: {fileID: 0}
+  averageInteractionTimeRText: {fileID: 0}
+  averageArmAngleLText: {fileID: 0}
+  averageArmAngleRText: {fileID: 0}
+  enemiesExpiredText: {fileID: 0}
+  enemiesTouchedLText: {fileID: 0}
+  enemiesTouchedRText: {fileID: 0}
 --- !u!4 &205337462
 Transform:
   m_ObjectHideFlags: 0
@@ -1989,7 +2013,10 @@ MonoBehaviour:
   rightWrist: {fileID: 832431407}
   totalReps: 5
   holdTimeRequired: 3
+  upperArmLength: 0.3
+  forearmLength: 0.25
   minDist: 0.3
+  returnDist: 0.15
   instructionText: {fileID: 1202485354}
 --- !u!114 &205337464
 MonoBehaviour:
@@ -6719,7 +6746,6 @@ GameObject:
   m_Component:
   - component: {fileID: 832431407}
   - component: {fileID: 832431409}
-  - component: {fileID: 832431408}
   m_Layer: 0
   m_Name: RightHandAnchor
   m_TagString: Untagged
@@ -6747,18 +6773,6 @@ Transform:
   - {fileID: 2072369679}
   m_Father: {fileID: 566137485}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &832431408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 832431406}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5304c7d76da012649b0190f5c4f7f603, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Shooting
 --- !u!114 &832431409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14660,6 +14674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24c9e128525e4f45801b03a143fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandTouch
+  isLeftHand: 0
 --- !u!135 &2072369681
 SphereCollider:
   m_ObjectHideFlags: 0
