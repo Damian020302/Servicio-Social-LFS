@@ -10,82 +10,110 @@ public class VRCalibration : MonoBehaviour
         SettingNeutral,
         WaitingForStretch,
         ReturningToNeutral,
-        Completed
+        Completed,
+        Transitioning
     }
     private CalibrationState calibrationState;
+
+    public enum CalibrationPhase
+    {
+        LeftArm,
+        RightArm,
+        Done
+    }
+    private CalibrationPhase currentPhase = CalibrationPhase.LeftArm;
+
     [Header("Calibration Settings")]
-    [Tooltip("El centro del jugador")] public Transform playerCenter;
-    [Tooltip("El objeto de referencia para medir distancia")] public Transform leftWrist;
-    [Tooltip("El objeto de referencia para medir distancia")] public Transform rightWrist;
-    private Transform activeHandL;
-    private Transform activeHandR;
+    [Tooltip("The center of the player")] public Transform playerCenter;
+    [Tooltip("The reference object for measuring distance")] public Transform leftWrist;
+    [Tooltip("The reference object for measuring distance")] public Transform rightWrist;
+    private bool useLeftArm = false;
+    private bool useRightArm = false;
+    private Transform activeHand;
+    public string currentArmName;
     public int totalReps = 3;
-    [Tooltip("Tiempo que debe mantener el brazo estirado")] public float holdTimeRequired = 3.0f;
+    [Tooltip("Time the arm must be held stretched")] public float holdTimeRequired = 3.0f;
     [Header("Medical Measurements")]
     [Tooltip("Arm length from shoulder to elbow")]
     public float upperArmLength = 0.30f;
     [Tooltip("Arm length from elbow to wrist")]
     public float forearmLength = 0.25f;
-    //public float neutralThreshHold = 30.0f;
     [Header("Calibration Maths")]
-    //private Quaternion neutralRotation;
     private int currentReps = 0;
-    [Tooltip("Distancia minima en metros para empezar a medir")] public float minDist = 0.30f;
-    [Tooltip("Distancia que debe retroceder para contar la repeticion")] public float returnDist = 0.15f;
+    [Tooltip("Minimum distance in meters to start measuring")] public float minDist = 0.30f;
+    [Tooltip("Distance the arm must return to count the repetition")] public float returnDist = 0.15f;
     private float holdTimer = 0.0f;
-    private float maxDistanceL = 0.0f;
-    private float maxDistanceR = 0.0f;
+    private float maxDistanceThisRep = 0.0f;
+    private float elbowAngleAtMaxReach = 180.0f;
     private List<float> recordedDistancesL = new List<float>();
     private List<float> recordedDistancesR = new List<float>();
-    private float maxElbowL = 180.0f;
-    private float maxElbowR = 180.0f;
     private List<float> recordedElbowL = new List<float>();
     private List<float> recordedElbowR = new List<float>();
-    /*[Header("Rastreadores de altura")]
-    private float maxHeightThisRep = -100.0f;
-    private List<float> recordedHeights = new List<float>();
-    private float maxShoulderAngleThisRep = -90.0f;
-    private List<float> recordedShoulderAngles = new List<float>();
-    private float elbowAngleAtMaxReach = 180.0f;
-    private List<float> recordedElbowAngles = new List<float>();*/
     [Header("UI Elements")]
     public TextMeshProUGUI instructionText;
-    //private bool isCalibrated = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         upperArmLength = PlayerPrefs.GetFloat("UpperArmLength", upperArmLength);
         forearmLength = PlayerPrefs.GetFloat("ForearmLength", forearmLength);
-        if (instructionText != null)
-        {
-            instructionText.text = "Estira tus brazos lo más que puedas y mantén la posición...";
-        }
         DetermineActiveHand();
-        Invoke("SetNeutralRotation", 3.0f);
+        Invoke("StartCalibrationSequence", 3.0f);
     }
 
     void DetermineActiveHand()
     {
         int selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
-        if (selectedHand == 0 && leftWrist != null) activeHandL = leftWrist;
-        else if (selectedHand == 1 && rightWrist != null) activeHandR = rightWrist;
-        else if (selectedHand == 2 && leftWrist != null)
+        if (selectedHand == 0 && leftWrist != null)
         {
-            activeHandL = leftWrist;
-            activeHandR = rightWrist;
+            useLeftArm = true;
+            useRightArm = false;
         }
-        else Debug.Log("No se encontro una mano activa");
+        else if (selectedHand == 1 && rightWrist != null)
+        {
+            useRightArm = true;
+            useLeftArm = false;
+        }
+        else if (selectedHand == 2 && leftWrist != null && rightWrist != null)
+        {
+            useLeftArm = true;
+            useRightArm = true;
+        }
+        else
+        {
+            Debug.Log("No se encontro una mano activa");
+            instructionText.text = "No se encontro una mano activa";
+        }        
     }
 
-    void SetNeutralRotation()
+    void StartCalibrationSequence()
     {
-        if (activeHandL != null || activeHandR != null)
+        if(useLeftArm)
         {
-            calibrationState = CalibrationState.WaitingForStretch;
-            //UpdateUI();
-            Invoke("UpdateUI", 1.5f);
+            currentPhase = CalibrationPhase.LeftArm;
+            activeHand = leftWrist;
         }
+        else if(useRightArm)
+        {
+            currentPhase = CalibrationPhase.RightArm;
+            activeHand = rightWrist;
+        }
+        else
+        {
+            currentPhase = CalibrationPhase.Done;
+            SaveMeanDistance();
+            return;
+        }
+        ResetRepTracking();
+        calibrationState = CalibrationState.WaitingForStretch;
+        UpdateUI();
+    }
+
+    void ResetRepTracking()
+    {
+        currentReps = 0;
+        holdTimer = 0.0f;
+        maxDistanceThisRep = 0.0f;
+        elbowAngleAtMaxReach = 180.0f;
     }
 
     float CalculateElbowAngle(float distance)
@@ -103,49 +131,40 @@ public class VRCalibration : MonoBehaviour
         return 180.0f - (Mathf.Acos(cosC) * Mathf.Rad2Deg);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(calibrationState == CalibrationState.Completed || calibrationState == CalibrationState.SettingNeutral || playerCenter == null) return;
-        float distL = (activeHandL != null) ? Vector3.Distance(playerCenter.position, activeHandL.position) : 0.0f;
-        float distR = (activeHandR != null) ? Vector3.Distance(playerCenter.position, activeHandR.position) : 0.0f;
-        float elbowL = (distL > 0) ? CalculateElbowAngle(distL) : 180.0f;
-        float elbowR = (distR > 0) ? CalculateElbowAngle(distR) : 180.0f;
-        float primaryDistance = Mathf.Max(distL, distR);
-        float maxDistanceThisRepPrimary = Mathf.Max(maxDistanceL, maxDistanceR);
+        float currentDistance = Vector3.Distance(playerCenter.position, activeHand.position);
+        float currentElbowAngle = (currentDistance > 0) ? CalculateElbowAngle(currentDistance) : 180.0f;
+        currentArmName = (currentPhase == CalibrationPhase.LeftArm) ? "Izquierdo" : "Derecho";
         if(calibrationState == CalibrationState.WaitingForStretch)
         {
-            if(primaryDistance > minDist)
+            if(currentDistance > minDist)
             {
-                if(distL > maxDistanceL)
+                if(currentDistance > maxDistanceThisRep)
                 {
-                    maxDistanceL = distL;
-                    maxElbowL = elbowL;
+                    maxDistanceThisRep = currentDistance;
+                    elbowAngleAtMaxReach = currentElbowAngle;
                 }
-                if(distR > maxDistanceR)
-                {
-                    maxDistanceR = distR;
-                    maxElbowR = elbowR;
-                }
-                if(primaryDistance >= (maxDistanceThisRepPrimary - 0.05f))
+                if(currentDistance >= (maxDistanceThisRep - 0.05f))
                 {
                     holdTimer += Time.deltaTime;
-                    instructionText.text = $"Mantén el brazo estirado.\n{(holdTimeRequired - holdTimer):F1}s\n<size=50%>(Distancia actual: {primaryDistance:F2}</size>)";
+                    instructionText.text = $"Mantén el brazo {currentArmName} estirado.\n{(holdTimeRequired - holdTimer):F1}s";
                     if(holdTimer >= holdTimeRequired)
                     {
-                        if(activeHandL != null)
+                        if(currentPhase == CalibrationPhase.LeftArm)
                         {
-                            recordedDistancesL.Add(maxDistanceL);
-                            recordedElbowL.Add(maxElbowL);
+                            recordedDistancesL.Add(maxDistanceThisRep);
+                            recordedElbowL.Add(elbowAngleAtMaxReach);
                         }
-                        if(activeHandR != null)
+                        else if(currentPhase == CalibrationPhase.RightArm)
                         {
-                            recordedDistancesR.Add(maxDistanceR);
-                            recordedElbowR.Add(maxElbowR);
+                            recordedDistancesR.Add(maxDistanceThisRep);
+                            recordedElbowR.Add(elbowAngleAtMaxReach);
                         }
                         currentReps++;
                         holdTimer = 0;
-                        if(currentReps >= totalReps) SaveMeanDistance();
+                        if(currentReps >= totalReps) Invoke("AdvancePhase", 3.0f);
                         else calibrationState = CalibrationState.ReturningToNeutral;
                     }
                 }
@@ -154,7 +173,7 @@ public class VRCalibration : MonoBehaviour
                     if(holdTimer > 0)
                     {
                         holdTimer = 0.0f;
-                        Invoke("UpdateUI", 1.5f);
+                        UpdateUI();
                     }
                 }
             }
@@ -163,112 +182,56 @@ public class VRCalibration : MonoBehaviour
                 if(holdTimer > 0)
                 {
                     holdTimer = 0.0f;
-                    maxDistanceL = 0.0f;
-                    maxDistanceR = 0.0f;
-                    maxElbowL = 180.0f;
-                    maxElbowR = 180.0f;
-                    Invoke("UpdateUI", 1.5f);
-                }
-            }
-        }
-        else if(calibrationState == CalibrationState.ReturningToNeutral)
-        {
-            instructionText.text = $"Bien. ({currentReps}/{totalReps})\nDobla tu brazo y regresa el brazo cerca de tu cuerpo.\n<size=50%>(Distancia actual: {primaryDistance:F2}</size>)";
-            if(primaryDistance <= (maxDistanceThisRepPrimary - returnDist) || primaryDistance < minDist)
-            {
-                maxDistanceL = 0.0f;
-                maxDistanceR = 0.0f;
-                maxElbowL = 180.0f;
-                maxElbowR = 180.0f;
-                calibrationState = CalibrationState.WaitingForStretch;
-                Invoke("UpdateUI", 1.5f);
-            }
-        }
-        /*float currentDistance = Vector3.Distance(playerCenter.position, activeHandR.position);
-        float currentHeight = activeHandR.position.y - playerCenter.position.y;
-        float currentShoulderAngle = 0.0f;
-        if(currentDistance > 0) currentShoulderAngle = Mathf.Asin(currentHeight / currentDistance) * Mathf.Rad2Deg;
-        if(currentDistance > (upperArmLength + forearmLength))
-        {
-            float scale = currentDistance / (upperArmLength + forearmLength);
-            upperArmLength *= scale;
-            forearmLength *= scale;
-        }
-        float a = upperArmLength;
-        float b = forearmLength;
-        float c = currentDistance;
-        c = Mathf.Clamp(c, 0.0001f, a + b);
-        float cosC = (a * a + b * b - c * c) / (2 * a * b);
-        cosC = Mathf.Clamp(cosC, -1.0f, 1.0f);
-        float interiorElbowAngle = Mathf.Acos(cosC) * Mathf.Rad2Deg;
-        float currentElbowAngle = 180.0f - interiorElbowAngle;
-        if (calibrationState == CalibrationState.WaitingForStretch)
-        {
-            if (currentDistance > minDist)
-            {
-                if (currentDistance > maxDistanceThisRep)
-                {
-                    maxDistanceThisRep = currentDistance;
-                    elbowAngleAtMaxReach = currentElbowAngle;
-                }
-                if(currentHeight > maxHeightThisRep) maxHeightThisRep = currentHeight;
-                if(currentShoulderAngle > maxShoulderAngleThisRep) maxShoulderAngleThisRep = currentShoulderAngle;
-                if (currentDistance >= (maxDistanceThisRep - 0.05f))
-                {
-                    holdTimer += Time.deltaTime;
-                    instructionText.text = $"Mantén el brazo estirado.\n{(holdTimeRequired - holdTimer):F1}s\n<size=50%>(Distancia actual: {currentDistance:F2}</size>)";
-                    if (holdTimer >= holdTimeRequired)
-                    {
-                        recordedDistances.Add(maxDistanceThisRep);
-                        recordedHeights.Add(maxHeightThisRep);
-                        recordedShoulderAngles.Add(maxShoulderAngleThisRep);
-                        recordedElbowAngles.Add(elbowAngleAtMaxReach);
-                        currentReps++;
-                        holdTimer = 0;
-                        if(currentReps >= totalReps) SaveMeanDistance();
-                        else calibrationState = CalibrationState.ReturningToNeutral;
-                    }
-                }
-                else
-                {
-                    if (holdTimer > 0)
-                    {
-                        holdTimer = 0.0f;
-                        //UpdateUI();
-                        Invoke("UpdateUI", 1.5f);
-                    }
-                }
-            }
-            else
-            {
-                if (holdTimer > 0)
-                {
-                    holdTimer = 0.0f;
                     maxDistanceThisRep = 0.0f;
-                    maxHeightThisRep = -100.0f;
-                    maxShoulderAngleThisRep = -90.0f;
                     elbowAngleAtMaxReach = 180.0f;
-                    //UpdateUI();
-                    Invoke("UpdateUI", 1.5f);
+                    UpdateUI();
                 }
             }
         }
         else if(calibrationState == CalibrationState.ReturningToNeutral)
         {
-            instructionText.text = $"Bien. ({currentReps}/{totalReps})\nDobla tu brazo y regresa el brazo cerca de tu cuerpo.\n<size=50%>(Distancia actual: {currentDistance:F2}</size>)";
+            instructionText.text = $"Bien. ({currentReps}/{totalReps})\nDobla tu brazo {currentArmName} hacia tu cuerpo.";
             if(currentDistance <= (maxDistanceThisRep - returnDist) || currentDistance < minDist)
             {
                 maxDistanceThisRep = 0.0f;
-                maxHeightThisRep = -100.0f;
-                maxShoulderAngleThisRep = -90.0f;
                 elbowAngleAtMaxReach = 180.0f;
                 calibrationState = CalibrationState.WaitingForStretch;
-                Invoke("UpdateUI", 1.5f);
-                //UpdateUI();
+                UpdateUI();
             }
-        }*/
+        }
     }
 
+    void AdvancePhase()
+    {
+        calibrationState = CalibrationState.Transitioning;
+        if(currentPhase == CalibrationPhase.LeftArm && useRightArm)
+        {
+            if(instructionText != null)
+            {
+                instructionText.text = "¡Excelente!\nAhora vamos a calibrar el brazo Derecho.\nPreparate...";
+            }
+            currentPhase = CalibrationPhase.RightArm;
+            activeHand = rightWrist;
+            Invoke("StartNextArm", 4.0f);
+        }
+        else
+        {
+            currentPhase = CalibrationPhase.Done;
+            SaveMeanDistance();
+        }
+    }
+
+    void StartNextArm()
+    {
+        ResetRepTracking();
+        calibrationState = CalibrationState.WaitingForStretch;
+        UpdateUI();
+    }
+
+    /**
+     * Saves the mean distances and elbow angles to PlayerPrefs.
+     * If only one arm is used, it copies the values to the other arm.
+     */
     void SaveMeanDistance()
     {
         calibrationState = CalibrationState.Completed;
@@ -294,46 +257,28 @@ public class VRCalibration : MonoBehaviour
             foreach(float angle in recordedElbowR) sumElbowR += angle;
             finalElbowR = sumElbowR / recordedElbowR.Count;
         }
-        if(activeHandL != null && activeHandR == null)
+        if(useLeftArm && !useRightArm)
         {
             finalRadioR = finalRadioL;
             finalElbowR = finalElbowL;
         }
-        if(activeHandR != null && activeHandL == null)
+        if(useRightArm && !useLeftArm)
         {
             finalRadioL = finalRadioR;
             finalElbowL = finalElbowR;
         }
         PlayerPrefs.SetFloat("PlayerRadiusL", finalRadioL);
         PlayerPrefs.SetFloat("PlayerRadiusR", finalRadioR);
+        PlayerPrefs.SetFloat("PlayerElbowAngleL", finalElbowL);
+        PlayerPrefs.SetFloat("PlayerElbowAngleR", finalElbowR);
         PlayerPrefs.SetFloat("PlayerElbowAngle", (finalElbowL+finalElbowR)/2.0f);
+        PlayerPrefs.SetFloat("PlayerRadius", Mathf.Max(finalRadioL, finalRadioR));
         PlayerPrefs.Save();
         if (instructionText != null)
         {
-            instructionText.text = $"Calibración completa.\nRadio guardado: L:{finalRadioL:F2}m R:{finalRadioR:F2}m\nÁngulo de Codo (Flexión): {(finalElbowL + finalElbowR) / 2.0f:F2}°\nIniciando terapia...";
+            instructionText.text = $"Calibración completa.\nRadio Izquierdo:{finalRadioL:F2}m\nRadio Derecho:{finalRadioR:F2}m\nÁngulo de Codo (Flexión): {(finalElbowL + finalElbowR) / 2.0f:F2}°\nIniciando terapia...";
         }
         Invoke("LoadNextScene", 3.0f);
-        //foreach(float dist in recordedDistances) sumDist += dist;
-        //float meanDistance = sum / recordedDistances.Count;
-        /*isCalibrated = true;*/
-        //float finalRadio = Mathf.Max((sumDist / recordedDistances.Count) - 0.05f, 0.2f);//meanDistance - 0.05f;
-        //finalRadio = Mathf.Max(finalRadio, 0.2f);
-        /*float sumHeight = 0;
-        foreach(float height in recordedHeights) sumHeight += height;
-        float meanHeight = sumHeight / recordedHeights.Count;
-        float sumShoulder = 0;
-        foreach(float angle in recordedShoulderAngles) sumShoulder += angle;
-        float meanShoulderAngle = sumShoulder / recordedShoulderAngles.Count;
-        float sumElbow = 0;
-        foreach(float angle in recordedElbowAngles) sumElbow += angle;
-        float meanElbowAngle = sumElbow / recordedElbowAngles.Count;
-        PlayerPrefs.SetFloat("PlayerRadius", finalRadio);
-        PlayerPrefs.SetFloat("PlayerMaxHeight", meanHeight);
-        PlayerPrefs.SetFloat("PlayerShoulderAngle", meanShoulderAngle);
-        PlayerPrefs.SetFloat("PlayerElbowAngle", meanElbowAngle);
-        PlayerPrefs.Save();
-        if(instructionText != null ) instructionText.text = $"Calibración completa.\nRadio guardado: {finalRadio:F2}m\nÁngulo de Codo (Flexión): {meanElbowAngle:F2}°\nIniciando terapia...";
-        Invoke("LoadNextScene", 3.0f);*/
     }
 
     void LoadNextScene()
@@ -346,7 +291,7 @@ public class VRCalibration : MonoBehaviour
     {
         if(instructionText != null)
         {
-            instructionText.text = $"Estira tu brazo sano lo más que puedas y sostén la posición.\nRepetición: {currentReps + 1} de {totalReps}";
+            instructionText.text = $"Estira tu brazo {currentArmName} lo más que puedas y sostén la posición.\nRepetición: {currentReps + 1} de {totalReps}";
         }
     }
 }

@@ -193,8 +193,10 @@ public class GameManager : MonoBehaviour
             maxRadiusAchievedL = actualRadiusL;
             maxRadiusAchievedR = actualRadiusR;
             float calibratedElbow = PlayerPrefs.GetFloat("PlayerElbowAngle", 0.0f);
-            averageArmAngleL = calibratedElbow;
-            averageArmAngleR = calibratedElbow;
+            /*averageArmAngleL = calibratedElbow;
+            averageArmAngleR = calibratedElbow;*/
+            averageArmAngleL = PlayerPrefs.GetFloat("PlayerElbowAngleL", 0.0f);
+            averageArmAngleR = PlayerPrefs.GetFloat("PlayerElbowAngleR", 0.0f);
             if (continuePanel != null) continuePanel.SetActive(false);
             if(resultsLPanel != null) resultsLPanel.SetActive(false);
             if(resultsRPanel != null) resultsRPanel.SetActive(false);

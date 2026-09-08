@@ -9,10 +9,8 @@ public class EnemyMovement : MonoBehaviour
     private float waitTimer = 0.0f;
     [Header("Effects")]
     public GameObject destroyedEnemyPrefab;
-    //private float playerRadius;
     private float scale;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if(player == null)
@@ -30,12 +28,9 @@ public class EnemyMovement : MonoBehaviour
         {
             speed = 3.0f;
             timeToDestroy = 5.0f;
-            //playerRadius = 0.7f;
         }
-        //playerRadius = PlayerPrefs.GetFloat("PlayerRadius", 0.7f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(player == null) return;

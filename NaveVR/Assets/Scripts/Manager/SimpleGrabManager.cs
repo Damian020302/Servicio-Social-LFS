@@ -13,12 +13,12 @@ public class SimpleGrabManager : MonoBehaviour
     public GameObject timerControls;
     private float selectedTime = 60.0f;
 
-    [Header("Buttons")]
+    [Header("UI Buttons")]
     public GameObject victory;
     public GameObject yesV;
     public GameObject noV;
 
-    [Header("UI")]
+    [Header("UI Panels")]
     public TextMeshProUGUI clawText;
     public TextMeshProUGUI timeRemainingText;
     public TextMeshProUGUI stageText;
@@ -35,10 +35,12 @@ public class SimpleGrabManager : MonoBehaviour
     public OVRHand leftHand;
     public OVRHand rightHand;
     private OVRHand activeHand;
-    [Tooltip("El punto donde se sujetaran los robots")]
+
+    [Header("Grabbing points for the robots")]
     public Transform leftPalm;
     public Transform rightPalm;
     private Transform activePalm;
+
     [Header("Visual Feedback")]
     public Light leftPalmLight;
     public Light rightPalmLight;
@@ -50,7 +52,7 @@ public class SimpleGrabManager : MonoBehaviour
 
     [Header("Calibration Data")]
     private float grabThreshold;
-    private float releaseThreshold = 0.2f;
+    private float releaseThreshHold = 0.2f;
     private bool isGrabbing = false;
     private Rigidbody grabbedObject;
 
@@ -68,7 +70,7 @@ public class SimpleGrabManager : MonoBehaviour
     public bool timerIsRunning = false;
     public float initialTimerValue;
     private bool useTimerConfig;
-    public int actualPhase = 0;//0 cuando tiene que cerrar la mano, 1 cuando tiene que abrirla
+    public int actualPhase = 0; //0 for closed hand, 1 for open hand
 
     [Header("Average Times")]
     public float averageTimeToGrab = 0.0f;
@@ -91,12 +93,18 @@ public class SimpleGrabManager : MonoBehaviour
     private float timeRobotGrabbed = 0.0f;
     private float roundStartTime = 0.0f;
 
+    /**
+     * Increases the selected time by 30 seconds and updates the display.
+     */
     public void IncreaseTime()
     {
         selectedTime += 30.0f;
         UpdateTimeDisplay();
     }
 
+    /**
+     * Decreases the selected time by 30 seconds, ensuring it doesn't go below 30 seconds, and updates the display.
+     */
     public void DecreaseTime()
     {
         if(selectedTime > 30.0f)
@@ -106,6 +114,9 @@ public class SimpleGrabManager : MonoBehaviour
         UpdateTimeDisplay();
     }
 
+    /**
+     * Updates the time display to show the currently selected time in minutes and seconds.
+     */
     private void UpdateTimeDisplay()
     {
         if (timeDisplay != null)
@@ -116,11 +127,17 @@ public class SimpleGrabManager : MonoBehaviour
         }
     }
 
+    /**
+     * Toggles the visibility of the timer controls based on the state of the useTimerToggle.
+     */
     public void OnToggleTimer()
     {
         if(timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
     }
-
+    
+    /**
+     * Confirms the timer settings and starts the game.
+     */
     public void ConfirmAndStartGame()
     {
         PlayerPrefs.SetInt("UseTimer", useTimerToggle.isOn ? 1 : 0);
@@ -154,7 +171,7 @@ public class SimpleGrabManager : MonoBehaviour
         else
         {
             SceneManager.LoadScene("Calibracion4");
-            Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+            Time.timeScale = 1.0f; //Makes sure the time resumes when returning to the menu
         }
     }
 
@@ -182,22 +199,14 @@ public class SimpleGrabManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Juego4")
         {
             float maxGrabStrength = PlayerPrefs.GetFloat("MaxGrabStrength", 0.7f);
-            grabThreshold = maxGrabStrength * 0.8f; // 80% of the max grab strength
-            Debug.Log($"Meta de agarre: {(grabThreshold * 100):F0}% | Meta para soltar: {(releaseThreshold * 100):F0}%");
+            grabThreshold = maxGrabStrength * 0.8f; //80% of the max grab strength
+            Debug.Log($"Meta de agarre: {(grabThreshold * 100):F0}% | Meta para soltar: {(releaseThreshHold * 100):F0}%");
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
-                if (warningOriginalScale == Vector3.zero) warningOriginalScale = Vector3.one; // Default to (1,1,1) if the scale is zero
+                if (warningOriginalScale == Vector3.zero) warningOriginalScale = Vector3.one; //Default to (1,1,1) if the scale is zero
             }
-            victory.SetActive(false);
-            yesV.SetActive(false);
-            noV.SetActive(false);
-            initialTimerValue = timer;
-            timerIsRunning = true;
-            isVictoryAchieved = false;
-            timeRobotAppeared = Time.time;
-            roundStartTime = Time.time;
-            totalRoundTime = 0.0f;
+            StartUI();
             UpdateUI();
             UpdateReminderMessage();
         }
@@ -206,6 +215,19 @@ public class SimpleGrabManager : MonoBehaviour
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
         if(!useTimerConfig && timeRemainingText != null) timeRemainingText.gameObject.SetActive(false);
+    }
+
+    void StartUI()
+    {
+        victory.SetActive(false);
+        yesV.SetActive(false);
+        noV.SetActive(false);
+        initialTimerValue = timer;
+        timerIsRunning = true;
+        isVictoryAchieved = false;
+        timeRobotAppeared = Time.time;
+        roundStartTime = Time.time;
+        totalRoundTime = 0.0f;
     }
 
     float GetCurrentGrip()
@@ -250,7 +272,7 @@ public class SimpleGrabManager : MonoBehaviour
         if (activeHand == null || !activeHand.IsTracked) return;
         float currentGrip = GetCurrentGrip();
         if(!isGrabbing && currentGrip >= grabThreshold) TryGrabObject();
-        else if(isGrabbing && currentGrip <= releaseThreshold) ReleaseObject();
+        else if(isGrabbing && currentGrip <= releaseThreshHold) ReleaseObject();
     }
 
     void DisplayTime(float timeToDisplay)
@@ -361,14 +383,19 @@ public class SimpleGrabManager : MonoBehaviour
             totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}", minutes, seconds);
         }
         StopReminder();
-        victory.SetActive(true);
-        yesV.SetActive(true);
-        noV.SetActive(true);
+        EndUI();
         UpdateMetricsUI();
         Debug.Log("¡Victoria! Has recogido todos los robots.");
     }
 
-    public void OnClickYesV()
+    void EndUI()
+    {
+        victory.SetActive(true);
+        yesV.SetActive(true);
+        noV.SetActive(true);
+    }
+
+    public void OnClickYes()
     {
         stage++;
         yesV.SetActive(false);

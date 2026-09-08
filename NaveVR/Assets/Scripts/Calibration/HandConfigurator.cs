@@ -12,24 +12,17 @@ public class HandConfigurator : MonoBehaviour
     public GameObject rightHandVisuals;
     public GameObject rightHandAnchor;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        int selectedHand = PlayerPrefs.GetInt("SelectedHand", 0); // 0 para mano izquierda, 1 para mano derecha
+        int selectedHand = PlayerPrefs.GetInt("SelectedHand", 0); //0 for left hand, 1 for right hand, 2 for both hands
         ApplyConfig(selectedHand);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void ApplyConfig(int selectedHand)
     {
         if (selectedHand == 0)
         {
-            // Configurar para mano izquierda
+            //Configure for left hand
             if (leftHandInteraction != null) leftHandInteraction.SetActive(true);
             if (leftHandVisuals != null) leftHandVisuals.SetActive(true);
             if (leftHandAnchor != null) leftHandAnchor.SetActive(true);
@@ -39,7 +32,7 @@ public class HandConfigurator : MonoBehaviour
         }
         else if(selectedHand == 1)
         {
-            // Configurar para mano derecha
+            //Configure for right hand
             if (leftHandInteraction != null) leftHandInteraction.SetActive(false);
             if (leftHandVisuals != null) leftHandVisuals.SetActive(false);
             if (leftHandAnchor != null) leftHandAnchor.SetActive(false);
@@ -49,7 +42,7 @@ public class HandConfigurator : MonoBehaviour
         }
         else
         {
-            // Configurar para ambas manos
+            //Configure for both hands
             if (leftHandInteraction != null) leftHandInteraction.SetActive(true);
             if (leftHandVisuals != null) leftHandVisuals.SetActive(true);
             if (leftHandAnchor != null) leftHandAnchor.SetActive(true);
