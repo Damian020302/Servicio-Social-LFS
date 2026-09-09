@@ -38,10 +38,7 @@ public class CauldronWristCalibration : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if(instructionText != null)
-        {
-            instructionText.text = "Mantén tu mano relajada frente a ti unos segundos...";
-        }
+        if(instructionText != null) instructionText.text = "Mantén tu mano relajada frente a ti unos segundos...";
         DetermineActiveHand();
         Invoke("SetNeutralRotation", 5.0f);
     }
@@ -49,18 +46,9 @@ public class CauldronWristCalibration : MonoBehaviour
     void DetermineActiveHand()
     {
         int selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
-        if (selectedHand == 0 && leftWrist != null)
-        {
-            activeHand = leftWrist;
-        }
-        else if(selectedHand == 1 && rightWrist != null)
-        {
-            activeHand = rightWrist;
-        }
-        else
-        {
-            Debug.Log("No se encontró una mano activa");
-        }
+        if (selectedHand == 0 && leftWrist != null) activeHand = leftWrist;
+        else if(selectedHand == 1 && rightWrist != null) activeHand = rightWrist;
+        else instructionText.text = "No se encontró una mano activa. Por favor, selecciona una mano en el menú principal.";
     }
 
     void SetNeutralRotation()
@@ -69,16 +57,11 @@ public class CauldronWristCalibration : MonoBehaviour
         {
             neutralRotation = activeHand.rotation;
             calibrationState = CalibrationState.WaitingForExtension;
-            Debug.Log("Mano detectada. Pasando a la calibración...");
             UpdateUI();
         }
-        else
-        {
-            Debug.LogError("No hay una mano activa");
-        }
+        else instructionText.text = "No se encontró una mano activa. Por favor, selecciona una mano en el menú principal.";
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (calibrationState == CalibrationState.Completed || calibrationState == CalibrationState.SettingNeutral || activeHand == null) return;
@@ -128,7 +111,6 @@ public class CauldronWristCalibration : MonoBehaviour
             instructionText.text = $"Bien. ({currentReps}/{totalReps})\nRelaja tu mano.\n<size=50%>(Faltan: {currentAbsoluteAngle:F0} para llegar a {neutralThreshHold}°)</size>";
             if(currentAbsoluteAngle <= neutralThreshHold)
             {
-                //neutralRotation = activeHand.rotation;
                 if (recordedExtensionAngles.Count >= totalReps) calibrationState = CalibrationState.WaitingForFlexion;
                 else calibrationState = CalibrationState.WaitingForExtension;
                 UpdateUI();
@@ -163,7 +145,6 @@ public class CauldronWristCalibration : MonoBehaviour
             instructionText.text = $"Bien. ({currentReps}/{totalReps})\nRelaja tu mano.\n<size=50%>(Faltan: {currentAbsoluteAngle:F0} para llegar a {neutralThreshHold}°)</size>";
             if (currentAbsoluteAngle <= neutralThreshHold)
             {
-                //neutralRotation = activeHand.rotation;
                 if (currentReps >= totalReps) SaveMeanRotations();
                 else calibrationState = CalibrationState.WaitingForFlexion;
                 UpdateUI();
@@ -195,10 +176,7 @@ public class CauldronWristCalibration : MonoBehaviour
         PlayerPrefs.SetFloat("CauldronMaxFlexion", meanFlex);
         PlayerPrefs.Save();
 
-        if(instructionText != null)
-        {
-            instructionText.text = $"¡Calibración Completada!\nExtension:{meanExt:F0}° | Flexión: {meanFlex:F0}°\n\nIniciando...";
-        }
+        if(instructionText != null) instructionText.text = $"¡Calibración Completada!\nExtension:{meanExt:F0}° | Flexión: {meanFlex:F0}°\n\nIniciando...";
         Invoke("LoadNextScene", 3.0f);
 
     }
@@ -207,10 +185,8 @@ public class CauldronWristCalibration : MonoBehaviour
     {
         if (instructionText != null)
         {
-            if (calibrationState == CalibrationState.WaitingForExtension)
-                instructionText.text = $"Extiende tu mano hacia arriba lo más que puedas y sostén. \nRepetición {currentReps+1} de {totalReps}";
-            else if (calibrationState == CalibrationState.WaitingForFlexion)
-                instructionText.text = $"Flexiona tu mano hacia abajo lo más que puedas y sostén. \nRepetición {currentReps + 1} de {totalReps}";
+            if (calibrationState == CalibrationState.WaitingForExtension) instructionText.text = $"Extiende tu mano hacia arriba lo más que puedas y sostén. \nRepetición {currentReps+1} de {totalReps}";
+            else if (calibrationState == CalibrationState.WaitingForFlexion) instructionText.text = $"Flexiona tu mano hacia abajo lo más que puedas y sostén. \nRepetición {currentReps + 1} de {totalReps}";
         }
     }
 

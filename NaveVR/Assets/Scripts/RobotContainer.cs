@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 
 public class RobotContainer : MonoBehaviour
 {
@@ -25,14 +24,17 @@ public class RobotContainer : MonoBehaviour
         MoveToNewPosition();
     }
 
+    /// <summary>
+    /// Moves the container to a new random position around the player, ensuring it is within reach and not too close to the previous position or the robot deployer.
+    /// </summary>
     void MoveToNewPosition()
     {
         int currentDiff = gameManager != null ? gameManager.difficulty : 0;
         float diffFactor = Mathf.Clamp01(currentDiff / 5.0f);
-        float currentMaxAngle = Mathf.Lerp(35.0f, 70.0f, diffFactor); // Adjust the range based on difficulty
+        float currentMaxAngle = Mathf.Lerp(35.0f, 70.0f, diffFactor); //Adjust the range based on difficulty
         float minD = 0.25f;
-        float currentMaxDist = Mathf.Lerp(Mathf.Max(0.30f, maxReachRadius*0.7f),maxReachRadius, diffFactor); // Adjust the range based on difficulty
-        currentMaxDist = Mathf.Min(currentMaxDist, maxReachRadius); // Ensure it doesn't exceed the player's reach
+        float currentMaxDist = Mathf.Lerp(Mathf.Max(0.30f, maxReachRadius*0.7f),maxReachRadius, diffFactor); //Adjust the range based on difficulty
+        currentMaxDist = Mathf.Min(currentMaxDist, maxReachRadius); //Ensure it doesn't exceed the player's reach
         Vector3 newPosition = transform.position;
         bool validPosition = false;
         int attempts = 0;
@@ -42,23 +44,17 @@ public class RobotContainer : MonoBehaviour
             float randomDistance = Random.Range(minD, currentMaxDist);
             Vector3 offset = Quaternion.Euler(0, randomAngle, 0) * playerCenter.forward * randomDistance;
             newPosition = playerCenter.position + offset;
-            newPosition.y = containerHeight; // Set the fixed height
-            validPosition = true; // Assume it's valid for now
+            newPosition.y = containerHeight; //Set the fixed height
+            validPosition = true; //Assume it's valid for now
             if (spawner != null && spawner.robotDeployer != null)
             {
                 Vector2 posContainer = new Vector2(newPosition.x, newPosition.z);
                 Vector2 posPlatform = new Vector2(spawner.robotDeployer.position.x, spawner.robotDeployer.position.z);
-                if(Vector2.Distance(posContainer, posPlatform) < 0.2f) // Ensure a minimum distance from the deployer
-                {
-                    validPosition = true;
-                }
+                if(Vector2.Distance(posContainer, posPlatform) < 0.2f) validPosition = true; //Ensure a minimum distance from the deployer
             }
             Vector2 currentPos2D = new Vector2(newPosition.x, newPosition.z);
             Vector2 newPos2D = new Vector2(newPosition.x, newPosition.z);
-            if(Vector2.Distance(currentPos2D, newPos2D) < 0.15f) // Ensure a minimum distance from the previous position
-            {
-                validPosition = false;
-            }
+            if(Vector2.Distance(currentPos2D, newPos2D) < 0.15f) validPosition = false; //Ensure a minimum distance from the previous position
             attempts++;
         }
         transform.position = newPosition;
@@ -69,10 +65,7 @@ public class RobotContainer : MonoBehaviour
         if(other.CompareTag("Grabbable"))
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
-            if(rb != null && !rb.isKinematic) // Check if the object is almost stationary
-            {
-                CollectRobot(other.gameObject);
-            }
+            if(rb != null && !rb.isKinematic) CollectRobot(other.gameObject); //Check if the object is almost stationary
         }
     }
 
@@ -81,18 +74,9 @@ public class RobotContainer : MonoBehaviour
         robot.tag = "Untagged"; // Prevent further collection
         Destroy(robot);
         robotsCollected++;
-        if(gameManager != null && gameManager.clawText != null)
-        {
-            gameManager.clawText.text = $"Robots\nrestantes: {maxRobotsPerRound - robotsCollected}";
-        }
+        if(gameManager != null && gameManager.clawText != null) gameManager.clawText.text = $"Robots\nrestantes: {maxRobotsPerRound - robotsCollected}";
         gameManager.UpdateMetricsUI();
-        if(robotsCollected >= maxRobotsPerRound)
-        {
-            if(gameManager != null)
-            {
-                gameManager.VictoryAchieved();
-            }
-        }
+        if(robotsCollected >= maxRobotsPerRound && gameManager != null) gameManager.VictoryAchieved();
         else
         {
             MoveToNewPosition();
@@ -105,9 +89,6 @@ public class RobotContainer : MonoBehaviour
     {
         robotsCollected = 0;
         MoveToNewPosition();
-        if(gameManager != null && gameManager.clawText != null)
-        {
-            gameManager.clawText.text = $"Robots\nrecolectados: {robotsCollected}/{maxRobotsPerRound}";
-        }
+        if(gameManager != null && gameManager.clawText != null) gameManager.clawText.text = $"Robots\nrecolectados: {robotsCollected}/{maxRobotsPerRound}";
     }
 }

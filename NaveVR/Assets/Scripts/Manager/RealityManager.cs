@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 
 public class RealityManager : MonoBehaviour
@@ -14,14 +13,8 @@ public class RealityManager : MonoBehaviour
     {
         int savedReality = PlayerPrefs.GetInt("RealityMode", 0);
         isMixedReality = (savedReality == 1);
-        if(isMixedReality)
-        {
-            ActivateMR();
-        }
-        else
-        {
-            ActivateVR();
-        }
+        if(isMixedReality) ActivateMR();
+        else ActivateVR();
     }
 
     public void AlternateReality()
@@ -29,16 +22,13 @@ public class RealityManager : MonoBehaviour
         isMixedReality = !isMixedReality;
         PlayerPrefs.SetInt("RealityMode", isMixedReality ? 1 : 0);
         PlayerPrefs.Save();
-        if (isMixedReality)
-        {
-            ActivateMR();
-        }
-        else
-        {
-            ActivateVR();
-        }
+        if (isMixedReality) ActivateMR();
+        else ActivateVR();
     }
 
+    /// <summary>
+    /// Activates Mixed Reality mode.
+    /// </summary>
     void ActivateMR()
     {
         vrSign.SetActive(false);
@@ -48,7 +38,6 @@ public class RealityManager : MonoBehaviour
             OVRManager.instance.isInsightPassthroughEnabled = true;
             Debug.Log("Ya debería funcionar");
         }
-
         if(passthroughLayer != null)
         {
             passthroughLayer.enabled = true;
@@ -59,6 +48,9 @@ public class RealityManager : MonoBehaviour
         Debug.Log("Mixed Reality Activated");
     }
 
+    /// <summary>
+    /// Activates Virtual Reality mode.
+    /// </summary>
     void ActivateVR()
     {
         mrSign.SetActive(false);

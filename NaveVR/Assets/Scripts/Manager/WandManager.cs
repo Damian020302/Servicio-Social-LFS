@@ -8,14 +8,13 @@ public class WandManager : MonoBehaviour
     public float rotateSpeed = 5.0f; // Speed of rotation
     private Quaternion startingRotation;
     private Quaternion goalRotation;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         startingRotation = wandPivot.localRotation; // Store the initial rotation of the wand pivot
         goalRotation = startingRotation;
     }
 
-    // Update is called once per frame
     void Update()
     {
         wandPivot.localRotation = Quaternion.Slerp(wandPivot.localRotation, goalRotation, Time.deltaTime * rotateSpeed);

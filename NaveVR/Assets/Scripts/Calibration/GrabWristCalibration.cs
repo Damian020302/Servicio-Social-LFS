@@ -21,21 +21,20 @@ public class GrabWristCalibration : MonoBehaviour
     public float holdTimeRequired = 3.0f;
     public float neutralThreshold = 0.2f;
     public float graceTime = 0.5f;
+
     [Header("Calibration Maths")]
     private int currentRep = 0;
     private float holdTimer = 0.0f;
     private float graceTimer = 0.0f;
     private float maxGripThisRep = 0.0f;
     private List<float> recordedGrips = new List<float>();
+
     [Header("UI Elements")]
     public TextMeshProUGUI instructionText;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
-        if (instructionText != null)
-        {
-            instructionText.text = "Mantén tu mano abierta y relajada frente a ti unos segundos...";
-        }
+        if (instructionText != null) instructionText.text = "Mantén tu mano abierta y relajada frente a ti unos segundos...";
         DetermineActiveHand();
         Invoke("StartCalibration", 5.0f);
     }
@@ -43,18 +42,9 @@ public class GrabWristCalibration : MonoBehaviour
     void DetermineActiveHand()
     {
         int selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
-        if (selectedHand == 0 && leftHand != null)
-        {
-            activeHand = leftHand;
-        }
-        else if (selectedHand == 1 && rightHand != null)
-        {
-            activeHand = rightHand;
-        }
-        else
-        {
-            Debug.Log("No se encontro una mano activa");
-        }
+        if (selectedHand == 0 && leftHand != null) activeHand = leftHand;
+        else if (selectedHand == 1 && rightHand != null) activeHand = rightHand;
+        else instructionText.text = "No se encontró una mano activa. Por favor, selecciona una mano en el menú principal.";
     }
 
     void StartCalibration()
@@ -74,12 +64,9 @@ public class GrabWristCalibration : MonoBehaviour
         grips[2] = activeHand.GetFingerPinchStrength(OVRHand.HandFinger.Ring);
         grips[3] = activeHand.GetFingerPinchStrength(OVRHand.HandFinger.Pinky);
         System.Array.Sort(grips);
-        //float thumbGrip = activeHand.GetFingerPinchStrength(OVRHand.HandFinger.Thumb);
-        //return Mathf.Max(indexGrip, middleGrip, ringGrip, pinkyGrip/*, thumbGrip*/);
         return (grips[2] + grips[3]) / 2.0f;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (calibrationState == CalibrationState.Completed || calibrationState == CalibrationState.SettingNeutral || activeHand == null) return;
@@ -94,10 +81,7 @@ public class GrabWristCalibration : MonoBehaviour
             bool isValidGrip = (currentGrip > 0.3f) && (currentGrip >= (maxGripThisRep - 0.2f));
             if (isValidGrip)
             {
-                if (currentGrip > maxGripThisRep)
-                {
-                    maxGripThisRep = currentGrip;
-                }
+                if (currentGrip > maxGripThisRep) maxGripThisRep = currentGrip;
                 graceTimer = 0.0f;
                 holdTimer += Time.deltaTime;
                 instructionText.text = $"¡Mantén tu puño cerrado! \n{(holdTimeRequired - holdTimer):F1}s\n<size=50%>(Fuerza actual: {(currentGrip * 100):F0}%)</size>";
@@ -107,14 +91,8 @@ public class GrabWristCalibration : MonoBehaviour
                     currentRep++;
                     holdTimer = 0.0f;
                     maxGripThisRep = 0.0f;
-                    if (currentRep >= totalReps)
-                    {
-                        SaveMeanGrip();
-                    }
-                    else
-                    {
-                        calibrationState = CalibrationState.ReturningToNeutral;
-                    }
+                    if (currentRep >= totalReps) SaveMeanGrip();
+                    else calibrationState = CalibrationState.ReturningToNeutral;
                 }
             }
             else
@@ -128,10 +106,7 @@ public class GrabWristCalibration : MonoBehaviour
                         maxGripThisRep = 0.0f;
                         UpdateUI();
                     }
-                    else
-                    {
-                        instructionText.text = $"¡Mantén tu puño cerrado! \n{(holdTimeRequired - holdTimer):F1}s\n<size=50%>(Fuerza actual: {(currentGrip * 100):F0}%)</size>\n<size=50%>(Tiempo de gracia: {(graceTime - graceTimer):F1}s)</size>";
-                    }
+                    else instructionText.text = $"¡Mantén tu puño cerrado! \n{(holdTimeRequired - holdTimer):F1}s\n<size=50%>(Fuerza actual: {(currentGrip * 100):F0}%)</size>\n<size=50%>(Tiempo de gracia: {(graceTime - graceTimer):F1}s)</size>";
                 }
             }
         }
@@ -150,27 +125,18 @@ public class GrabWristCalibration : MonoBehaviour
     {
         calibrationState = CalibrationState.Completed;
         float sum = 0;
-        foreach (float grip in recordedGrips)
-        {
-            sum += grip;
-        }
+        foreach (float grip in recordedGrips) sum += grip;
         float meanGrip = sum / recordedGrips.Count;
         float finalCalibration = Mathf.Clamp(meanGrip, 0.3f, 0.95f);
         PlayerPrefs.SetFloat("MaxGrabStrength", finalCalibration);
         PlayerPrefs.Save();
-        if (instructionText != null)
-        {
-            instructionText.text = $"Calibración completada.\nFuerza de puño guardada: {(finalCalibration * 100):F0}%\nIniciando...";
-        }
+        if (instructionText != null) instructionText.text = $"Calibración completada.\nFuerza de puño guardada: {(finalCalibration * 100):F0}%\nIniciando...";
         Invoke("LoadNextScene", 3.0f);
     }
 
     void UpdateUI()
     {
-        if (instructionText != null)
-        {
-            instructionText.text = $"Cierra tu mano para hacer un puño y sostén. \nRepetición: {currentRep + 1} de {totalReps}";
-        }
+        if (instructionText != null) instructionText.text = $"Cierra tu mano para hacer un puño y sostén. \nRepetición: {currentRep + 1} de {totalReps}";
     }
 
     void LoadNextScene()

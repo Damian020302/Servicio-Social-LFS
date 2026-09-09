@@ -1,7 +1,5 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class AppManager : MonoBehaviour
 {
@@ -14,72 +12,66 @@ public class AppManager : MonoBehaviour
     public void Game1()
     {
         SceneManager.LoadScene("Menu");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+        Time.timeScale = 1.0f;
     }
 
     public void Game2()
     {
         SceneManager.LoadScene("Menu2");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+        Time.timeScale = 1.0f;
     }
 
     public void Game3()
     {
         SceneManager.LoadScene("Menu3");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+        Time.timeScale = 1.0f;
     }
 
     public void Game4()
     {
         SceneManager.LoadScene("Menu4");
-        Time.timeScale = 1.0f; // Asegura que el tiempo se reanude al volver al menú
+        Time.timeScale = 1.0f;
+    }
+
+    void Menus()
+    {
+        handMenu.SetActive(false);
+        mainMenu.SetActive(true);
     }
 
     public void LeftHandSelection()
     {
-        handMenu.SetActive(false);
-        mainMenu.SetActive(true);
+        Menus();
         bothHandsGame.SetActive(false);
         leftOrRightHandGame.SetActive(true);
-        PlayerPrefs.SetInt("SelectedHand", 0); // 0 para mano izquierda
+        PlayerPrefs.SetInt("SelectedHand", 0); //0 for left hand
         PlayerPrefs.Save();
         HandConfigurator configurator = Object.FindFirstObjectByType<HandConfigurator>();
-        if (configurator != null)
-        {
-            configurator.ApplyConfig(0); // Aplica la configuración para mano izquierda
-        }
+        if (configurator != null) configurator.ApplyConfig(0); //Applies configuration to left hand
         Debug.Log("Mano izquierda seleccionada");
     }
 
     public void RightHandSelection()
     {
-        handMenu.SetActive(false);
-        mainMenu.SetActive(true);
+        Menus();
         bothHandsGame.SetActive(false);
         leftOrRightHandGame.SetActive(true);
-        PlayerPrefs.SetInt("SelectedHand", 1); // 1 para mano derecha
+        PlayerPrefs.SetInt("SelectedHand", 1); //1 for right hand
         PlayerPrefs.Save();
         HandConfigurator configurator = Object.FindFirstObjectByType<HandConfigurator>();
-        if (configurator != null)
-        {
-            configurator.ApplyConfig(1); // Aplica la configuración para mano derecha
-        }
+        if (configurator != null) configurator.ApplyConfig(1); //Applies configuration to right hand
         Debug.Log("Mano derecha seleccionada");
     }
 
     public void BothHandsSelection()
     {
-        handMenu.SetActive(false);
-        mainMenu.SetActive(true);
+        Menus();
         bothHandsGame.SetActive(true);
         leftOrRightHandGame.SetActive(false);
-        PlayerPrefs.SetInt("SelectedHand", 2); // 2 para ambas manos
+        PlayerPrefs.SetInt("SelectedHand", 2); //2 for both hands
         PlayerPrefs.Save();
         HandConfigurator configurator = Object.FindFirstObjectByType<HandConfigurator>();
-        if (configurator != null)
-        {
-            configurator.ApplyConfig(2); // Aplica la configuración para ambas manos
-        }
+        if (configurator != null) configurator.ApplyConfig(2); //Applies configuration to both hands
         Debug.Log("Ambas manos seleccionadas");
     }
 }

@@ -13,10 +13,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Start()
     {
-        if(player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
-        }
+        if(player == null) player = GameObject.FindGameObjectWithTag("Player").transform;
         if(GameManager.Instance != null)
         {
             speed = GameManager.Instance.enemySpeed;
@@ -54,15 +51,15 @@ public class EnemyMovement : MonoBehaviour
             waitTimer += Time.deltaTime;
             if(waitTimer >= timeToDestroy)
             {
-                if(GameManager.Instance != null && !GameManager.Instance.roundOver)
-                {
-                    GameManager.Instance.EnemyExpired();
-                }
+                if(GameManager.Instance != null && !GameManager.Instance.roundOver) GameManager.Instance.EnemyExpired();
                 Destroy(gameObject);
             }
         }
     }
 
+    /// <summary>
+    /// Shatters the enemy into pieces by instantiating the destroyedEnemyPrefab at the enemy's position and rotation.
+    /// </summary>
     public void Pieces()
     {
         if(destroyedEnemyPrefab != null) Instantiate(destroyedEnemyPrefab, transform.position, transform.rotation);

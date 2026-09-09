@@ -179,9 +179,7 @@ public class CauldronManager : MonoBehaviour
             spawner.SpawnWand();
             wandManager = Object.FindFirstObjectByType<WandManager>();
             initialTimerValue = timer;
-            yesV.SetActive(false);
-            noV.SetActive(false);
-            victory.SetActive(false);
+            StartUI();
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
@@ -201,6 +199,13 @@ public class CauldronManager : MonoBehaviour
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
         if (!useTimerConfig && timeRemainingText != null) timeRemainingText.gameObject.SetActive(false);
+    }
+
+    void StartUI()
+    {
+        yesV.SetActive(false);
+        noV.SetActive(false);
+        victory.SetActive(false);
     }
 
     void ResetMetrics()
@@ -403,34 +408,13 @@ public class CauldronManager : MonoBehaviour
 
     void UpdateMetricsUI()
     {
-        if(initialReactionTimeText != null)
-        {
-            initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
-        }
-        if (averageTimeToFlexText != null)
-        {
-            averageTimeToFlexText.text = string.Format("Tiempo Promedio\nde Flexión: {0:F1}s", averageTimeToFlex);
-        }
-        if (averageTimeToExtText != null)
-        {
-            averageTimeToExtText.text = string.Format("Tiempo Promedio\ndw Extensión: {0:F1}s", averageTimeToExt);
-        }
-        if (maxAngleFlexText != null)
-        {
-            maxAngleFlexText.text = string.Format("Ángulo Máximo\nde Flexión: {0:F1}º", maxAngleFlex);
-        }
-        if (maxAngleExtText != null)
-        {
-            maxAngleExtText.text = string.Format("Ángulo Máximo\nde Extensión: {0:F1}º", maxAngleExt);
-        }
-        if (averageAngleFlexText != null)
-        {
-            averageAngleFlexText.text = string.Format("Ángulo Promedio\nde Flexión: {0:F1}º", averageAngleFlex);
-        }
-        if (averageAngleExtText != null)
-        {
-            averageAngleExtText.text = string.Format("Ángulo Promedio\nde Extensión: {0:F1}º", averageAngleExt);
-        }
+        if(initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
+        if (averageTimeToFlexText != null) averageTimeToFlexText.text = string.Format("Tiempo Promedio\nde Flexión: {0:F1}s", averageTimeToFlex);
+        if (averageTimeToExtText != null) averageTimeToExtText.text = string.Format("Tiempo Promedio\ndw Extensión: {0:F1}s", averageTimeToExt);
+        if (maxAngleFlexText != null) maxAngleFlexText.text = string.Format("Ángulo Máximo\nde Flexión: {0:F1}º", maxAngleFlex);
+        if (maxAngleExtText != null) maxAngleExtText.text = string.Format("Ángulo Máximo\nde Extensión: {0:F1}º", maxAngleExt);
+        if (averageAngleFlexText != null) averageAngleFlexText.text = string.Format("Ángulo Promedio\nde Flexión: {0:F1}º", averageAngleFlex);
+        if (averageAngleExtText != null) averageAngleExtText.text = string.Format("Ángulo Promedio\nde Extensión: {0:F1}º", averageAngleExt);
     }
 
     void VictoryAchieved()
@@ -446,20 +430,23 @@ public class CauldronManager : MonoBehaviour
         }
         UpdateMetricsUI();
         StopReminder();
-        yesV.SetActive(true);
-        noV.SetActive(true);
-        victory.SetActive(true);
+        EndUI();
         Debug.Log("Victory logic executed.");
     }
 
-    public void OnClickYesV()
+    void EndUI()
+    {
+        yesV.SetActive(true);
+        noV.SetActive(true);
+        victory.SetActive(true);
+    }
+
+    public void OnClickYes()
     {
         StopReminder();
         StartReminder("Extiende tu muñeca para lanzar la poción");
         cauldron++;
-        yesV.SetActive(false);
-        noV.SetActive(false);
-        victory.SetActive(false);
+        StartUI();
         if(timer >= (initialTimerValue * 0.5f) && timer > 0)
         {
             winningStreak++;
@@ -469,10 +456,7 @@ public class CauldronManager : MonoBehaviour
                 winningStreak = 0;
             }
         }
-        else
-        {
-            winningStreak = 0;
-        }
+        else winningStreak = 0;
         ResetMetrics();
         LevelConfig();
     }

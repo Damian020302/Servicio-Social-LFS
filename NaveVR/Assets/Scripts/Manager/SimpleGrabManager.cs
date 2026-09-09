@@ -93,18 +93,18 @@ public class SimpleGrabManager : MonoBehaviour
     private float timeRobotGrabbed = 0.0f;
     private float roundStartTime = 0.0f;
 
-    /**
-     * Increases the selected time by 30 seconds and updates the display.
-     */
+    /// <summary>
+    /// Increases the selected time by 30 seconds and updates the display.
+    /// </summary>
     public void IncreaseTime()
     {
         selectedTime += 30.0f;
         UpdateTimeDisplay();
     }
 
-    /**
-     * Decreases the selected time by 30 seconds, ensuring it doesn't go below 30 seconds, and updates the display.
-     */
+    /// <summary>
+    /// Decreases the selected time by 30 seconds, ensuring it doesn't go below 30 seconds, and updates the display.
+    /// </summary>
     public void DecreaseTime()
     {
         if(selectedTime > 30.0f)
@@ -114,9 +114,9 @@ public class SimpleGrabManager : MonoBehaviour
         UpdateTimeDisplay();
     }
 
-    /**
-     * Updates the time display to show the currently selected time in minutes and seconds.
-     */
+    /// <summary>
+    /// Updates the time display to show the currently selected time in minutes and seconds.
+    /// </summary>
     private void UpdateTimeDisplay()
     {
         if (timeDisplay != null)
@@ -127,17 +127,17 @@ public class SimpleGrabManager : MonoBehaviour
         }
     }
 
-    /**
-     * Toggles the visibility of the timer controls based on the state of the useTimerToggle.
-     */
+    /// <summary>
+    /// Toggles the visibility of the timer controls based on the state of the useTimerToggle.
+    /// </summary>
     public void OnToggleTimer()
     {
         if(timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
     }
-    
-    /**
-     * Confirms the timer settings and starts the game.
-     */
+
+    /// <summary>
+    /// Confirms the timer settings, saves them to PlayerPrefs, and starts the game.
+    /// </summary>
     public void ConfirmAndStartGame()
     {
         PlayerPrefs.SetInt("UseTimer", useTimerToggle.isOn ? 1 : 0);

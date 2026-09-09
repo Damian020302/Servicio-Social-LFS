@@ -46,10 +46,7 @@ public class AutoVRCalibration : MonoBehaviour
             float offsetRotation = targetHeadPosition.eulerAngles.y - vrCamera.eulerAngles.y;
             vrRig.RotateAround(vrCamera.position, Vector3.up, offsetRotation);
         }
-        else
-        {
-            Debug.LogWarning("AutoVRCalibration: Missing reference(s) for calibration.");
-        }
+        else Debug.LogWarning("AutoVRCalibration: Missing reference(s) for calibration.");
         float elapsedTime = 0.0f;
         while (elapsedTime < fadeOutTime)
         {

@@ -15,7 +15,6 @@ public class WristCalibration : MonoBehaviour
     public TextMeshProUGUI counterSupination;
     public TextMeshProUGUI counterPronation;
 
-    // Update is called once per frame
     void Update()
     {
         if (isCalibrating)
@@ -30,28 +29,16 @@ public class WristCalibration : MonoBehaviour
             float flexExtAngle = Vector3.SignedAngle(forwardNeutral, transform.forward, rightNeutral);
             flexionAngle = 0.0f;
             extensionAngle = 0.0f;
-            if (flexExtAngle > 0)
-            {
-                flexionAngle = flexExtAngle;
-            }
-            else if (flexExtAngle < 0)
-            {
-                extensionAngle = Mathf.Abs(flexExtAngle);
-            }
+            if (flexExtAngle > 0) flexionAngle = flexExtAngle;
+            else if (flexExtAngle < 0) extensionAngle = Mathf.Abs(flexExtAngle);
             Debug.Log($"Flexion: {flexionAngle:F1}° | Extension: {extensionAngle:F1}°");
             SetCounterExtension();
             SetCounterFlexion();
             float supProAngle = Vector3.SignedAngle(rightNeutral, transform.right, transform.forward);
             supinationAngle = 0.0f;
             pronationAngle = 0.0f;
-            if (supProAngle > 0)
-            {
-                supinationAngle = supProAngle;
-            }
-            else if (supProAngle < 0)
-            {
-                pronationAngle = Mathf.Abs(supProAngle);
-            }
+            if (supProAngle > 0) supinationAngle = supProAngle;
+            else if (supProAngle < 0) pronationAngle = Mathf.Abs(supProAngle);
             Debug.Log($"Supination: {supinationAngle:F1}° | Pronation: {pronationAngle:F1}°");
             SetCounterPronation();
             SetCounterSupination();
@@ -67,33 +54,21 @@ public class WristCalibration : MonoBehaviour
     
     public void SetCounterFlexion()
     {
-        if (counterFlexion != null)
-        {
-            counterFlexion.text = $"Flexion: {flexionAngle:F1}°";
-        }
+        if (counterFlexion != null) counterFlexion.text = $"Flexion: {flexionAngle:F1}°";
     }
 
     public void SetCounterExtension()
     {
-        if (counterExtension != null)
-        {
-            counterExtension.text = $"Extension: {extensionAngle:F1}°";
-        }
+        if (counterExtension != null) counterExtension.text = $"Extension: {extensionAngle:F1}°";
     }
 
     public void SetCounterSupination()
     {
-        if (counterSupination != null)
-        {
-            counterSupination.text = $"Supination: {supinationAngle:F1}°";
-        }
+        if (counterSupination != null) counterSupination.text = $"Supination: {supinationAngle:F1}°";
     }
 
     public void SetCounterPronation()
     {
-        if (counterPronation != null)
-        {
-            counterPronation.text = $"Pronation: {pronationAngle:F1}°";
-        }
+        if (counterPronation != null) counterPronation.text = $"Pronation: {pronationAngle:F1}°";
     }
 }

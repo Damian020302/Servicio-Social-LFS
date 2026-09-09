@@ -18,11 +18,14 @@ public class HandConfigurator : MonoBehaviour
         ApplyConfig(selectedHand);
     }
 
+    /// <summary>
+    /// Applies the hand configuration based on the selected hand preference.
+    /// </summary>
+    /// <param name="selectedHand">0 for left hand, 1 for right hand, 2 for both hands</param>
     public void ApplyConfig(int selectedHand)
     {
         if (selectedHand == 0)
         {
-            //Configure for left hand
             if (leftHandInteraction != null) leftHandInteraction.SetActive(true);
             if (leftHandVisuals != null) leftHandVisuals.SetActive(true);
             if (leftHandAnchor != null) leftHandAnchor.SetActive(true);
@@ -32,7 +35,6 @@ public class HandConfigurator : MonoBehaviour
         }
         else if(selectedHand == 1)
         {
-            //Configure for right hand
             if (leftHandInteraction != null) leftHandInteraction.SetActive(false);
             if (leftHandVisuals != null) leftHandVisuals.SetActive(false);
             if (leftHandAnchor != null) leftHandAnchor.SetActive(false);
@@ -42,7 +44,6 @@ public class HandConfigurator : MonoBehaviour
         }
         else
         {
-            //Configure for both hands
             if (leftHandInteraction != null) leftHandInteraction.SetActive(true);
             if (leftHandVisuals != null) leftHandVisuals.SetActive(true);
             if (leftHandAnchor != null) leftHandAnchor.SetActive(true);

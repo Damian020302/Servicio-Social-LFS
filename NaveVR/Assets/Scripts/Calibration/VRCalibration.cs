@@ -33,11 +33,13 @@ public class VRCalibration : MonoBehaviour
     public string currentArmName;
     public int totalReps = 3;
     [Tooltip("Time the arm must be held stretched")] public float holdTimeRequired = 3.0f;
+
     [Header("Medical Measurements")]
     [Tooltip("Arm length from shoulder to elbow")]
     public float upperArmLength = 0.30f;
     [Tooltip("Arm length from elbow to wrist")]
     public float forearmLength = 0.25f;
+
     [Header("Calibration Maths")]
     private int currentReps = 0;
     [Tooltip("Minimum distance in meters to start measuring")] public float minDist = 0.30f;
@@ -49,6 +51,7 @@ public class VRCalibration : MonoBehaviour
     private List<float> recordedDistancesR = new List<float>();
     private List<float> recordedElbowL = new List<float>();
     private List<float> recordedElbowR = new List<float>();
+
     [Header("UI Elements")]
     public TextMeshProUGUI instructionText;
 
@@ -78,11 +81,7 @@ public class VRCalibration : MonoBehaviour
             useLeftArm = true;
             useRightArm = true;
         }
-        else
-        {
-            Debug.Log("No se encontro una mano activa");
-            instructionText.text = "No se encontro una mano activa";
-        }        
+        else instructionText.text = "No se encontro una mano activa";    
     }
 
     void StartCalibrationSequence()
@@ -116,6 +115,11 @@ public class VRCalibration : MonoBehaviour
         elbowAngleAtMaxReach = 180.0f;
     }
 
+    /// <summary>
+    /// Using Pythagorean theorem and the law of cosines, calculates the elbow angle based on the distance between the shoulder and wrist.
+    /// </summary>
+    /// <param name="distance">The distance between the shoulder and wrist.</param>
+    /// <returns>The calculated elbow angle in degrees.</returns>
     float CalculateElbowAngle(float distance)
     {
         float a = upperArmLength;
@@ -206,10 +210,7 @@ public class VRCalibration : MonoBehaviour
         calibrationState = CalibrationState.Transitioning;
         if(currentPhase == CalibrationPhase.LeftArm && useRightArm)
         {
-            if(instructionText != null)
-            {
-                instructionText.text = "¡Excelente!\nAhora vamos a calibrar el brazo Derecho.\nPreparate...";
-            }
+            if(instructionText != null) instructionText.text = "¡Excelente!\nAhora vamos a calibrar el brazo Derecho.\nPreparate...";
             currentPhase = CalibrationPhase.RightArm;
             activeHand = rightWrist;
             Invoke("StartNextArm", 4.0f);
@@ -228,10 +229,9 @@ public class VRCalibration : MonoBehaviour
         UpdateUI();
     }
 
-    /**
-     * Saves the mean distances and elbow angles to PlayerPrefs.
-     * If only one arm is used, it copies the values to the other arm.
-     */
+    /// <summary>
+    /// Saves the mean distances and elbow angles to PlayerPrefs. If only one arm is used, it copies the values to the other arm.
+    /// </summary>
     void SaveMeanDistance()
     {
         calibrationState = CalibrationState.Completed;
@@ -274,10 +274,7 @@ public class VRCalibration : MonoBehaviour
         PlayerPrefs.SetFloat("PlayerElbowAngle", (finalElbowL+finalElbowR)/2.0f);
         PlayerPrefs.SetFloat("PlayerRadius", Mathf.Max(finalRadioL, finalRadioR));
         PlayerPrefs.Save();
-        if (instructionText != null)
-        {
-            instructionText.text = $"Calibración completa.\nRadio Izquierdo:{finalRadioL:F2}m\nRadio Derecho:{finalRadioR:F2}m\nÁngulo de Codo (Flexión): {(finalElbowL + finalElbowR) / 2.0f:F2}°\nIniciando terapia...";
-        }
+        if (instructionText != null) instructionText.text = $"Calibración completa.\nRadio Izquierdo:{finalRadioL:F2}m\nRadio Derecho:{finalRadioR:F2}m\nÁngulo de Codo (Flexión): {(finalElbowL + finalElbowR) / 2.0f:F2}°\nIniciando terapia...";
         Invoke("LoadNextScene", 3.0f);
     }
 
@@ -287,11 +284,11 @@ public class VRCalibration : MonoBehaviour
         Time.timeScale = 1.0f;
     }
 
+    /// <summary>
+    /// Updates the UI with the current instruction and repetition count.
+    /// </summary>
     void UpdateUI()
     {
-        if(instructionText != null)
-        {
-            instructionText.text = $"Estira tu brazo {currentArmName} lo más que puedas y sostén la posición.\nRepetición: {currentReps + 1} de {totalReps}";
-        }
+        if(instructionText != null) instructionText.text = $"Estira tu brazo {currentArmName} lo más que puedas y sostén la posición.\nRepetición: {currentReps + 1} de {totalReps}";
     }
 }

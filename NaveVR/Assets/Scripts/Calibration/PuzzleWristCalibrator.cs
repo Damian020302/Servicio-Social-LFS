@@ -34,10 +34,7 @@ public class PuzzleWristCalibrator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (instructionText != null)
-        {
-            instructionText.text = "Mantén tu mano relajada frente a ti unos segundos...";
-        }
+        if (instructionText != null) instructionText.text = "Mantén tu mano relajada frente a ti unos segundos...";
         DetermineActiveHand();
         Invoke("SetNeutralRotation", 10.0f);
     }
@@ -45,18 +42,9 @@ public class PuzzleWristCalibrator : MonoBehaviour
     void DetermineActiveHand()
     {
         int selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
-        if(selectedHand == 0 && leftWrist != null)
-        {
-            activeHand = leftWrist;
-        }
-        else if (selectedHand == 1 && rightWrist != null)
-        {
-            activeHand = rightWrist;
-        }
-        else
-        {
-            Debug.Log("No se encontro una mano activa");
-        }
+        if(selectedHand == 0 && leftWrist != null) activeHand = leftWrist;
+        else if (selectedHand == 1 && rightWrist != null) activeHand = rightWrist;
+        else instructionText.text = "No se encontro una mano activa";
     }
 
     void SetNeutralRotation()
@@ -67,13 +55,9 @@ public class PuzzleWristCalibrator : MonoBehaviour
             calibrationState = CalibrationState.WaitingForRotation;
             UpdateUI();
         }
-        else
-        {
-            Debug.LogError("No hay mano activa");
-        }
+        else instructionText.text = "No se encontro una mano activa";
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(calibrationState == CalibrationState.Completed || calibrationState == CalibrationState.SettingNeutral || activeHand == null)
@@ -86,10 +70,7 @@ public class PuzzleWristCalibrator : MonoBehaviour
             if(currentAngle > 20.0f)
             {
                 holdTimer += Time.deltaTime;
-                if(currentAngle > maxAngleThisRep)
-                {
-                    maxAngleThisRep = currentAngle;
-                }
+                if(currentAngle > maxAngleThisRep) maxAngleThisRep = currentAngle;
                 instructionText.text = $"¡Mantén la posición ahí!\n{(holdTimeRequired - holdTimer):F1}s";
                 if(holdTimer >= holdTimeRequired)
                 {
@@ -97,14 +78,8 @@ public class PuzzleWristCalibrator : MonoBehaviour
                     currentReps++;
                     holdTimer = 0.0f;
                     maxAngleThisRep = 0.0f;
-                    if(currentReps >= totalReps)
-                    {
-                        SaveMeanRotation();
-                    }
-                    else
-                    {
-                        calibrationState = CalibrationState.ReturningToNeutral;
-                    }
+                    if(currentReps >= totalReps) SaveMeanRotation();
+                    else calibrationState = CalibrationState.ReturningToNeutral;
                 }
             }
             else
@@ -122,7 +97,6 @@ public class PuzzleWristCalibrator : MonoBehaviour
             instructionText.text = $"Buen trabajo. ({currentReps}/{totalReps})\nAhora relaja y baja tu mano.";
             if (currentAngle <= neutralThreshHold)
             {
-                //neutralRotation = activeHand.rotation;
                 calibrationState = CalibrationState.WaitingForRotation;
                 UpdateUI();
             }
@@ -134,27 +108,18 @@ public class PuzzleWristCalibrator : MonoBehaviour
     {
         calibrationState = CalibrationState.Completed;
         float sum = 0;
-        foreach(float angle in recordedAngles)
-        {
-            sum += angle;
-        }
+        foreach(float angle in recordedAngles) sum += angle;
         float meanAngle = sum / recordedAngles.Count;
         float finalCalibration = Mathf.Clamp(meanAngle, 30.0f, 180.0f);
         PlayerPrefs.SetFloat("MaxPuzzleRotation", finalCalibration);
         PlayerPrefs.Save();
-        if(instructionText != null)
-        {
-            instructionText.text = $"Calibración existosa. \nRotación máxima promedio: {finalCalibration:F1}°\n\nIniciando terapia...";
-        }
+        if(instructionText != null) instructionText.text = $"Calibración existosa. \nRotación máxima promedio: {finalCalibration:F1}°\n\nIniciando terapia...";
         Invoke("LoadNextScene", 3.0f);
     }
 
     void UpdateUI()
     {
-        if(instructionText != null)
-        {
-            instructionText.text = $"Gira tu muñeca lo más que puedas y sostén el esfuerzo.\nRepetición: {currentReps + 1} de {totalReps}";
-        }
+        if(instructionText != null) instructionText.text = $"Gira tu muñeca lo más que puedas y sostén el esfuerzo.\nRepetición: {currentReps + 1} de {totalReps}";
     }
 
     void LoadNextScene()

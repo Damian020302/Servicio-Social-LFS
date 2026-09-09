@@ -150,10 +150,7 @@ public class PuzzleManager : MonoBehaviour
         {
             timerPanel.SetActive(true);
             UpdateTimeDisplay();
-            if (timerControls != null)
-            {
-                timerControls.SetActive(useTimerToggle.isOn);
-            }
+            if (timerControls != null) timerControls.SetActive(useTimerToggle.isOn);
         }
         else
         {
@@ -172,19 +169,14 @@ public class PuzzleManager : MonoBehaviour
             {
                 perfectRotations.Add(piece, piece.transform.rotation); // Store the initial rotation as the perfect rotation for each piece
             }
-            yesV.SetActive(false); // Ensure the yes object is initially inactive
-            noV.SetActive(false);
-            victoria.SetActive(false); // Ensure the victory object is initially inactive
+            StartUI();
             currentPuzzleIndex = 0;
             LoadCurrentPuzzle();
             //DinamicPuzzle();
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
-                if (warningOriginalScale == Vector3.zero)
-                {
-                    warningOriginalScale = Vector3.one; // Fallback to a default scale if the original scale is not set
-                }
+                if (warningOriginalScale == Vector3.zero) warningOriginalScale = Vector3.one; // Fallback to a default scale if the original scale is not set
             }
             UpdateReminderMessage();
             isVictoryAchieved = false;
@@ -193,10 +185,14 @@ public class PuzzleManager : MonoBehaviour
         initialTimerValue = PlayerPrefs.GetFloat("SessionTime", 60.0f);
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
-        if (!useTimerConfig && timeRemainingText != null)
-        {
-            timeRemainingText.gameObject.SetActive(false);
-        }
+        if (!useTimerConfig && timeRemainingText != null)timeRemainingText.gameObject.SetActive(false);
+    }
+
+    void StartUI()
+    {
+        yesV.SetActive(false); // Ensure the yes object is initially inactive
+        noV.SetActive(false);
+        victoria.SetActive(false); // Ensure the victory object is initially inactive
     }
 
     void LoadCurrentPuzzle()
@@ -206,10 +202,7 @@ public class PuzzleManager : MonoBehaviour
         {
             bool isSelected = (i == currentPuzzleIndex);
             puzzleAdmin.transform.GetChild(i).gameObject.SetActive(isSelected);
-            if(isSelected)
-            {
-                activePuzzle = puzzleAdmin.transform.GetChild(i).gameObject;
-            }
+            if(isSelected) activePuzzle = puzzleAdmin.transform.GetChild(i).gameObject;
         }
         puzzlePhases.Clear();
         actualPhase = 0;
@@ -237,10 +230,7 @@ public class PuzzleManager : MonoBehaviour
                 pieceCollider.transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
                 pieceCollider.enabled = (j == 0); // Enable only the pieces of the first phase
                 RotatePuzzle scriptRotation = pieceCollider.GetComponent<RotatePuzzle>();
-                if (scriptRotation != null)
-                {
-                    scriptRotation.enabled = (j == 0); // Enable the RotatePuzzle script only for the pieces of the first phase
-                }
+                if (scriptRotation != null) scriptRotation.enabled = (j == 0); // Enable the RotatePuzzle script only for the pieces of the first phase
             }
             puzzlePhases.Add(phasePieces); // Add the current phase pieces to the list of phases
         }
@@ -265,53 +255,6 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
-    /*void DinamicPuzzle()
-    {
-        difficulty = Mathf.Clamp(difficulty, 0, puzzleAdmin.transform.childCount - 1); // Increase difficulty every 3 dungeons
-        GameObject activePuzzle = null;
-        for(int i = 0; i < puzzleAdmin.transform.childCount; i++)
-        {
-            bool isSelected = (i == difficulty); // Select the puzzle based on the current difficulty level
-            puzzleAdmin.transform.GetChild(i).gameObject.SetActive(isSelected); // Activate the selected puzzle and deactivate others
-            if(isSelected)
-            {
-                activePuzzle = puzzleAdmin.transform.GetChild(i).gameObject; // Store reference to the active puzzle
-            }
-        }
-        puzzlePhases.Clear(); // Clear any existing phases
-        actualPhase = 0; // Reset to the first phase
-        int phases = activePuzzle.transform.childCount;
-        for (int f = 0; f < phases; f++)
-        {
-            Transform nPuzzle = activePuzzle.transform.GetChild(f);
-            int piecesInPhase = nPuzzle.childCount;
-            Collider[] phasePieces = new Collider[piecesInPhase];
-            for(int p = 0; p < piecesInPhase; p++)
-            {
-                Collider pieceCollider = nPuzzle.GetChild(p).GetComponent<Collider>();
-                phasePieces[p] = pieceCollider; // Store the collider for each piece in the current phase
-                pieceCollider.gameObject.SetActive(true); // Ensure the piece is active in the scene
-                Rigidbody rb = pieceCollider.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    rb.isKinematic = false; // Make the pieces non-physical to prevent them from falling or being interacted with
-                    rb.angularVelocity = Vector3.zero; // Stop any existing angular velocity to prevent pieces from spinning
-                    rb.angularDamping = 15.0f; // Apply angular damping to gradually stop rotation
-                }
-                pieceCollider.transform.rotation = perfectRotations[pieceCollider]; // Reset the piece to its perfect rotation
-                float randomRotation = Random.Range(60.0f, 300.0f); // Generate a random Y rotation
-                pieceCollider.transform.Rotate(0, 0, randomRotation, Space.Self); // Apply the random rotation
-                pieceCollider.enabled = (f == 0); // Enable only the pieces of the first phase
-                RotatePuzzle scriptRotation = pieceCollider.GetComponent<RotatePuzzle>();
-                if (scriptRotation != null)
-                {
-                    scriptRotation.enabled = (f == 0); // Enable the RotatePuzzle script only for the pieces of the first phase
-                }
-            }
-            puzzlePhases.Add(phasePieces); // Add the current phase pieces to the list of phases
-        }
-    }*/
-
     public void Update()
     {
         if (isVictoryAchieved) return;
@@ -322,7 +265,6 @@ public class PuzzleManager : MonoBehaviour
             {
                 timer -= Time.deltaTime;
                 DisplayTime(timer);
-                //UpdateUI();
             }
             else
             {
@@ -376,10 +318,7 @@ public class PuzzleManager : MonoBehaviour
                     realPhysicalDisplacement /= scriptRotation.rotationMultiplier;
                 }
                 totalPiecesRotationAngle += realPhysicalDelta;
-                if (realPhysicalDisplacement > maxRotationAngle)
-                {
-                    maxRotationAngle = realPhysicalDisplacement;
-                }
+                if (realPhysicalDisplacement > maxRotationAngle) maxRotationAngle = realPhysicalDisplacement;
             }
             Quaternion targetRot = perfectRotations[piece];
             float angleDifference = Quaternion.Angle(piece.transform.rotation, targetRot);
@@ -436,10 +375,7 @@ public class PuzzleManager : MonoBehaviour
                     timerIsRunning = false;
                     VictoryAchieved();
                 }
-                else
-                {
-                    LoadCurrentPuzzle();
-                }
+                else LoadCurrentPuzzle();
             }
             else
             {
@@ -458,93 +394,6 @@ public class PuzzleManager : MonoBehaviour
             }
         }
     }
-        /*int correctPieces = GetCorrectPiecesCount(currentPhasePieces);
-        if(doorManager != null && totalPuzzles > 0)
-        {
-            int totalPiecesInCurrentPuzzle = 0;
-            int correctPiecesInCurrentPuzzle = 0;
-            foreach (Collider[] phase in puzzlePhases)
-            {
-                totalPiecesInCurrentPuzzle += phase.Length;
-                correctPiecesInCurrentPuzzle += GetCorrectPiecesCount(phase);
-            }
-            if(totalPiecesInCurrentPuzzle > 0)
-            {
-                float baseProgress = (float)currentPuzzleIndex / totalPuzzles;
-                float currentPuzzleProgress = ((float)correctPiecesInCurrentPuzzle / totalPiecesInCurrentPuzzle) / totalPuzzles;
-                doorManager.UpdateOpening(baseProgress + currentPuzzleProgress);
-            }*/
-            /*int totalLevelPieces = 0;
-            int totalCorrectPieces = 0;
-            foreach (Collider[] phase in puzzlePhases)
-            {
-                totalLevelPieces += phase.Length; // Count total pieces across all phases
-                totalCorrectPieces += GetCorrectPiecesCount(phase); // Count total correct pieces across all phases
-            }
-            if(totalLevelPieces > 0)
-            {
-                float progress = (float)totalCorrectPieces / totalLevelPieces; // Calculate overall progress as a percentage
-                doorManager.UpdateOpening(progress); // Update the door opening based on overall progress
-            }*/
-        /*}
-        if (correctPieces == currentPhasePieces.Length)
-        {
-            foreach (Collider piece in currentPhasePieces)
-            {
-                if (piece != null)
-                {
-                    piece.enabled = false; // Disable the colliders for the current phase pieces
-                    Rigidbody rb = piece.GetComponent<Rigidbody>();
-                    if (rb != null)
-                    {
-                        rb.angularVelocity = Vector3.zero; // Stop any existing angular velocity to prevent pieces from spinning
-                        rb.isKinematic = true; // Make the pieces non-physical to prevent them from falling or being interacted with
-                    }
-                    RotatePuzzle scriptRotation = piece.GetComponent<RotatePuzzle>();
-                    if (scriptRotation != null)
-                    {
-                        scriptRotation.enabled = false; // Disable the RotatePuzzle script to prevent further interaction
-                    }
-                    piece.gameObject.SetActive(false); // Deactivate the pieces of the current phase to prevent further interaction
-                    piece.gameObject.SetActive(true); // Reactivate the pieces to ensure they remain visible but non-interactive
-                }
-            }
-            actualPhase++; // Move to the next phase
-            if (actualPhase >= puzzlePhases.Count)
-            {
-                currentPuzzleIndex++;
-                if(currentPuzzleIndex >= totalPuzzles)
-                {
-                    Debug.Log("All pieces are correctly aligned! Checking for victory condition...");
-                    isVictoryAchieved = true; // Set victory flag to true
-                    timerIsRunning = false;
-                    VictoryAchieved();
-                    Debug.Log("Victory Achieved! All pieces are aligned.");
-                }
-                else
-                {
-                    LoadCurrentPuzzle();
-                }
-            }
-            else
-            {
-                Collider[] nextPhasePieces = puzzlePhases[actualPhase]; // Get the pieces for the next phase
-                foreach (Collider piece in nextPhasePieces)
-                {
-                    if (piece != null)
-                    {
-                        piece.enabled = true; // Enable the colliders for the next phase pieces
-                        RotatePuzzle scriptRotation = piece.GetComponent<RotatePuzzle>();
-                        if (scriptRotation != null)
-                        {
-                            scriptRotation.enabled = true; // Enable the RotatePuzzle script to allow interaction
-                        }
-                    }
-                }
-                UpdateReminderMessage();
-            }
-        }
-    }*/
 
     void DisplayTime(float timeToDisplay)
     {
@@ -556,59 +405,18 @@ public class PuzzleManager : MonoBehaviour
 
     void UpdateMetricsUI()
     {
-        if(initialReactionTimeText != null)
-        {
-            initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
-        }
-        if(averageRotationTimeText != null)
-        {
-            averageRotationTimeText.text = string.Format("Tiempo Promedio\nde Rotación: {0:F1}s", averageRotationTime);
-        }
-        if(averageSolvingTimeText != null)
-        {
-            averageSolvingTimeText.text = string.Format("Tiempo Promedio\nde Resolución: {0:F1}s", averageSolvingTime);
-        }
-        if(averageRotationAngleText != null)
-        {
-            averageRotationAngleText.text = string.Format("Ángulo Promedio\nde Rotación: {0:F1}º", averageRotationAngle);
-        }
-        if(maxRotationAngleText != null)
-        {
-            maxRotationAngleText.text = string.Format("Ánglo Máximo\nde Rotación: {0:F1}º", maxRotationAngle);
-        }
+        if(initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
+        if(averageRotationTimeText != null) averageRotationTimeText.text = string.Format("Tiempo Promedio\nde Rotación: {0:F1}s", averageRotationTime);
+        if(averageSolvingTimeText != null) averageSolvingTimeText.text = string.Format("Tiempo Promedio\nde Resolución: {0:F1}s", averageSolvingTime);
+        if(averageRotationAngleText != null) averageRotationAngleText.text = string.Format("Ángulo Promedio\nde Rotación: {0:F1}º", averageRotationAngle);
+        if(maxRotationAngleText != null) maxRotationAngleText.text = string.Format("Ánglo Máximo\nde Rotación: {0:F1}º", maxRotationAngle);
     }
-
-    /*private int GetCorrectPiecesCount(Collider[] pieces)
-    {
-        int count = 0;
-        for(int i = 0; i < pieces.Length; i++)
-        {
-            if(pieces[i] != null)
-            {
-                Quaternion target = perfectRotations[pieces[i]];
-                float angleDifference = Quaternion.Angle(pieces[i].transform.rotation, target);
-                bool isCorrect = (angleDifference <= victoryMargin);
-                RotatePuzzle scriptRotation = pieces[i].GetComponent<RotatePuzzle>();
-                if(scriptRotation != null)
-                {
-                    scriptRotation.ToggleLights(isCorrect); // Increment count if the piece is aligned within the margin
-                }
-                if(isCorrect)
-                {
-                    count++;
-                }
-            }
-        }
-        return count; // Return the total count of correctly aligned pieces
-    }*/
 
     void VictoryAchieved()
     {
         isVictoryAchieved = true;
         timerIsRunning = false;
-        yesV.SetActive(true); // Activate the yes object
-        noV.SetActive(true); // Activate the no object
-        victoria.SetActive(true); // Activate the victory object
+        EndUI();
         if(totalRoundTimeText != null)
         {
             float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
@@ -625,12 +433,17 @@ public class PuzzleManager : MonoBehaviour
         Debug.Log("Victory logic executed.");
     }
 
-    public void OnClickYesV()
+    void EndUI()
+    {
+        yesV.SetActive(true); // Activate the yes object
+        noV.SetActive(true); // Activate the no object
+        victoria.SetActive(true); // Activate the victory object
+    }
+
+    public void OnClickYes()
     {
         dungeon++;
-        yesV.SetActive(false); // Deactivate the yes object
-        noV.SetActive(false); // Deactivate the no object
-        victoria.SetActive(false); // Deactivate the victory object
+        StartUI();
         timer = initialTimerValue;
         timerIsRunning = useTimerConfig;
         isVictoryAchieved = false;
@@ -647,24 +460,6 @@ public class PuzzleManager : MonoBehaviour
         totalPiecesSolved = 0;
         totalPiecesRotationTime = 0.0f;
         totalPiecesRotationAngle = 0.0f;
-        /*if(timer >= (initialTimerValue * 0.5f) && timer > 0)
-        {
-            winningStreak++;
-            if(winningStreak >= 2)
-            {
-                difficulty++; // Increase difficulty if the player won with more than 50% of the time remaining
-                winningStreak = 0; // Reset winning streak after increasing difficulty
-            }
-        }
-        else
-        {
-            winningStreak = 0; // Reset winning streak if the player won with less than 50% of the time remaining
-        }*/
-        //timer = initialTimerValue; // Reset the timer to its initial value
-        //timerIsRunning = useTimerConfig; // Restart the timer
-        //isVictoryAchieved = false; // Reset victory flag
-        //DinamicPuzzle(); // Regenerate the puzzle with the updated difficulty level
-        //currentPuzzleIndex = 0;
         if(doorManager != null)
         {
             doorManager.UpdateOpening(0.0f); // Reset the door to closed position
@@ -681,34 +476,19 @@ public class PuzzleManager : MonoBehaviour
         StopReminder();
         if(actualPhase == 0)
         {
-            if (currentPuzzleIndex > 0)
-            {
-                StartReminder("Rota tu muñeca en las runas interiores");
-            }
-            else
-            {
-                StartReminder("Rota tu muñeca en la runa interior");
-            }
+            if (currentPuzzleIndex > 0) StartReminder("Rota tu muñeca en las runas interiores"); 
+            else StartReminder("Rota tu muñeca en la runa interior");
         }
         else
         {
-            if (currentPuzzleIndex > 0)
-            {
-                StartReminder("Rota tu muñeca en las runas exteriores");
-            }
-            else
-            {
-                StartReminder("Rota tu muñeca en la runa exterior");
-            }
+            if (currentPuzzleIndex > 0) StartReminder("Rota tu muñeca en las runas exteriores");
+            else StartReminder("Rota tu muñeca en la runa exterior");
         }
     }
 
     void UpdateUI()
     {
-        if(dungeonText != null)
-        {
-            dungeonText.text = "Catacumba " + dungeon; // Update the dungeon level text
-        }
+        if(dungeonText != null) dungeonText.text = "Catacumba " + dungeon; // Update the dungeon level text
     }
 
     IEnumerator WarningAnimationRoutine(string message)

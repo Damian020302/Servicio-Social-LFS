@@ -3189,7 +3189,7 @@ GameObject:
   - component: {fileID: 470638193}
   - component: {fileID: 470638192}
   m_Layer: 5
-  m_Name: NoV
+  m_Name: No
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8041,6 +8041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24c9e128525e4f45801b03a143fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandTouch
+  isLeftHand: 1
 --- !u!135 &1083404097
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -15285,7 +15286,7 @@ GameObject:
   - component: {fileID: 1986871591}
   - component: {fileID: 1986871590}
   m_Layer: 5
-  m_Name: YesV
+  m_Name: Yes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15357,7 +15358,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2014849220}
         m_TargetAssemblyTypeName: CauldronManager, Assembly-CSharp
-        m_MethodName: OnClickYesV
+        m_MethodName: OnClickYes
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15481,6 +15482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24c9e128525e4f45801b03a143fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandTouch
+  isLeftHand: 1
 --- !u!135 &2001954048
 SphereCollider:
   m_ObjectHideFlags: 0

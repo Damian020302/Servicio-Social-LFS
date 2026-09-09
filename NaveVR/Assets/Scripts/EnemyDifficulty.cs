@@ -8,7 +8,7 @@ public class EnemyDifficulty : MonoBehaviour
     public Slider speedSlider;
     public Slider lifeTimeSlider;
     public Slider spawnRateSlider;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         float savedEnemySpeed = PlayerPrefs.GetFloat("EnemySpeed", 3.0f);
@@ -18,28 +18,24 @@ public class EnemyDifficulty : MonoBehaviour
         if (sizeSlider != null)
         {
             sizeSlider.value = savedEnemySize;
-            Debug.Log($"Cargando tamaño de enemigo guardado: {savedEnemySize}");
         }
         if (speedSlider != null)
         {
             speedSlider.value = savedEnemySpeed;
-            Debug.Log($"Cargando velocidad de enemigo guardada: {savedEnemySpeed}");
         }
         if (lifeTimeSlider != null)
         {
             lifeTimeSlider.value = savedEnemyLifetime;
-            Debug.Log($"Cargando tiempo de vida de enemigo guardado: {savedEnemyLifetime}");
         }
         if (spawnRateSlider != null)
         {
             spawnRateSlider.value = savedSpawnRate;
-            Debug.Log($"Cargando tasa de aparición guardada: {savedSpawnRate}");
         }
     }
 
-    /**
-     * Guarda las configuraciones de dificultad seleccionadas por el jugador y carga la escena del juego.
-     */
+    /// <summary>
+    /// Saves the current values of the sliders to PlayerPrefs and starts the game scene.
+    /// </summary>
     public void SaveAndPlay()
     {
         PlayerPrefs.SetFloat("TimeSpawnInterval", spawnRateSlider.value);

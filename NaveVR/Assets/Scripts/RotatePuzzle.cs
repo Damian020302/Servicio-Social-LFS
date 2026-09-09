@@ -31,28 +31,22 @@ public class RotatePuzzle : MonoBehaviour
         physicalRotationLimit = Mathf.Max(physicalRotationLimit, 5.0f);
         float virtualRotationNeeded = 120.0f;
         PuzzleManager puzzleManager = Object.FindFirstObjectByType<PuzzleManager>();
-        if(puzzleManager != null)
-        {
-            virtualRotationNeeded = puzzleManager.predefinedScrambleAngle;
-        }
+        if(puzzleManager != null) virtualRotationNeeded = puzzleManager.predefinedScrambleAngle;
         rotationMultiplier = virtualRotationNeeded / physicalRotationLimit;
         Debug.Log($"RotatePuzzle: Limite Fisico = {physicalRotationLimit}, Meta virtual = {virtualRotationNeeded}, Multiplicador = {rotationMultiplier:F2}");
-        //maxRotationPerInteraction = PlayerPrefs.GetFloat("MaxPuzzleRotation", maxRotationPerInteraction);
     }
 
     private void Update()
     {
         if (isGrabbed && handInteraction != null)
         {
-            // Calculate the rotation based on the hand's movement
+            //Calculate the rotation based on the hand's movement
             Quaternion difRotation = handInteraction.rotation * Quaternion.Inverse(initialHandRotation);
             difRotation.ToAngleAxis(out float handAngle, out Vector3 handAxis);
             if (handAngle > 180.0f) handAngle += 360.0f;
             float virtualAngle = handAngle * rotationMultiplier;
             Quaternion scaledDifRotation = Quaternion.AngleAxis(virtualAngle, handAxis);
             transform.rotation = scaledDifRotation * initialPuzzleRotation;
-            //Quaternion targetRotation = difRotation * initialPuzzleRotation;
-            //transform.rotation = Quaternion.RotateTowards(initialPuzzleRotation, targetRotation, maxRotationPerInteraction);
             transform.position = pos;
             Vector3 blockedRotation = transform.localEulerAngles;
             blockedRotation.x = xRotation;
@@ -61,6 +55,10 @@ public class RotatePuzzle : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Grab the puzzle when the hand enters the trigger.
+    /// </summary>
+    /// <param name="other">The collider that entered the trigger.</param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Hand") && !isGrabbed)
@@ -73,6 +71,10 @@ public class RotatePuzzle : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Release the puzzle when the hand exits the trigger.
+    /// </summary>
+    /// <param name="other">The collider that exited the trigger.</param>
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Hand") && other.transform == handInteraction)
@@ -83,18 +85,16 @@ public class RotatePuzzle : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Toggle the lights on or off.
+    /// </summary>
+    /// <param name="isOn">true to turn on the lights, false to turn them off.</param>
     public void ToggleLights(bool isOn)
     {
-        if(runeLights == null)
-        {
-            return;
-        }
+        if(runeLights == null) return;
         foreach(Light l in runeLights)
         {
-            if (l != null)
-            {
-                l.enabled = isOn;
-            }
+            if (l != null) l.enabled = isOn;
         }
     }
 }

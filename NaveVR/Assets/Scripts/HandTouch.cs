@@ -11,14 +11,8 @@ public class HandTouch : MonoBehaviour
         {
             other.enabled = false;
             EnemyMovement enemyMovement = other.GetComponent<EnemyMovement>();
-            if (enemyMovement != null)
-            {
-                enemyMovement.Pieces();
-            }
-            if (GameManager.Instance != null && !GameManager.Instance.roundOver)
-            {
-                GameManager.Instance.EnemyTouched(1, isLeftHand);
-            }
+            if (enemyMovement != null) enemyMovement.Pieces();
+            if (GameManager.Instance != null && !GameManager.Instance.roundOver) GameManager.Instance.EnemyTouched(1, isLeftHand);
             Destroy(other.gameObject);
         }
     }

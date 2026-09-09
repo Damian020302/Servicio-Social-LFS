@@ -19,7 +19,7 @@ public class DestroyedEnemy : MonoBehaviour
             if(piece != null)
             {
                 piece.AddExplosionForce(explosionForce, transform.position, explosionRadius);
-                piece.AddTorque(Random.insideUnitSphere * 5.0f, ForceMode.Impulse); // Agrega una rotación aleatoria
+                piece.AddTorque(Random.insideUnitSphere * 5.0f, ForceMode.Impulse);
             }
         }
         Destroy(gameObject, cleanupDelay);
