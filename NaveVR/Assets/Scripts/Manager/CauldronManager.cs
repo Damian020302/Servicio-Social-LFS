@@ -96,7 +96,7 @@ public class CauldronManager : MonoBehaviour
     public TextMeshProUGUI maxAngleExtText;
     public TextMeshProUGUI averageAngleFlexText;
     public TextMeshProUGUI averageAngleExtText;
-
+    public TextMeshProUGUI selectedArmText;
     private float roundStartTime = 0.0f;
     private float phaseStartTime = 0.0f;
     private bool hasReacted = false;
@@ -106,6 +106,9 @@ public class CauldronManager : MonoBehaviour
     private float totalExtTime = 0.0f;
     private int extCount = 0;
     private float totalExtAngle = 0.0f;
+    public string roundDate;
+    public string roundStartingTime;
+    public string currentArmName;
 
     public void IncreaseTime()
     {
@@ -231,8 +234,16 @@ public class CauldronManager : MonoBehaviour
 
     void UpdateActiveWrist()
     {
-        if (leftWrist != null && leftWrist.gameObject.activeInHierarchy) activeWrist = leftWrist;
-        else if (rightWrist != null && rightWrist.gameObject.activeInHierarchy) activeWrist = rightWrist;
+        if (leftWrist != null && leftWrist.gameObject.activeInHierarchy)
+        {
+            activeWrist = leftWrist;
+            currentArmName = "Izquierdo";
+        }
+        else if (rightWrist != null && rightWrist.gameObject.activeInHierarchy)
+        {
+            activeWrist = rightWrist;
+            currentArmName = "Derecho";
+        }
         else
         {
             activeWrist = null;
@@ -408,7 +419,9 @@ public class CauldronManager : MonoBehaviour
 
     void UpdateMetricsUI()
     {
-        if(initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
+        if (selectedArmText != null && leftWrist != null && leftWrist.gameObject.activeInHierarchy) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
+        if (selectedArmText != null && rightWrist != null && rightWrist.gameObject.activeInHierarchy) selectedArmText.text = $"Brazo Trabajado:\n{currentArmName}";
+        if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
         if (averageTimeToFlexText != null) averageTimeToFlexText.text = string.Format("Tiempo Promedio\nde Flexión: {0:F1}s", averageTimeToFlex);
         if (averageTimeToExtText != null) averageTimeToExtText.text = string.Format("Tiempo Promedio\ndw Extensión: {0:F1}s", averageTimeToExt);
         if (maxAngleFlexText != null) maxAngleFlexText.text = string.Format("Ángulo Máximo\nde Flexión: {0:F1}º", maxAngleFlex);

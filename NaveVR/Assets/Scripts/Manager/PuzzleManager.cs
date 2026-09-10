@@ -73,7 +73,9 @@ public class PuzzleManager : MonoBehaviour
     public TextMeshProUGUI averageSolvingTimeText;
     public TextMeshProUGUI averageRotationAngleText;
     public TextMeshProUGUI maxRotationAngleText;
-
+    public TextMeshProUGUI selectedArmText;
+    public TextMeshProUGUI roundDateText;
+    public TextMeshProUGUI roundStartTimeText;
     private float roundStartTime = 0.0f;
     private float phaseStartTime = 0.0f;
     private bool hasReacted = false;
@@ -82,10 +84,14 @@ public class PuzzleManager : MonoBehaviour
     private int totalPiecesSolved = 0;
     private float totalPiecesRotationTime = 0.0f;
     private float totalPiecesRotationAngle = 0.0f;
+    public string roundDate;
+    public string roundStartingTime;
+    public string currentArmName;
     private Dictionary<Collider, Quaternion> scrambledRotations = new Dictionary<Collider, Quaternion>();
     private Dictionary<Collider, Quaternion> lastFrameRotations = new Dictionary<Collider, Quaternion>();
     private Dictionary<Collider, float> pieceActiveTime = new Dictionary<Collider, float>();
 
+    int selectedHand;
     public void IncreaseTime()
     {
         selectedTime += 30.0f; // Incrementa en 10 segundos
@@ -161,7 +167,10 @@ public class PuzzleManager : MonoBehaviour
 
     void Start()
     {
-        if(SceneManager.GetActiveScene().name == "Juego2")
+        selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
+        if (selectedHand == 0) currentArmName = "Izquierdo";
+        else if (selectedHand == 1) currentArmName = "Derecho";
+        if (SceneManager.GetActiveScene().name == "Juego2")
         {
             totalPuzzles = puzzleAdmin.transform.childCount;
             Collider[] allPieces = puzzleAdmin.GetComponentsInChildren<Collider>(true); // Get all colliders from the puzzle pieces
@@ -405,7 +414,9 @@ public class PuzzleManager : MonoBehaviour
 
     void UpdateMetricsUI()
     {
-        if(initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
+        if (selectedHand == 0) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
+        else if (selectedHand == 1) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
+        if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
         if(averageRotationTimeText != null) averageRotationTimeText.text = string.Format("Tiempo Promedio\nde Rotación: {0:F1}s", averageRotationTime);
         if(averageSolvingTimeText != null) averageSolvingTimeText.text = string.Format("Tiempo Promedio\nde Resolución: {0:F1}s", averageSolvingTime);
         if(averageRotationAngleText != null) averageRotationAngleText.text = string.Format("Ángulo Promedio\nde Rotación: {0:F1}º", averageRotationAngle);

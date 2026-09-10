@@ -3194,7 +3194,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &470638191
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13834,10 +13834,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fdd75cf0d3c1a44d9c7cbc7d66de0db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  rb: {fileID: 0}
-  Health: 1000
-  MaxHealth: 1000
-  hpManager: {fileID: 0}
 --- !u!114 &1812633105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14049,7 +14045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1830701458
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15291,7 +15287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1986871589
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15685,6 +15681,10 @@ MonoBehaviour:
   maxAngleExtText: {fileID: 2119846835}
   averageAngleFlexText: {fileID: 1409093874}
   averageAngleExtText: {fileID: 1056093997}
+  selectedArmText: {fileID: 1155588519}
+  roundDate: 
+  roundStartingTime: 
+  currentArmName: 
 --- !u!114 &2014849221
 MonoBehaviour:
   m_ObjectHideFlags: 0

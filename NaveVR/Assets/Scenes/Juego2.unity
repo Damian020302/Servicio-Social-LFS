@@ -6737,6 +6737,12 @@ MonoBehaviour:
   averageSolvingTimeText: {fileID: 761736085}
   averageRotationAngleText: {fileID: 698936559}
   maxRotationAngleText: {fileID: 1942777095}
+  selectedArmText: {fileID: 1983634842}
+  roundDateText: {fileID: 0}
+  roundStartTimeText: {fileID: 0}
+  roundDate: 
+  roundStartingTime: 
+  currentArmName: 
 --- !u!4 &634323023
 Transform:
   m_ObjectHideFlags: 0

@@ -85,6 +85,8 @@ public class SimpleGrabManager : MonoBehaviour
     public TextMeshProUGUI successGrabsText;
     public TextMeshProUGUI failGrabsText;
     public TextMeshProUGUI selectedArmText;
+    public TextMeshProUGUI roundDateText;
+    public TextMeshProUGUI roundStartTimeText;
     private float totalTimeToGrab = 0.0f;
     private float totalHoldTime = 0.0f;
     private int grabCount = 0;
@@ -92,6 +94,9 @@ public class SimpleGrabManager : MonoBehaviour
     private float timeRobotAppeared = 0.0f;
     private float timeRobotGrabbed = 0.0f;
     private float roundStartTime = 0.0f;
+    public string roundDate;
+    public string roundStartingTime;
+    public string currentArmName;
 
     /// <summary>
     /// Increases the selected time by 30 seconds and updates the display.
@@ -180,12 +185,14 @@ public class SimpleGrabManager : MonoBehaviour
         selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
         if(selectedHand == 0 && leftHand != null)
         {
+            currentArmName = "Izquierdo";
             activeHand = leftHand;
             activePalm = leftPalm != null ? leftPalm : leftHand.transform;
             activePalmLight = leftPalmLight;
         }
         else if(selectedHand == 1 && rightHand != null)
         {
+            currentArmName = "Derecho";
             activeHand = rightHand;
             activePalm = rightPalm != null ? rightPalm : rightHand.transform;
             activePalmLight = rightPalmLight;
@@ -353,14 +360,8 @@ public class SimpleGrabManager : MonoBehaviour
 
     public void UpdateMetricsUI()
     {
-        if (selectedHand == 0 && leftHand != null && selectedArmText != null)
-        {
-            selectedArmText.text = "Brazo\nTrabajado: Izquierdo";
-        }
-        else if (selectedHand == 1 && rightHand != null && selectedArmText != null)
-        {
-            selectedArmText.text = "Brazo\nTrabajado: Derecho";
-        }
+        if (selectedHand == 0 && leftHand != null && selectedArmText != null) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
+        else if (selectedHand == 1 && rightHand != null && selectedArmText != null) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
         if (averageHoldTimeText != null) averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
         if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de Reacción: {0:F1}s", initialReactionTime);
         if (averageHoldTimeText != null) averageTimeToGrabText.text = string.Format("Tiempo Promedio entre Agarre: {0:F1}s", averageTimeToGrab);
