@@ -83,7 +83,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI enemiesTouchedLText;
     public TextMeshProUGUI enemiesTouchedRText;
     public TextMeshProUGUI totalEnemiesTouchedText;
-
+    public TextMeshProUGUI roundDateText;
+    public TextMeshProUGUI roundStartTimeText;
     private float lastTouchTimeL = 0.0f;
     private float lastTouchTimeR = 0.0f;
     private float totalInteractionTimeL = 0.0f;
@@ -93,6 +94,9 @@ public class GameManager : MonoBehaviour
     private float totalSpawnIntervals = 0.0f;
     private int spawnCount = 0;
     private float roundStartTime = 0.0f;
+    public string roundDate;
+    public string roundStartingTime;
+    public string currentArmName;
 
     public void IncreaseTime()
     {
@@ -211,6 +215,11 @@ public class GameManager : MonoBehaviour
         continuePanel.SetActive(false);
         resultsLPanel.SetActive(false);
         resultsRPanel.SetActive(false);
+        System.DateTime now = System.DateTime.Now;
+        roundDate = now.ToString("dd/MM/yyyy");
+        roundStartingTime = now.ToString("HH:mm:ss tt");
+        if (roundDateText != null) roundDateText.text = $"Fecha: {roundDate}";
+        if (roundStartTimeText != null) roundStartTimeText.text = $"Hora de inicio: {roundStartingTime}";
     }
 
     private void Update()

@@ -13245,6 +13245,11 @@ MonoBehaviour:
   enemiesTouchedLText: {fileID: 1584364178}
   enemiesTouchedRText: {fileID: 178183891}
   totalEnemiesTouchedText: {fileID: 1771691957}
+  roundDateText: {fileID: 1059257779}
+  roundStartTimeText: {fileID: 417451355}
+  roundDate: 
+  roundStartingTime: 
+  currentArmName: 
 --- !u!4 &1617407036
 Transform:
   m_ObjectHideFlags: 0

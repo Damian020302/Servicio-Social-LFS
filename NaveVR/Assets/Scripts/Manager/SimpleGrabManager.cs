@@ -235,6 +235,11 @@ public class SimpleGrabManager : MonoBehaviour
         timeRobotAppeared = Time.time;
         roundStartTime = Time.time;
         totalRoundTime = 0.0f;
+        System.DateTime now = System.DateTime.Now;
+        roundDate = now.ToString("dd/MM/yyyy");
+        roundStartingTime = now.ToString("HH:mm:ss tt");
+        if(roundDateText != null) roundDateText.text = $"Fecha:\n{roundDate}";
+        if (roundStartTimeText != null) roundStartTimeText.text = $"Hora de inicio:\n{roundStartingTime}";
     }
 
     float GetCurrentGrip()
@@ -273,7 +278,7 @@ public class SimpleGrabManager : MonoBehaviour
             {
                 float minutes = Mathf.FloorToInt(totalRoundTime / 60);
                 float seconds = Mathf.FloorToInt(totalRoundTime % 60);
-                totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}", minutes, seconds);
+                totalRoundTimeText.text = string.Format("Tiempo Total:\n{0:00}:{1:00}", minutes, seconds);
             }
         }
         if (activeHand == null || !activeHand.IsTracked) return;
@@ -360,11 +365,10 @@ public class SimpleGrabManager : MonoBehaviour
 
     public void UpdateMetricsUI()
     {
-        if (selectedHand == 0 && leftHand != null && selectedArmText != null) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
-        else if (selectedHand == 1 && rightHand != null && selectedArmText != null) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
-        if (averageHoldTimeText != null) averageHoldTimeText.text = string.Format("Tiempo Promedio de Agarre: {0:F1}s", averageHoldTime);
-        if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de Reacción: {0:F1}s", initialReactionTime);
-        if (averageHoldTimeText != null) averageTimeToGrabText.text = string.Format("Tiempo Promedio entre Agarre: {0:F1}s", averageTimeToGrab);
+        if (selectedArmText != null) selectedArmText.text = $"Brazo Trabajado:\n{currentArmName}";
+        if (averageHoldTimeText != null) averageHoldTimeText.text = string.Format("Tiempo Promedio\nde Agarre: {0:F1}s", averageHoldTime);
+        if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de Reacción:\n{0:F1}s", initialReactionTime);
+        if (averageHoldTimeText != null) averageTimeToGrabText.text = string.Format("Tiempo Promedio\nentre Agarre: {0:F1}s", averageTimeToGrab);
         if(totalGrabsText != null)
         {
             totalGrabsText.text = string.Format("Total de Agarres: {0}", (droppedRobots + robotContainer.robotsCollected));
@@ -381,12 +385,12 @@ public class SimpleGrabManager : MonoBehaviour
         {
             float minutes = Mathf.FloorToInt(totalRoundTime / 60);
             float seconds = Mathf.FloorToInt(totalRoundTime % 60);
-            totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}", minutes, seconds);
+            totalRoundTimeText.text = string.Format("Tiempo Total:\n{0:00}:{1:00}", minutes, seconds);
         }
         StopReminder();
         EndUI();
         UpdateMetricsUI();
-        Debug.Log("¡Victoria! Has recogido todos los robots.");
+        //StartReminder("¡Victoria! Has recogido todos los robots.");
     }
 
     void EndUI()

@@ -17,6 +17,7 @@ public class PuzzleWristCalibrator : MonoBehaviour
     public Transform leftWrist;
     public Transform rightWrist;
     private Transform activeHand;
+    public int selectedHand;
     public int totalReps = 5;
     public float holdTimeRequired = 3.0f;
     public float neutralThreshHold = 30.0f;
@@ -34,14 +35,15 @@ public class PuzzleWristCalibrator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (instructionText != null) instructionText.text = "Mantén tu mano relajada frente a ti unos segundos...";
         DetermineActiveHand();
+        if (instructionText != null && selectedHand == 0) instructionText.text = $"Mantén tu mano izquierda relajada frente a ti unos segundos...";
+        else if (instructionText != null && selectedHand == 1) instructionText.text = $"Mantén tu mano derecha relajada frente a ti unos segundos...";
         Invoke("SetNeutralRotation", 10.0f);
     }
 
     void DetermineActiveHand()
     {
-        int selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
+        selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
         if(selectedHand == 0 && leftWrist != null) activeHand = leftWrist;
         else if (selectedHand == 1 && rightWrist != null) activeHand = rightWrist;
         else instructionText.text = "No se encontro una mano activa";

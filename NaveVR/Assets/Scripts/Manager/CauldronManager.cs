@@ -97,6 +97,8 @@ public class CauldronManager : MonoBehaviour
     public TextMeshProUGUI averageAngleFlexText;
     public TextMeshProUGUI averageAngleExtText;
     public TextMeshProUGUI selectedArmText;
+    public TextMeshProUGUI roundDateText;
+    public TextMeshProUGUI roundStartTimeText;
     private float roundStartTime = 0.0f;
     private float phaseStartTime = 0.0f;
     private bool hasReacted = false;
@@ -209,6 +211,11 @@ public class CauldronManager : MonoBehaviour
         yesV.SetActive(false);
         noV.SetActive(false);
         victory.SetActive(false);
+        System.DateTime now = System.DateTime.Now;
+        roundDate = now.ToString("dd/MM/yyyy");
+        roundStartingTime = now.ToString("HH:mm:ss tt");
+        if (roundDateText != null) roundDateText.text = $"Fecha:\n{roundDate}";
+        if (roundStartTimeText != null) roundStartTimeText.text = $"Hora de inicio:\n{roundStartingTime}";
     }
 
     void ResetMetrics()
@@ -341,7 +348,7 @@ public class CauldronManager : MonoBehaviour
         {
             float minutes = Mathf.FloorToInt(totalRoundTime / 60);
             float seconds = Mathf.FloorToInt(totalRoundTime % 60);
-            totalRoundTimeText.text = string.Format("Tiempo total: {0:00}:{1:00}s", minutes, seconds);
+            totalRoundTimeText.text = string.Format("Tiempo total:\n{0:00}:{1:00}s", minutes, seconds);
         }
         Debug.Log($"Flexion: {flexionAngle:F1}° | Extension: {extensionAngle:F1}°");
     }
@@ -414,13 +421,12 @@ public class CauldronManager : MonoBehaviour
         timeToDisplay += 1;
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-        timeRemainingText.text = string.Format("Tiempo Restante: {0:00}:{1:00}", minutes, seconds);
+        timeRemainingText.text = string.Format("Tiempo Restante:\n{0:00}:{1:00}", minutes, seconds);
     }
 
     void UpdateMetricsUI()
     {
-        if (selectedArmText != null && leftWrist != null && leftWrist.gameObject.activeInHierarchy) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
-        if (selectedArmText != null && rightWrist != null && rightWrist.gameObject.activeInHierarchy) selectedArmText.text = $"Brazo Trabajado:\n{currentArmName}";
+        if (selectedArmText != null) selectedArmText.text = $"Brazo Trabajado:\n{currentArmName}";
         if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
         if (averageTimeToFlexText != null) averageTimeToFlexText.text = string.Format("Tiempo Promedio\nde Flexión: {0:F1}s", averageTimeToFlex);
         if (averageTimeToExtText != null) averageTimeToExtText.text = string.Format("Tiempo Promedio\ndw Extensión: {0:F1}s", averageTimeToExt);
@@ -439,7 +445,7 @@ public class CauldronManager : MonoBehaviour
             float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
             float minutes = Mathf.FloorToInt(finalTimeToShow / 60);
             float seconds = Mathf.FloorToInt(finalTimeToShow % 60);
-            totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}s", minutes, seconds);
+            totalRoundTimeText.text = string.Format("Tiempo Total:\n{0:00}:{1:00}s", minutes, seconds);
         }
         UpdateMetricsUI();
         StopReminder();

@@ -181,7 +181,6 @@ public class PuzzleManager : MonoBehaviour
             StartUI();
             currentPuzzleIndex = 0;
             LoadCurrentPuzzle();
-            //DinamicPuzzle();
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
@@ -202,6 +201,11 @@ public class PuzzleManager : MonoBehaviour
         yesV.SetActive(false); // Ensure the yes object is initially inactive
         noV.SetActive(false);
         victoria.SetActive(false); // Ensure the victory object is initially inactive
+        System.DateTime now = System.DateTime.Now;
+        roundDate = now.ToString("dd/MM/yyyy");
+        roundStartingTime = now.ToString("HH:mm:ss tt");
+        if (roundDateText != null) roundDateText.text = $"Fecha:\n{roundDate}";
+        if (roundStartTimeText != null) roundStartTimeText.text = $"Hora de inicio:\n{roundStartingTime}";
     }
 
     void LoadCurrentPuzzle()
@@ -289,7 +293,7 @@ public class PuzzleManager : MonoBehaviour
             {
                 float minutes = Mathf.FloorToInt(totalRoundTime / 60);
                 float seconds = Mathf.FloorToInt(totalRoundTime % 60);
-                totalRoundTimeText.text = string.Format("Tiempo total: {0:00}:{1:00}", minutes, seconds);
+                totalRoundTimeText.text = string.Format("Tiempo total:\n{0:00}:{1:00}", minutes, seconds);
             }
         }
         if (puzzlePhases.Count == 0) return;
@@ -414,9 +418,8 @@ public class PuzzleManager : MonoBehaviour
 
     void UpdateMetricsUI()
     {
-        if (selectedHand == 0) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
-        else if (selectedHand == 1) selectedArmText.text = $"Brazo\nTrabajado: {currentArmName}";
-        if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
+        if (selectedArmText != null) selectedArmText.text = $"Brazo Trabajado:\n{currentArmName}";
+        if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de Reacción:\n{0:F1}s", initialReactionTime);
         if(averageRotationTimeText != null) averageRotationTimeText.text = string.Format("Tiempo Promedio\nde Rotación: {0:F1}s", averageRotationTime);
         if(averageSolvingTimeText != null) averageSolvingTimeText.text = string.Format("Tiempo Promedio\nde Resolución: {0:F1}s", averageSolvingTime);
         if(averageRotationAngleText != null) averageRotationAngleText.text = string.Format("Ángulo Promedio\nde Rotación: {0:F1}º", averageRotationAngle);
@@ -433,7 +436,7 @@ public class PuzzleManager : MonoBehaviour
             float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
             float minutes = Mathf.FloorToInt(finalTimeToShow / 60);
             float seconds = Mathf.FloorToInt(finalTimeToShow % 60);
-            totalRoundTimeText.text = string.Format("Tiempo Total: {0:00}:{1:00}", minutes, seconds);
+            totalRoundTimeText.text = string.Format("Tiempo Total:\n{0:00}:{1:00}", minutes, seconds);
         }
         if(doorManager != null)
         {
