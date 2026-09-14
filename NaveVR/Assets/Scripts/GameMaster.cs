@@ -1,19 +1,60 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public static class GameMaster
 {
     public static string archivePath = "C:\\LANR\\";
+    public static bool INDAUTOR = false;
+    public static void CreateDirectory()
+    {
+        if(!Directory.Exists(archivePath)) Directory.CreateDirectory(archivePath);
+    }
+
+    private static string _fileName = "";
+    public static string FileName
+    {
+        get { return _fileName; }
+    }
+    public static void SetFileName(string patientId)
+    {
+        _fileName = patientId + "_Data.xml";
+    }
+
+    private static string patientSessionRecordPath = "";
+    public static string PatientSessionRecordPath
+    {
+        get { return patientSessionRecordPath; }
+    }
+    public static void SetPatientSessionRecordPath(string patientId)
+    {
+        SetFileName(patientId);
+        patientSessionRecordPath = archivePath + "\\" + _fileName;
+    }
+
+    ////////////////////////////////////////////////////////
+    private static string offlineTherapist = "clinica";
+    public static string OfflineTherapist
+    {
+        get { return offlineTherapist; }
+    }
+    private static string offlineTherapistPassword = "clinica";
+    public static string OfflineTherapistPassword
+    {
+        get { return offlineTherapistPassword; }
+    }
+    ////////////////////////////////////////////////////////
+    
     private static string patientName;
     public static string PatientName
     {
         get { return patientName; }
     }
 
-    private static string patientID;
-    public static string PatientID
+    private static string patientId;
+    public static string PatientId
     {
-        get { return patientID; }
+        get { return patientId; }
     }
 
     public static void SetPatientName(string name)
@@ -23,19 +64,19 @@ public static class GameMaster
 
     public static void SetPatientID(string id)
     {
-        patientID = id;
+        patientId = id;
     }
 
     public static void SetPatientNameAndId(string _name, string _id)
     {
         patientName = _name;
-        patientID = _id;
+        patientId = _id;
     }
 
     public static void ResetPatientData()
     {
         patientName = "";
-        patientID = "";
+        patientId = "";
     }
 
     public static int sessionsPlayed;
@@ -98,9 +139,9 @@ public static class GameMaster
         public string name;
         public int id;
         public List<Game1> Game1OnThisSession = new List<Game1>();
-        //public List<Game2> Game2OnThisSession = new List<Game2>();
-        //public List<Game3> Game3OnThisSession = new List<Game3>();
-        //public List<Game4> Game4OnThisSession = new List<Game4>();
+        public List<Game2> Game2OnThisSession = new List<Game2>();
+        public List<Game3> Game3OnThisSession = new List<Game3>();
+        public List<Game4> Game4OnThisSession = new List<Game4>();
     }
 
     public class PlayerData
@@ -118,6 +159,7 @@ public static class GameMaster
 
     public class Game1
     {
+        public string currentArmName;
         public float totalRoundTime;
         public string date;
         public string roundStartingTime;
@@ -126,14 +168,58 @@ public static class GameMaster
         public int score;
         public int missed;
         public float initialReactionTimeL;
-        public float initialReactionTimeR;
+        public float avgInteractionTimeL;
+        public float maxRadiusAchievedL;
         public float avgArmAngleL;
+        public int enemiesTouchedL;
+        public float initialReactionTimeR;
+        public float avgInteractionTimeR;
+        public float maxRadiusAchievedR;
         public float avgArmAngleR;
-        public int leftInteractions;
-        public int rightInteractions;
-        //Checar si se usa Hand o string para la mano
+        public int enemiesTouchedR;
     }
 
+    public class Game2
+    {
+        public float totalRoundTime;
+        public string date;
+        public string roundStartingTime;
+        public string currentArmName;
+        public float initialReactionTime;
+        public float avgRotationTime;
+        public float avgSolvingTime;
+        public float avgRotationAngle;
+        public float maxRotationAngle;
+    }
+
+    public class Game3
+    {
+        public float totalRoundTime;
+        public string date;
+        public string roundStartingTime;
+        public string currentArmName;
+        public float initialReactionTime;
+        public float avgFlexionTime;
+        public float maxFlexionAngle;
+        public float avgFlexionAngle;
+        public float avgExtensionTime;
+        public float maxExtensionAngle;
+        public float avgExtensionAngle;
+    }
+
+    public class Game4
+    {
+        public float totalRoundTime;
+        public string date;
+        public string roundStartingTime;
+        public string currentArmName;
+        public float initialReactionTime;
+        public float avgHoldTime;
+        public float avgGrabTime;
+        public float totalGrabbedRobots;
+        public int collectedRobots;
+        public int droppedRobots;
+    }
     ////////////////////////////////////////////////////////
 
 

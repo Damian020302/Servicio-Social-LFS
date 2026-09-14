@@ -15665,14 +15665,14 @@ MonoBehaviour:
   timer: 120
   timerIsRunning: 0
   initialTimerValue: 0
-  averageTimeToFlex: 0
-  averageTimeToExt: 0
+  averageFlexionTime: 0
+  averageExtensionTime: 0
   totalRoundTime: 0
   initialReactionTime: 0
-  maxAngleFlex: 0
-  maxAngleExt: 0
-  averageAngleExt: 0
-  averageAngleFlex: 0
+  maxFlexionAngle: 0
+  maxExtensionAngle: 0
+  averageExtensionAngle: 0
+  averageFlexionAngle: 0
   initialReactionTimeText: {fileID: 1387273668}
   totalRoundTimeText: {fileID: 1462715054}
   averageTimeToFlexText: {fileID: 1850429664}

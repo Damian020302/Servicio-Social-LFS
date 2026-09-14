@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
     private float roundStartTime = 0.0f;
     public string roundDate;
     public string roundStartingTime;
-    public string currentArmName;
+    public string currentArmName = "Ambos";
 
     public void IncreaseTime()
     {
@@ -381,7 +381,7 @@ public class GameManager : MonoBehaviour
         if (maxSpeedAchievedText != null) maxSpeedAchievedText.text = string.Format("Velocidad Máxima alcanzada\npor las Naves: {0:F1}", maxSpeedAchieved);
         if (averageSpawningTimeAchievedText != null) averageSpawningTimeAchievedText.text = string.Format("Tiempo de Aparición\nde las Naves: {0:F1}s", averageSpawningTimeAchieved);
         if (enemiesExpiredText != null) enemiesExpiredText.text = string.Format("Fallos: {0}", enemiesExpired);
-        if (initialReactionTimeLText != null) initialReactionTimeLText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTimeL);
+        if (initialReactionTimeLText != null) initialReactionTimeLText.text = string.Format("Tiempo de Reacción:\n{0:F1}s", initialReactionTimeL);
         if (averageInteractionTimeLText != null) averageInteractionTimeLText.text = string.Format("Tiempo Promedio\nentre Interacción: {0:F1}s", averageInteractionTimeL);
         if(averageArmAngleLText != null) averageArmAngleLText.text = string.Format("Ángulo Promedio\ndel Brazo: {0:F1}º", averageArmAngleL);
         if(enemiesTouchedLText != null) enemiesTouchedLText.text = string.Format("Aciertos: {0}", enemiesTouchedL);

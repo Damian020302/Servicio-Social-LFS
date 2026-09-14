@@ -80,14 +80,14 @@ public class CauldronManager : MonoBehaviour
     private bool useTimerConfig;
 
     [Header("Average Times")]
-    public float averageTimeToFlex = 0.0f;
-    public float averageTimeToExt = 0.0f;
+    public float averageFlexionTime = 0.0f;
+    public float averageExtensionTime = 0.0f;
     public float totalRoundTime = 0.0f;
     public float initialReactionTime = 0.0f;
-    public float maxAngleFlex = 0.0f;
-    public float maxAngleExt = 0.0f;
-    public float averageAngleExt = 0.0f;
-    public float averageAngleFlex = 0.0f;
+    public float maxFlexionAngle = 0.0f;
+    public float maxExtensionAngle = 0.0f;
+    public float averageExtensionAngle = 0.0f;
+    public float averageFlexionAngle = 0.0f;
     public TextMeshProUGUI initialReactionTimeText;
     public TextMeshProUGUI totalRoundTimeText;
     public TextMeshProUGUI averageTimeToFlexText;
@@ -222,12 +222,12 @@ public class CauldronManager : MonoBehaviour
     {
         totalRoundTime = 0.0f;
         initialReactionTime = 0.0f;
-        averageTimeToFlex = 0.0f;
-        averageTimeToExt = 0.0f;
-        maxAngleFlex = 0.0f;
-        maxAngleExt = 0.0f;
-        averageAngleFlex = 0.0f;
-        averageAngleExt = 0.0f;
+        averageFlexionTime= 0.0f;
+        averageExtensionTime = 0.0f;
+        maxFlexionAngle = 0.0f;
+        maxExtensionAngle = 0.0f;
+        averageFlexionAngle = 0.0f;
+        averageExtensionAngle = 0.0f;
         totalFlexTime = 0.0f;
         flexCount = 0;
         totalFlexAngle = 0.0f;
@@ -283,7 +283,7 @@ public class CauldronManager : MonoBehaviour
         if (flexExtAngle > 0)
         {
             flexionAngle = flexExtAngle;
-            if (flexionAngle > maxAngleFlex) maxAngleFlex = flexionAngle;
+            if (flexionAngle > maxFlexionAngle) maxFlexionAngle = flexionAngle;
             if (!hasReacted && flexionAngle > 3.0f)
             {
                 initialReactionTime = Time.time - roundStartTime;
@@ -294,7 +294,7 @@ public class CauldronManager : MonoBehaviour
         else if (flexExtAngle < 0)
         {
             extensionAngle = Mathf.Abs(flexExtAngle);
-            if(extensionAngle > maxAngleExt) maxAngleExt = extensionAngle;
+            if(extensionAngle > maxExtensionAngle) maxExtensionAngle = extensionAngle;
         }
         float targetWandState = 0.0f;
         if (currentState == ExerciseState.WaitingForFlexion)
@@ -306,8 +306,8 @@ public class CauldronManager : MonoBehaviour
                 totalFlexTime += timeTaken;
                 totalFlexAngle += flexionAngle;
                 flexCount++;
-                averageTimeToFlex = totalFlexTime / flexCount;
-                averageAngleFlex = totalFlexAngle / flexCount;
+                averageFlexionTime = totalFlexTime / flexCount;
+                averageFlexionAngle = totalFlexAngle / flexCount;
                 UpdateMetricsUI();
                 SpawnPotion();
             }
@@ -321,8 +321,8 @@ public class CauldronManager : MonoBehaviour
                 totalExtTime += timeTaken;
                 totalExtAngle += extensionAngle;
                 extCount++;
-                averageTimeToExt = totalExtTime / extCount;
-                averageAngleExt = totalExtAngle / extCount;
+                averageExtensionTime = totalExtTime / extCount;
+                averageExtensionAngle = totalExtAngle / extCount;
                 UpdateMetricsUI();
                 ThrowPotion();
             }
@@ -428,12 +428,12 @@ public class CauldronManager : MonoBehaviour
     {
         if (selectedArmText != null) selectedArmText.text = $"Brazo Trabajado:\n{currentArmName}";
         if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTime);
-        if (averageTimeToFlexText != null) averageTimeToFlexText.text = string.Format("Tiempo Promedio\nde Flexión: {0:F1}s", averageTimeToFlex);
-        if (averageTimeToExtText != null) averageTimeToExtText.text = string.Format("Tiempo Promedio\ndw Extensión: {0:F1}s", averageTimeToExt);
-        if (maxAngleFlexText != null) maxAngleFlexText.text = string.Format("Ángulo Máximo\nde Flexión: {0:F1}º", maxAngleFlex);
-        if (maxAngleExtText != null) maxAngleExtText.text = string.Format("Ángulo Máximo\nde Extensión: {0:F1}º", maxAngleExt);
-        if (averageAngleFlexText != null) averageAngleFlexText.text = string.Format("Ángulo Promedio\nde Flexión: {0:F1}º", averageAngleFlex);
-        if (averageAngleExtText != null) averageAngleExtText.text = string.Format("Ángulo Promedio\nde Extensión: {0:F1}º", averageAngleExt);
+        if (averageTimeToFlexText != null) averageTimeToFlexText.text = string.Format("Tiempo Promedio\nde Flexión: {0:F1}s", averageFlexionTime);
+        if (averageTimeToExtText != null) averageTimeToExtText.text = string.Format("Tiempo Promedio\ndw Extensión: {0:F1}s", averageExtensionTime);
+        if (maxAngleFlexText != null) maxAngleFlexText.text = string.Format("Ángulo Máximo\nde Flexión: {0:F1}º", maxFlexionAngle);
+        if (maxAngleExtText != null) maxAngleExtText.text = string.Format("Ángulo Máximo\nde Extensión: {0:F1}º", maxExtensionAngle);
+        if (averageAngleFlexText != null) averageAngleFlexText.text = string.Format("Ángulo Promedio\nde Flexión: {0:F1}º", averageFlexionAngle);
+        if (averageAngleExtText != null) averageAngleExtText.text = string.Format("Ángulo Promedio\nde Extensión: {0:F1}º", averageExtensionAngle);
     }
 
     void VictoryAchieved()

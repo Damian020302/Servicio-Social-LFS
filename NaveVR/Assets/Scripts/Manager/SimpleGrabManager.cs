@@ -73,7 +73,7 @@ public class SimpleGrabManager : MonoBehaviour
     public int actualPhase = 0; //0 for closed hand, 1 for open hand
 
     [Header("Average Times")]
-    public float averageTimeToGrab = 0.0f;
+    public float averageGrabTime = 0.0f;
     public float averageHoldTime = 0.0f;
     public float totalRoundTime = 0.0f;
     public float initialReactionTime = 0.0f;
@@ -330,7 +330,7 @@ public class SimpleGrabManager : MonoBehaviour
             if(grabCount == 0) initialReactionTime = timeTakenToGrab;
             totalTimeToGrab += timeTakenToGrab;
             grabCount++;
-            averageTimeToGrab = totalTimeToGrab / grabCount;
+            averageGrabTime = totalTimeToGrab / grabCount;
             timeRobotGrabbed = Time.time;
             UpdateMetricsUI();
             UpdateReminderMessage();
@@ -368,7 +368,7 @@ public class SimpleGrabManager : MonoBehaviour
         if (selectedArmText != null) selectedArmText.text = $"Brazo Trabajado:\n{currentArmName}";
         if (averageHoldTimeText != null) averageHoldTimeText.text = string.Format("Tiempo Promedio\nde Agarre: {0:F1}s", averageHoldTime);
         if (initialReactionTimeText != null) initialReactionTimeText.text = string.Format("Tiempo de Reacción:\n{0:F1}s", initialReactionTime);
-        if (averageHoldTimeText != null) averageTimeToGrabText.text = string.Format("Tiempo Promedio\nentre Agarre: {0:F1}s", averageTimeToGrab);
+        if (averageHoldTimeText != null) averageTimeToGrabText.text = string.Format("Tiempo Promedio\nentre Agarre: {0:F1}s", averageGrabTime);
         if(totalGrabsText != null)
         {
             totalGrabsText.text = string.Format("Total de Agarres: {0}", (droppedRobots + robotContainer.robotsCollected));
@@ -431,7 +431,7 @@ public class SimpleGrabManager : MonoBehaviour
         totalHoldTime = 0.0f;
         grabCount = 0;
         holdCount = 0;
-        averageTimeToGrab = 0.0f;
+        averageGrabTime = 0.0f;
         averageHoldTime = 0.0f;
         initialReactionTime = 0.0f;
         timeRobotAppeared = Time.time;
