@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class GameManager : MonoBehaviour
     public Toggle useTimerToggle;
     public GameObject timerControls;
     private float selectedTime = 60.0f;
+    [Header("Arm Configuration")]
+    public GameObject armPanel;
+    public TMP_InputField upperArmInputField;
+    public TMP_InputField foreArmInputField;
     [Header("UI")]
     public TextMeshProUGUI scoreText;
     //public TextMeshProUGUI missText;
@@ -149,6 +154,20 @@ public class GameManager : MonoBehaviour
 
     public void Calibrate()
     {
+        if (armPanel != null)
+        {
+            armPanel.SetActive(true);
+            if (upperArmInputField != null) upperArmInputField.text = PlayerPrefs.GetFloat("UpperArmLength", 30.0f).ToString("F2");
+            if (foreArmInputField != null) foreArmInputField.text = PlayerPrefs.GetFloat("ForeArmLength", 0.25f).ToString("F2");
+        }
+    }
+
+    public void ConfirmArm()
+    {
+        if (upperArmInputField != null && float.TryParse(upperArmInputField.text, out float upperVal)) PlayerPrefs.SetFloat("UpperArmLength", upperVal);
+        if (foreArmInputField != null && float.TryParse(foreArmInputField.text, out float foreVal)) PlayerPrefs.SetFloat("ForeArmLength", foreVal);
+        PlayerPrefs.Save();
+        armPanel.SetActive(false);
         if (timerPanel != null)
         {
             timerPanel.SetActive(true);

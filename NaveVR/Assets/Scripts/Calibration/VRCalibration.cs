@@ -38,7 +38,19 @@ public class VRCalibration : MonoBehaviour
     [Tooltip("Arm length from shoulder to elbow")]
     public float upperArmLength = 0.30f;
     [Tooltip("Arm length from elbow to wrist")]
-    public float forearmLength = 0.25f;
+    public float foreArmLength = 0.25f;
+
+    public float UpperArmLength
+    {
+        get {  return upperArmLength; }
+        set { upperArmLength = value; }
+    }
+
+    public float ForeArmLength
+    {
+        get { return foreArmLength; }
+        set { foreArmLength = value; }
+    }
 
     [Header("Calibration Maths")]
     private int currentReps = 0;
@@ -58,7 +70,7 @@ public class VRCalibration : MonoBehaviour
     void Start()
     {
         upperArmLength = PlayerPrefs.GetFloat("UpperArmLength", upperArmLength);
-        forearmLength = PlayerPrefs.GetFloat("ForearmLength", forearmLength);
+        foreArmLength = PlayerPrefs.GetFloat("ForearmLength", foreArmLength);
         DetermineActiveHand();
         Invoke("StartCalibrationSequence", 3.0f);
     }
@@ -123,7 +135,7 @@ public class VRCalibration : MonoBehaviour
     float CalculateElbowAngle(float distance)
     {
         float a = upperArmLength;
-        float b = forearmLength;
+        float b = foreArmLength;
         float c = Mathf.Clamp(distance, 0.0001f, a + b);
         if(c>(a+b))
         {
@@ -168,7 +180,7 @@ public class VRCalibration : MonoBehaviour
                         }
                         currentReps++;
                         holdTimer = 0;
-                        if(currentReps >= totalReps) Invoke("AdvancePhase", 3.0f);
+                        if(currentReps >= totalReps) /*Invoke("AdvancePhase", 3.0f)*/AdvancePhase();
                         else calibrationState = CalibrationState.ReturningToNeutral;
                     }
                 }

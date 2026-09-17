@@ -1940,11 +1940,13 @@ MonoBehaviour:
   warning: {fileID: 0}
   warningBlinkSpeed: 5
   warningScaleMultiplier: 1.2
+  resultsLPanel: {fileID: 0}
+  resultsRPanel: {fileID: 0}
   continuePanel: {fileID: 0}
-  continueText: {fileID: 0}
   enemiesPerRound: 10
   enemiesTouchedL: 0
   enemiesTouchedR: 0
+  totalEnemiesTouched: 0
   enemiesExpired: 0
   enemyLifetime: 10
   timeSpawnInterval: 2
@@ -1981,6 +1983,12 @@ MonoBehaviour:
   enemiesExpiredText: {fileID: 0}
   enemiesTouchedLText: {fileID: 0}
   enemiesTouchedRText: {fileID: 0}
+  totalEnemiesTouchedText: {fileID: 0}
+  roundDateText: {fileID: 0}
+  roundStartTimeText: {fileID: 0}
+  roundDate: 
+  roundStartingTime: 
+  currentArmName: Ambos
 --- !u!4 &205337462
 Transform:
   m_ObjectHideFlags: 0
@@ -2011,6 +2019,7 @@ MonoBehaviour:
   playerCenter: {fileID: 1751244247}
   leftWrist: {fileID: 189375424}
   rightWrist: {fileID: 832431407}
+  currentArmName: 
   totalReps: 5
   holdTimeRequired: 3
   upperArmLength: 0.3
