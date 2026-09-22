@@ -1,0 +1,67 @@
+using UnityEngine;
+
+public class EnemyMovement : MonoBehaviour
+{
+    public Transform player;
+    public float speed;
+    [Tooltip("Ventana de tiempo que el jugador tiene para destruir al enemigo")] public float timeToDestroy = 5.0f;
+    private bool isStopped = false;
+    private float waitTimer = 0.0f;
+    [Header("Effects")]
+    public GameObject destroyedEnemyPrefab;
+    private float scale;
+
+    void Start()
+    {
+        if(player == null) player = GameObject.FindGameObjectWithTag("Player").transform;
+        if(GameManager.Instance != null)
+        {
+            speed = GameManager.Instance.enemySpeed;
+            timeToDestroy = GameManager.Instance.enemyLifetime;
+            scale = GameManager.Instance.enemySize;
+            transform.localScale = new Vector3(scale, scale, scale);
+        }
+        else
+        {
+            speed = 3.0f;
+            timeToDestroy = 5.0f;
+        }
+    }
+
+    void Update()
+    {
+        if(player == null) return;
+        if(GameManager.Instance != null) speed = GameManager.Instance.enemySpeed;
+        if (!isStopped)
+        {
+            transform.LookAt(player);
+            float playerDistance = Vector3.Distance(transform.position, player.position);
+            float playerRadius = 0.7f;
+            if(GameManager.Instance != null)
+            {
+                Vector3 localPos = player.InverseTransformPoint(transform.position);
+                if(localPos.x < 0) playerRadius = GameManager.Instance.actualRadiusL;
+                else playerRadius = GameManager.Instance.actualRadiusR;
+            }
+            if (playerDistance > playerRadius) transform.position += transform.forward * speed * Time.deltaTime;
+            else isStopped = true;
+        }
+        else
+        { 
+            waitTimer += Time.deltaTime;
+            if(waitTimer >= timeToDestroy)
+            {
+                if(GameManager.Instance != null && !GameManager.Instance.roundOver) GameManager.Instance.EnemyExpired();
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Shatters the enemy into pieces by instantiating the destroyedEnemyPrefab at the enemy's position and rotation.
+    /// </summary>
+    public void Pieces()
+    {
+        if(destroyedEnemyPrefab != null) Instantiate(destroyedEnemyPrefab, transform.position, transform.rotation);
+    }
+}
