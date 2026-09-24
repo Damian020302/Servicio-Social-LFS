@@ -20,10 +20,13 @@ public class HandMirror : MonoBehaviour
         Vector3 localPos = trackingSpace.InverseTransformPoint(sourceAnchor.position);
         localPos.x = -localPos.x;
         transform.position = trackingSpace.TransformPoint(localPos);
-        Quaternion localRot = Quaternion.Inverse(trackingSpace.rotation) * sourceFingersRoot.rotation; //sourceAnchor.rotation;
+        Quaternion sourceLocalRot = Quaternion.Inverse(trackingSpace.rotation) * sourceFingersRoot.rotation;
+        Quaternion mirroredLocalRol = new Quaternion(sourceLocalRot.x, -sourceLocalRot.y, -sourceLocalRot.z, sourceLocalRot.w);
+        /*Quaternion localRot = Quaternion.Inverse(trackingSpace.rotation) * sourceFingersRoot.rotation; //sourceAnchor.rotation;
         localRot.y = -localRot.y;
         localRot.z = -localRot.z;
-        transform.rotation = trackingSpace.rotation * localRot;
+        transform.rotation = trackingSpace.rotation * localRot;*/
+        transform.rotation = trackingSpace.rotation * mirroredLocalRol;
         if(flipPalms) transform.Rotate(transform.up, 180.0f, Space.World);
         if(mirrorFingers/* && sourceFingersRoot != null*/) CopyBonesRecursive(sourceFingersRoot, transform);
     }

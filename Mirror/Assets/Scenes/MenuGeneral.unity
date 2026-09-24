@@ -10545,7 +10545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1344372358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15031,7 +15031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df7f5b73cddbf84582b4be07f6428ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandConfigurator
-  playerHead: {fileID: 159029310}
+  trackingSpace: {fileID: 1984156590}
   leftHandInteraction: {fileID: 1361126432}
   leftHandVisuals: {fileID: 1532133921}
   leftHandAnchor: {fileID: 1073285174}

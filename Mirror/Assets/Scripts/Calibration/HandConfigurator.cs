@@ -18,12 +18,12 @@ public class HandConfigurator : MonoBehaviour
     [Header("Mirror Therapy Settings")]
     public bool useMirrorTherapy = true;
 
-    void Start()
+    /*void Start()
     {
         int selectedHand = PlayerPrefs.GetInt("SelectedHand", 0);
         ApplyConfig(selectedHand);
-    }
-
+    }*/
+    
     public void ApplyConfig(int selectedHand)
     {
         if (selectedHand == 0)
