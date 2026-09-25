@@ -9,6 +9,12 @@ public class AppManager : MonoBehaviour
     public GameObject bothHandsGame;
     public GameObject leftOrRightHandGame;
 
+    void Start()
+    {
+        handMenu.SetActive(true);
+        mainMenu.SetActive(false);
+    }
+
     public void Game1()
     {
         SceneManager.LoadScene("Menu");
@@ -37,12 +43,6 @@ public class AppManager : MonoBehaviour
     {
         handMenu.SetActive(false);
         mainMenu.SetActive(true);
-    }
-
-    void Start()
-    {
-        handMenu.SetActive(true);
-        mainMenu.SetActive(false);
     }
 
     public void LeftHandSelection()

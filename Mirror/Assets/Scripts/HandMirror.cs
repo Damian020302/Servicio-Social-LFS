@@ -14,9 +14,16 @@ public class HandMirror : MonoBehaviour
     public bool invertFingerY = true;
     public bool invertFingerZ = true;
 
+    private SkinnedMeshRenderer smr;
+
+    void Start()
+    {
+        smr = GetComponentInChildren<SkinnedMeshRenderer>();
+    }
+
     void LateUpdate()
     {
-        if (sourceAnchor == null || trackingSpace == null) return;
+        if (sourceAnchor == null || trackingSpace == null || sourceFingersRoot == null) return;
         Vector3 localPos = trackingSpace.InverseTransformPoint(sourceAnchor.position);
         localPos.x = -localPos.x;
         transform.position = trackingSpace.TransformPoint(localPos);
@@ -29,6 +36,8 @@ public class HandMirror : MonoBehaviour
         transform.rotation = trackingSpace.rotation * mirroredLocalRol;
         if(flipPalms) transform.Rotate(transform.up, 180.0f, Space.World);
         if(mirrorFingers/* && sourceFingersRoot != null*/) CopyBonesRecursive(sourceFingersRoot, transform);
+
+        if(smr != null && !smr.enabled) smr.enabled = true;
     }
 
     void CopyBonesRecursive(Transform source, Transform target)
@@ -39,11 +48,19 @@ public class HandMirror : MonoBehaviour
             {
                 Transform sourceChild = source.GetChild(i);
                 Transform targetChild = target.GetChild(i);
-                Vector3 euler = sourceChild.localEulerAngles;
+
+                Quaternion sourceFingerRot = sourceChild.localRotation;
+                float x = sourceFingerRot.x;
+                float y = invertFingerY ? -sourceFingerRot.y : sourceFingerRot.y;
+                float z = invertFingerZ ? -sourceFingerRot.z : sourceFingerRot.z;
+                float w = sourceFingerRot.w;
+                targetChild.localRotation = new Quaternion(x, y, z, w);
+
+                /*Vector3 euler = sourceChild.localEulerAngles;
                 if (invertFingerX) euler.x = -euler.x;
                 if (invertFingerY) euler.y = -euler.y;
                 if (invertFingerZ) euler.z = -euler.z;
-                targetChild.localEulerAngles = euler;
+                targetChild.localEulerAngles = euler;*/
                 CopyBonesRecursive(sourceChild, targetChild);
             }
         }

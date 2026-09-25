@@ -41,7 +41,7 @@ public class HandConfigurator : MonoBehaviour
             }
             Debug.Log("Terapia de Espejo: Mano Izquierda activa");
         }
-        else if (selectedHand == 1)
+        else /*if (selectedHand == 1)*/
         {
             SetHandState(rightHandInteraction, rightHandVisuals, rightHandAnchor, true);
             ToggleOculusTracking(rightHandVisuals, true);
@@ -89,7 +89,11 @@ public class HandConfigurator : MonoBehaviour
         if(!state)
         {
             SkinnedMeshRenderer smr = visuals.GetComponentInChildren<SkinnedMeshRenderer>();
-            if (smr != null) smr.enabled = true;
+            if (smr != null)
+            {
+                smr.enabled = true;
+                smr.updateWhenOffscreen = true;
+            }   
         }
     }
 }
