@@ -13,12 +13,11 @@ public class HandMirror : MonoBehaviour
     public bool invertFingerX = false;
     public bool invertFingerY = true;
     public bool invertFingerZ = true;
-
     private SkinnedMeshRenderer smr;
 
     void Start()
     {
-        smr = GetComponentInChildren<SkinnedMeshRenderer>();
+        smr = GetComponentInChildren<SkinnedMeshRenderer>(true);
     }
 
     void LateUpdate()
@@ -29,14 +28,9 @@ public class HandMirror : MonoBehaviour
         transform.position = trackingSpace.TransformPoint(localPos);
         Quaternion sourceLocalRot = Quaternion.Inverse(trackingSpace.rotation) * sourceFingersRoot.rotation;
         Quaternion mirroredLocalRol = new Quaternion(sourceLocalRot.x, -sourceLocalRot.y, -sourceLocalRot.z, sourceLocalRot.w);
-        /*Quaternion localRot = Quaternion.Inverse(trackingSpace.rotation) * sourceFingersRoot.rotation; //sourceAnchor.rotation;
-        localRot.y = -localRot.y;
-        localRot.z = -localRot.z;
-        transform.rotation = trackingSpace.rotation * localRot;*/
         transform.rotation = trackingSpace.rotation * mirroredLocalRol;
         if(flipPalms) transform.Rotate(transform.up, 180.0f, Space.World);
-        if(mirrorFingers/* && sourceFingersRoot != null*/) CopyBonesRecursive(sourceFingersRoot, transform);
-
+        if(mirrorFingers) CopyBonesRecursive(sourceFingersRoot, transform);
         if(smr != null && !smr.enabled) smr.enabled = true;
     }
 
@@ -48,19 +42,17 @@ public class HandMirror : MonoBehaviour
             {
                 Transform sourceChild = source.GetChild(i);
                 Transform targetChild = target.GetChild(i);
-
+                /*Vector3 euler = sourceChild.localEulerAngles;
+                if (invertFingerX) euler.x = -euler.x;
+                if (invertFingerY) euler.y = -euler.y;
+                if (invertFingerZ) euler.z = -euler.z;
+                targetChild.localEulerAngles = euler;*/
                 Quaternion sourceFingerRot = sourceChild.localRotation;
                 float x = sourceFingerRot.x;
                 float y = invertFingerY ? -sourceFingerRot.y : sourceFingerRot.y;
                 float z = invertFingerZ ? -sourceFingerRot.z : sourceFingerRot.z;
                 float w = sourceFingerRot.w;
                 targetChild.localRotation = new Quaternion(x, y, z, w);
-
-                /*Vector3 euler = sourceChild.localEulerAngles;
-                if (invertFingerX) euler.x = -euler.x;
-                if (invertFingerY) euler.y = -euler.y;
-                if (invertFingerZ) euler.z = -euler.z;
-                targetChild.localEulerAngles = euler;*/
                 CopyBonesRecursive(sourceChild, targetChild);
             }
         }

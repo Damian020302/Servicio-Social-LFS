@@ -5,16 +5,17 @@ public class RealityManager : MonoBehaviour
     [Header("References")]
     [Tooltip("Camara principal del Jugador")] public Camera mainCamera;
     [Tooltip("Componente de OVRCameraRig")] public OVRPassthroughLayer passthroughLayer;
-    private bool isMixedReality = false;
+    public bool isMixedReality = false;
     public GameObject vrSign;
     public GameObject mrSign;
 
     private void Start()
     {
-        int savedReality = PlayerPrefs.GetInt("RealityMode", 0);
+        /*int savedReality = PlayerPrefs.GetInt("RealityMode", 0);
         isMixedReality = (savedReality == 1);
         if(isMixedReality) ActivateMR();
-        else ActivateVR();
+        else ActivateVR();*/
+        ActivateMR();
     }
 
     public void AlternateReality()

@@ -47,37 +47,27 @@ public class AppManager : MonoBehaviour
 
     public void LeftHandSelection()
     {
-        Menus();
+        //Menus();
         bothHandsGame.SetActive(false);
         leftOrRightHandGame.SetActive(true);
+        //handMenu.SetActive(false);
         PlayerPrefs.SetInt("SelectedHand", 0); //0 for left hand
         PlayerPrefs.Save();
         HandConfigurator configurator = Object.FindFirstObjectByType<HandConfigurator>();
-        if (configurator != null) /*configurator.Start();*/ configurator.ApplyConfig(0); //Applies configuration to left hand
+        if (configurator != null) configurator.ApplyConfig(0); //Applies configuration to left hand
         Debug.Log("Mano izquierda seleccionada");
     }
 
     public void RightHandSelection()
     {
-        Menus();
+        //Menus();
         bothHandsGame.SetActive(false);
         leftOrRightHandGame.SetActive(true);
+        //handMenu.SetActive(false);
         PlayerPrefs.SetInt("SelectedHand", 1); //1 for right hand
         PlayerPrefs.Save();
         HandConfigurator configurator = Object.FindFirstObjectByType<HandConfigurator>();
-        if (configurator != null) /*configurator.Start();*/ configurator.ApplyConfig(1); //Applies configuration to right hand
+        if (configurator != null) configurator.ApplyConfig(1); //Applies configuration to right hand
         Debug.Log("Mano derecha seleccionada");
     }
-
-    /*public void BothHandsSelection()
-    {
-        Menus();
-        bothHandsGame.SetActive(true);
-        leftOrRightHandGame.SetActive(false);
-        PlayerPrefs.SetInt("SelectedHand", 2); //2 for both hands
-        PlayerPrefs.Save();
-        HandConfigurator configurator = Object.FindFirstObjectByType<HandConfigurator>();
-        if (configurator != null) configurator.ApplyConfig(2); //Applies configuration to both hands
-        Debug.Log("Ambas manos seleccionadas");
-    }*/
 }
