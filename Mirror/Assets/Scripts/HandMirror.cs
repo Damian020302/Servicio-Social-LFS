@@ -6,6 +6,10 @@ public class HandMirror : MonoBehaviour
     public Transform sourceAnchor;
     public Transform sourceFingersRoot;
     public Transform trackingSpace;
+
+    public OVRHand sourceOVRHand;
+    public Transform centerEyeAnchor;
+
     [Header("Mirror Configuration")]
     public bool mirrorFingers = true;
     public bool flipPalms = false;
