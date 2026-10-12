@@ -11,11 +11,11 @@ public class RealityManager : MonoBehaviour
 
     private void Start()
     {
-        /*int savedReality = PlayerPrefs.GetInt("RealityMode", 0);
+        int savedReality = PlayerPrefs.GetInt("RealityMode", 0);
         isMixedReality = (savedReality == 1);
         if(isMixedReality) ActivateMR();
-        else ActivateVR();*/
-        ActivateMR();
+        else ActivateVR();
+        //ActivateMR();
     }
 
     public void AlternateReality()

@@ -69,8 +69,8 @@ public class GameManager : MonoBehaviour
     //public float maxRadiusAchieved = 0.0f;
     public float averageInteractionTimeL = 0.0f;
     public float averageInteractionTimeR = 0.0f;
-    public float averageArmAngleL = 0.0f;
-    public float averageArmAngleR = 0.0f;
+    //public float averageArmAngleL = 0.0f;
+    //public float averageArmAngleR = 0.0f;
     public float averageSpawningTimeAchieved = 0.0f;
     [Header("UI Metrics")]
     public TextMeshProUGUI averageSpawningTimeAchievedText;
@@ -154,20 +154,6 @@ public class GameManager : MonoBehaviour
 
     public void Calibrate()
     {
-        if (armPanel != null)
-        {
-            armPanel.SetActive(true);
-            if (upperArmInputField != null) upperArmInputField.text = PlayerPrefs.GetFloat("UpperArmLength", 30.0f).ToString("F2");
-            if (foreArmInputField != null) foreArmInputField.text = PlayerPrefs.GetFloat("ForeArmLength", 0.25f).ToString("F2");
-        }
-    }
-
-    public void ConfirmArm()
-    {
-        if (upperArmInputField != null && float.TryParse(upperArmInputField.text, out float upperVal)) PlayerPrefs.SetFloat("UpperArmLength", upperVal);
-        if (foreArmInputField != null && float.TryParse(foreArmInputField.text, out float foreVal)) PlayerPrefs.SetFloat("ForeArmLength", foreVal);
-        PlayerPrefs.Save();
-        armPanel.SetActive(false);
         if (timerPanel != null)
         {
             timerPanel.SetActive(true);
@@ -209,9 +195,9 @@ public class GameManager : MonoBehaviour
             maxSpeedAchieved = enemySpeed;
             maxRadiusAchievedL = actualRadiusL;
             maxRadiusAchievedR = actualRadiusR;
-            float calibratedElbow = PlayerPrefs.GetFloat("PlayerElbowAngle", 0.0f);
+            /*float calibratedElbow = PlayerPrefs.GetFloat("PlayerElbowAngle", 0.0f);
             averageArmAngleL = PlayerPrefs.GetFloat("PlayerElbowAngleL", 0.0f);
-            averageArmAngleR = PlayerPrefs.GetFloat("PlayerElbowAngleR", 0.0f);
+            averageArmAngleR = PlayerPrefs.GetFloat("PlayerElbowAngleR", 0.0f);*/
             StartUI();
             if (countdownText != null) countdownText.gameObject.SetActive(false);
             if (warning != null)
@@ -402,12 +388,12 @@ public class GameManager : MonoBehaviour
         if (enemiesExpiredText != null) enemiesExpiredText.text = string.Format("Fallos: {0}", enemiesExpired);
         if (initialReactionTimeLText != null) initialReactionTimeLText.text = string.Format("Tiempo de Reacción:\n{0:F1}s", initialReactionTimeL);
         if (averageInteractionTimeLText != null) averageInteractionTimeLText.text = string.Format("Tiempo Promedio\nentre Interacción: {0:F1}s", averageInteractionTimeL);
-        if(averageArmAngleLText != null) averageArmAngleLText.text = string.Format("Ángulo Promedio\ndel Brazo: {0:F1}º", averageArmAngleL);
+        //if(averageArmAngleLText != null) averageArmAngleLText.text = string.Format("Ángulo Promedio\ndel Brazo: {0:F1}º", averageArmAngleL);
         if(enemiesTouchedLText != null) enemiesTouchedLText.text = string.Format("Aciertos: {0}", enemiesTouchedL);
         if (maxRadiusAchievedLText != null) maxRadiusAchievedLText.text = string.Format("Radio Máximo \nalcanzado: {0:F1}m", maxRadiusAchievedL);
         if (initialReactionTimeRText != null)initialReactionTimeRText.text = string.Format("Tiempo de\nReacción: {0:F1}s", initialReactionTimeR);
         if (averageInteractionTimeRText != null) averageInteractionTimeRText.text = string.Format("Tiempo Promedio\nentre Interacción: {0:F1}s", averageInteractionTimeR);
-        if (averageArmAngleRText != null) averageArmAngleRText.text = string.Format("Ángulo Promedio\ndel Brazo: {0:F1}º", averageArmAngleR);
+        //if (averageArmAngleRText != null) averageArmAngleRText.text = string.Format("Ángulo Promedio\ndel Brazo: {0:F1}º", averageArmAngleR);
         if (enemiesTouchedRText != null) enemiesTouchedRText.text = string.Format("Aciertos: {0}", enemiesTouchedR);
         if (maxRadiusAchievedRText != null) maxRadiusAchievedRText.text = string.Format("Radio Máximo \nalcanzado: {0:F1}m", maxRadiusAchievedR);
     }

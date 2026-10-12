@@ -40,7 +40,7 @@ public class VRCalibration : MonoBehaviour
     [Tooltip("Arm length from elbow to wrist")]
     public float foreArmLength = 0.25f;
 
-    public float UpperArmLength
+    /*public float UpperArmLength
     {
         get {  return upperArmLength; }
         set { upperArmLength = value; }
@@ -50,7 +50,7 @@ public class VRCalibration : MonoBehaviour
     {
         get { return foreArmLength; }
         set { foreArmLength = value; }
-    }
+    }*/
 
     [Header("Calibration Maths")]
     private int currentReps = 0;
@@ -58,19 +58,19 @@ public class VRCalibration : MonoBehaviour
     [Tooltip("Distance the arm must return to count the repetition")] public float returnDist = 0.15f;
     private float holdTimer = 0.0f;
     private float maxDistanceThisRep = 0.0f;
-    private float elbowAngleAtMaxReach = 180.0f;
+    //private float elbowAngleAtMaxReach = 180.0f;
     private List<float> recordedDistancesL = new List<float>();
     private List<float> recordedDistancesR = new List<float>();
-    private List<float> recordedElbowL = new List<float>();
-    private List<float> recordedElbowR = new List<float>();
+    //private List<float> recordedElbowL = new List<float>();
+    //private List<float> recordedElbowR = new List<float>();
 
     [Header("UI Elements")]
     public TextMeshProUGUI instructionText;
 
     void Start()
     {
-        upperArmLength = PlayerPrefs.GetFloat("UpperArmLength", upperArmLength);
-        foreArmLength = PlayerPrefs.GetFloat("ForearmLength", foreArmLength);
+        /*upperArmLength = PlayerPrefs.GetFloat("UpperArmLength", upperArmLength);
+        foreArmLength = PlayerPrefs.GetFloat("ForearmLength", foreArmLength);*/
         DetermineActiveHand();
         Invoke("StartCalibrationSequence", 3.0f);
     }
@@ -124,7 +124,7 @@ public class VRCalibration : MonoBehaviour
         currentReps = 0;
         holdTimer = 0.0f;
         maxDistanceThisRep = 0.0f;
-        elbowAngleAtMaxReach = 180.0f;
+        //elbowAngleAtMaxReach = 180.0f;
     }
 
     /// <summary>
@@ -132,7 +132,7 @@ public class VRCalibration : MonoBehaviour
     /// </summary>
     /// <param name="distance">The distance between the shoulder and wrist.</param>
     /// <returns>The calculated elbow angle in degrees.</returns>
-    float CalculateElbowAngle(float distance)
+    /*float CalculateElbowAngle(float distance)
     {
         float a = upperArmLength;
         float b = foreArmLength;
@@ -145,13 +145,13 @@ public class VRCalibration : MonoBehaviour
         }
         float cosC = Mathf.Clamp((a * a + b * b - c * c) / (2 * a * b), -1.0f, 1.0f);
         return 180.0f - (Mathf.Acos(cosC) * Mathf.Rad2Deg);
-    }
+    }*/
 
     void Update()
     {
         if(calibrationState == CalibrationState.Completed || calibrationState == CalibrationState.SettingNeutral || playerCenter == null) return;
         float currentDistance = Vector3.Distance(playerCenter.position, activeHand.position);
-        float currentElbowAngle = (currentDistance > 0) ? CalculateElbowAngle(currentDistance) : 180.0f;
+        //float currentElbowAngle = (currentDistance > 0) ? CalculateElbowAngle(currentDistance) : 180.0f;
         currentArmName = (currentPhase == CalibrationPhase.LeftArm) ? "Izquierdo" : "Derecho";
         if(calibrationState == CalibrationState.WaitingForStretch)
         {
@@ -160,7 +160,7 @@ public class VRCalibration : MonoBehaviour
                 if(currentDistance > maxDistanceThisRep)
                 {
                     maxDistanceThisRep = currentDistance;
-                    elbowAngleAtMaxReach = currentElbowAngle;
+                    //elbowAngleAtMaxReach = currentElbowAngle;
                 }
                 if(currentDistance >= (maxDistanceThisRep - 0.05f))
                 {
@@ -171,12 +171,12 @@ public class VRCalibration : MonoBehaviour
                         if(currentPhase == CalibrationPhase.LeftArm)
                         {
                             recordedDistancesL.Add(maxDistanceThisRep);
-                            recordedElbowL.Add(elbowAngleAtMaxReach);
+                            //recordedElbowL.Add(elbowAngleAtMaxReach);
                         }
                         else if(currentPhase == CalibrationPhase.RightArm)
                         {
                             recordedDistancesR.Add(maxDistanceThisRep);
-                            recordedElbowR.Add(elbowAngleAtMaxReach);
+                            //recordedElbowR.Add(elbowAngleAtMaxReach);
                         }
                         currentReps++;
                         holdTimer = 0;
@@ -199,7 +199,7 @@ public class VRCalibration : MonoBehaviour
                 {
                     holdTimer = 0.0f;
                     maxDistanceThisRep = 0.0f;
-                    elbowAngleAtMaxReach = 180.0f;
+                    //elbowAngleAtMaxReach = 180.0f;
                     UpdateUI();
                 }
             }
@@ -210,7 +210,7 @@ public class VRCalibration : MonoBehaviour
             if(currentDistance <= (maxDistanceThisRep - returnDist) || currentDistance < minDist)
             {
                 maxDistanceThisRep = 0.0f;
-                elbowAngleAtMaxReach = 180.0f;
+                //elbowAngleAtMaxReach = 180.0f;
                 calibrationState = CalibrationState.WaitingForStretch;
                 UpdateUI();
             }
@@ -249,44 +249,44 @@ public class VRCalibration : MonoBehaviour
         calibrationState = CalibrationState.Completed;
         float finalRadioL = 0.2f;
         float finalRadioR = 0.2f;
-        float finalElbowL = 0.0f;
-        float finalElbowR = 0.0f;
+        /*float finalElbowL = 0.0f;
+        float finalElbowR = 0.0f;*/
         if(recordedDistancesL.Count > 0)
         {
             float sumDistL = 0.0f;
             foreach(float dist in recordedDistancesL) sumDistL += dist;
             finalRadioL = Mathf.Max((sumDistL / recordedDistancesL.Count) - 0.05f, 0.2f);
-            float sumElbowL = 0.0f;
+            /*float sumElbowL = 0.0f;
             foreach(float angle in recordedElbowL) sumElbowL += angle;
-            finalElbowL = sumElbowL / recordedElbowL.Count;
+            finalElbowL = sumElbowL / recordedElbowL.Count;*/
         }
         if(recordedDistancesR.Count > 0)
         {
             float sumDistR = 0.0f;
             foreach(float dist in recordedDistancesR) sumDistR += dist;
             finalRadioR = Mathf.Max((sumDistR / recordedDistancesR.Count) - 0.05f, 0.2f);
-            float sumElbowR = 0.0f;
+            /*float sumElbowR = 0.0f;
             foreach(float angle in recordedElbowR) sumElbowR += angle;
-            finalElbowR = sumElbowR / recordedElbowR.Count;
+            finalElbowR = sumElbowR / recordedElbowR.Count;*/
         }
         if(useLeftArm && !useRightArm)
         {
             finalRadioR = finalRadioL;
-            finalElbowR = finalElbowL;
+            //finalElbowR = finalElbowL;
         }
         if(useRightArm && !useLeftArm)
         {
             finalRadioL = finalRadioR;
-            finalElbowL = finalElbowR;
+            //finalElbowL = finalElbowR;
         }
         PlayerPrefs.SetFloat("PlayerRadiusL", finalRadioL);
         PlayerPrefs.SetFloat("PlayerRadiusR", finalRadioR);
-        PlayerPrefs.SetFloat("PlayerElbowAngleL", finalElbowL);
+        /*PlayerPrefs.SetFloat("PlayerElbowAngleL", finalElbowL);
         PlayerPrefs.SetFloat("PlayerElbowAngleR", finalElbowR);
-        PlayerPrefs.SetFloat("PlayerElbowAngle", (finalElbowL+finalElbowR)/2.0f);
+        PlayerPrefs.SetFloat("PlayerElbowAngle", (finalElbowL+finalElbowR)/2.0f);*/
         PlayerPrefs.SetFloat("PlayerRadius", Mathf.Max(finalRadioL, finalRadioR));
         PlayerPrefs.Save();
-        if (instructionText != null) instructionText.text = $"Calibración completa.\nRadio Izquierdo:{finalRadioL:F2}m\nRadio Derecho:{finalRadioR:F2}m\nÁngulo de Codo (Flexión): {(finalElbowL + finalElbowR) / 2.0f:F2}°\nIniciando terapia...";
+        if (instructionText != null) instructionText.text = $"Calibración completa.\nRadio Izquierdo:{finalRadioL:F2}m\nRadio Derecho:{finalRadioR:F2}m\nIniciando terapia...";
         Invoke("LoadNextScene", 3.0f);
     }
 
