@@ -9,10 +9,23 @@ public class AppManager : MonoBehaviour
     public GameObject bothHandsGame;
     public GameObject leftOrRightHandGame;
 
+    [Header("Loading System")]
+    public GameObject loadingTextUI;
+    public GameObject selectionButtonsUI;
+
     void Start()
     {
         handMenu.SetActive(true);
         mainMenu.SetActive(false);
+        if(loadingTextUI != null) loadingTextUI.SetActive(true);
+        if(selectionButtonsUI != null) selectionButtonsUI.SetActive(false);
+    }
+
+    public void UnlockHandSelection()
+    {
+        if(loadingTextUI != null) loadingTextUI.SetActive(false);
+        if(selectionButtonsUI != null) selectionButtonsUI.SetActive(true);
+        Debug.Log("Botones de selección de mano desbloqueados");
     }
 
     public void Game1()

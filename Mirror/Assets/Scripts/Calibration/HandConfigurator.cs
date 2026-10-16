@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class HandConfigurator : MonoBehaviour
 {
@@ -17,6 +18,48 @@ public class HandConfigurator : MonoBehaviour
 
     [Header("Mirror Therapy Settings")]
     public bool useMirrorTherapy = true;
+
+    void Awake()
+    {
+        WarmUpHands();
+        StartCoroutine(WaitForHardwareReady());
+    }
+
+    void WarmUpHands()
+    {
+        SetHandState(leftHandInteraction, leftHandVisuals, leftHandAnchor, true);
+        SetHandState(leftHandInteraction, leftHandVisuals, leftHandAnchor, true);
+
+        ToggleOculusTracking(leftHandVisuals, true);
+        ToggleOculusTracking(rightHandVisuals, true);
+
+        HandMirror leftMirror = leftHandVisuals.GetComponent<HandMirror>();
+        if(leftMirror) leftMirror.enabled = false;
+
+        HandMirror rightMirror = rightHandVisuals.GetComponent<HandMirror>();
+        if(rightMirror) rightMirror.enabled = false;
+    }
+
+    private IEnumerator WaitForHardwareReady()
+    {
+        OVRSkeleton leftSkeleton = leftHandVisuals != null ? leftHandVisuals.GetComponentInChildren<OVRSkeleton>() : null;
+        OVRSkeleton rightSkeleton = rightHandVisuals != null ? rightHandVisuals.GetComponentInChildren<OVRSkeleton>() : null;
+        while(true)
+        {
+            bool leftReady = leftSkeleton != null || leftSkeleton.IsInitialized;
+            bool rightReady = rightSkeleton != null || rightSkeleton.IsInitialized;
+            if(leftReady && rightReady)
+            {
+                AppManager appManager = Object.FindFirstObjectByType<AppManager>();
+                if(appManager != null)
+                {
+                    appManager.UnlockHandSelection();
+                }
+                break;
+            }
+            yield return null;
+        }
+    }
 
     public void ApplyConfig(int selectedHand)
     {
