@@ -4896,12 +4896,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cfc15f4879d2e9428ec2275f9e8d2e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AppManager
+  leftHandMenu: {fileID: 1031106736}
+  rightHandMenu: {fileID: 519587893}
   handMenu: {fileID: 1344372357}
   mainMenu: {fileID: 2016892104}
   bothHandsGame: {fileID: 865348592}
   leftOrRightHandGame: {fileID: 1154502995}
-  loadingTextUI: {fileID: 33639676}
-  selectionButtonsUI: {fileID: 1511406881}
+  instructions: {fileID: 1227428073}
 --- !u!1 &639625403
 GameObject:
   m_ObjectHideFlags: 0
@@ -9996,8 +9997,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Antes de alguna activaci\xF3n, frente a t\xED, rota constantemente la
-    mano con la que se estar\xE1 trabajando."
+  m_text: Instrucciones
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12904,7 +12904,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1511406882
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15642,6 +15642,9 @@ MonoBehaviour:
   rightHandVisuals: {fileID: 2136792041}
   rightHandAnchor: {fileID: 471967064}
   useMirrorTherapy: 1
+  isHardwareReady: 0
+  leftHandReady: 0
+  rightHandReady: 0
 --- !u!1 &1815391350
 GameObject:
   m_ObjectHideFlags: 0

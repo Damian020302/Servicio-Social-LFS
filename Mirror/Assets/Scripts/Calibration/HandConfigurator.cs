@@ -19,50 +19,88 @@ public class HandConfigurator : MonoBehaviour
     [Header("Mirror Therapy Settings")]
     public bool useMirrorTherapy = true;
 
-    void Awake()
+    public bool isHardwareReady = false;
+    public bool leftHandReady = false;
+    public bool rightHandReady = false;
+
+    void Start()
     {
-        WarmUpHands();
-        StartCoroutine(WaitForHardwareReady());
+        StartCoroutine(SilentHardwareWarmpup());
     }
 
-    void WarmUpHands()
+    private IEnumerator SilentHardwareWarmpup()
     {
         SetHandState(leftHandInteraction, leftHandVisuals, leftHandAnchor, true);
-        SetHandState(leftHandInteraction, leftHandVisuals, leftHandAnchor, true);
-
+        SetHandState(rightHandInteraction, rightHandVisuals, rightHandAnchor, true);
         ToggleOculusTracking(leftHandVisuals, true);
         ToggleOculusTracking(rightHandVisuals, true);
-
         HandMirror leftMirror = leftHandVisuals.GetComponent<HandMirror>();
-        if(leftMirror) leftMirror.enabled = false;
-
+        if (leftMirror) leftMirror.enabled = false;
         HandMirror rightMirror = rightHandVisuals.GetComponent<HandMirror>();
-        if(rightMirror) rightMirror.enabled = false;
-    }
-
-    private IEnumerator WaitForHardwareReady()
-    {
+        if (rightMirror) rightMirror.enabled = false;
         OVRSkeleton leftSkeleton = leftHandVisuals != null ? leftHandVisuals.GetComponentInChildren<OVRSkeleton>() : null;
         OVRSkeleton rightSkeleton = rightHandVisuals != null ? rightHandVisuals.GetComponentInChildren<OVRSkeleton>() : null;
-        while(true)
+        float timeout = 2.0f;
+        while (timeout > 0)
         {
-            bool leftReady = leftSkeleton != null || leftSkeleton.IsInitialized;
-            bool rightReady = rightSkeleton != null || rightSkeleton.IsInitialized;
-            if(leftReady && rightReady)
+            bool leftReady = leftSkeleton == null || leftSkeleton.IsInitialized;
+            bool rightReady = rightSkeleton == null || rightSkeleton.IsInitialized;
+            if (leftReady && rightReady)
             {
-                AppManager appManager = Object.FindFirstObjectByType<AppManager>();
-                if(appManager != null)
-                {
-                    appManager.UnlockHandSelection();
-                }
+                isHardwareReady = true;
                 break;
             }
+            timeout -= Time.deltaTime;
             yield return null;
         }
+        yield return new WaitForSeconds(0.1f);
+        isHardwareReady = true;
+        Debug.Log("HandConfigurator: Hardware ready for use.");
     }
 
     public void ApplyConfig(int selectedHand)
     {
+        StopAllCoroutines();
+        StartCoroutine(ApplyConfigRoutine(selectedHand));
+        /*if (selectedHand == 0)
+        {
+            SetHandState(leftHandInteraction, leftHandVisuals, leftHandAnchor, true);
+            ToggleOculusTracking(leftHandVisuals, true);
+            HandMirror leftMirror = leftHandVisuals.GetComponent<HandMirror>();
+            if (leftMirror) leftMirror.enabled = false;
+            SetHandState(rightHandInteraction, rightHandVisuals, rightHandAnchor, false, useMirrorTherapy);
+            ToggleOculusTracking(rightHandVisuals, !useMirrorTherapy);
+            if (useMirrorTherapy)
+            {
+                HandMirror rightMirror = SetupMirrorScript(rightHandVisuals, leftHandAnchor, leftHandVisuals);
+                if (rightMirror) rightMirror.enabled = true;
+            }
+            Debug.Log("Terapia de Espejo: Mano Izquierda activa");
+        }
+        else
+        {
+            SetHandState(rightHandInteraction, rightHandVisuals, rightHandAnchor, true);
+            ToggleOculusTracking(rightHandVisuals, true);
+            HandMirror rightMirror = rightHandVisuals.GetComponent<HandMirror>();
+            if (rightMirror) rightMirror.enabled = false;
+            SetHandState(leftHandInteraction, leftHandVisuals, leftHandAnchor, false, useMirrorTherapy);
+            ToggleOculusTracking(leftHandVisuals, !useMirrorTherapy);
+            if (useMirrorTherapy)
+            {
+                HandMirror leftMirror = SetupMirrorScript(leftHandVisuals, rightHandAnchor, rightHandVisuals);
+                if (leftMirror) leftMirror.enabled = true;
+            }
+            Debug.Log("Terapia de Espejo: Mano Derecha activa");
+        }*/
+    }
+
+    private IEnumerator ApplyConfigRoutine(int selectedHand)
+    {
+        leftHandVisuals.SetActive(false);
+        rightHandVisuals.SetActive(false);
+        yield return null;
+        leftHandVisuals.SetActive(true);
+        rightHandVisuals.SetActive(true);
         if (selectedHand == 0)
         {
             SetHandState(leftHandInteraction, leftHandVisuals, leftHandAnchor, true);
@@ -110,6 +148,10 @@ public class HandConfigurator : MonoBehaviour
         mirror.sourceAnchor = sourceAnchor.transform;
         mirror.sourceFingersRoot = sourceVisuals.transform;
         mirror.trackingSpace = trackingSpace;
+
+        OVRHand sourceHand = sourceVisuals.GetComponent<OVRHand>();
+        if(sourceHand != null) mirror.sourceOVRHand = sourceHand;
+        
         return mirror;
     }
 
