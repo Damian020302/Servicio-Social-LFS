@@ -33,7 +33,7 @@ public class AppManager : MonoBehaviour
             leftHandMenu.SetActive(true);
             rightHandMenu.SetActive(false);
             mainMenu.SetActive(false);
-            instructions.text = "Bienvenid@.\nComencemos con la calibración del sistema: Seleccione la mano Izquierda.";
+            instructions.text = "Bienvenid@s.\nComencemos con la calibración del sistema:\nPaciente - Si puede, estire su brazo y ponga su palma izquierda frente al visor. \nTerapeuta - Seleccione la mano Izquierda.";
         }
         /*if(loadingTextUI != null) loadingTextUI.SetActive(true);
         if(selectionButtonsUI != null) selectionButtonsUI.SetActive(false);*/
@@ -70,10 +70,9 @@ public class AppManager : MonoBehaviour
         Time.timeScale = 1.0f;
     }
 
-    void Menus()
+    public void EndGame()
     {
-        handMenu.SetActive(false);
-        mainMenu.SetActive(true);
+        Application.Quit();
     }
 
     public void LeftHandSelection()
@@ -83,7 +82,7 @@ public class AppManager : MonoBehaviour
         if (configurator.leftHandReady && configurator.rightHandReady)
         {
             Debug.Log("Hardware listo para usar");
-            instructions.text = "¡Perfecto!.\nSistema calibrado, puede alternar de mano en cualquier momento.";
+            instructions.text = "¡Perfecto!.\nSistema calibrado, se puede alternar de mano en cualquier momento.";
         }
         else
         {
@@ -92,7 +91,7 @@ public class AppManager : MonoBehaviour
             leftOrRightHandGame.SetActive(true);
             rightHandMenu.SetActive(true);
             leftHandMenu.SetActive(false);
-            instructions.text = "¡Excelente!.\nContinuemos con la calibración del sistema: Seleccione la mano Derecha.";
+            instructions.text = "¡Excelente!.\nContinuemos con la calibración del sistema:\nPaciente - Si puede, estire su brazo y ponga su palma derecha frente al visor \nTerapeuta - Seleccione la mano Derecha.";
         }
         //handMenu.SetActive(false);
         PlayerPrefs.SetInt("SelectedHand", 0); //0 for left hand
