@@ -5,6 +5,8 @@ public class DoorManager : MonoBehaviour
     [Header("Door Pivots")]
     public Transform leftPivot;
     public Transform rightPivot;
+    public GameObject[] leftDoors;
+    public GameObject[] rightDoors;
     [Header("Door Settings")]
     public float openMaxAngle = 90.0f; //Maximum angle to open the door
     public float openSpeed = 5.0f; //Speed at which the door opens
@@ -17,8 +19,6 @@ public class DoorManager : MonoBehaviour
     private Quaternion goalLeftRotation;
     private Quaternion goalRightRotation;
 
-    private Material treasureMaterial;
-
     void Start()
     {
         startingLeftRotation = leftPivot.rotation; //Store the initial rotation of the left pivot
@@ -29,6 +29,7 @@ public class DoorManager : MonoBehaviour
         {
             treasureLight.intensity = 0.0f; //Set the initial intensity of the treasure light
         }
+        SelectRandomDoors(); //Select random door models to display
     }
 
     void Update()
@@ -51,6 +52,23 @@ public class DoorManager : MonoBehaviour
         {
             float actualLightIntensity = lightMaxIntensity * progress; //Calculate the actual light intensity based on progress
             treasureLight.intensity = actualLightIntensity; //Set the intensity of the treasure light
+        }
+    }
+
+    private void SelectRandomDoors()
+    {
+        foreach (GameObject model in leftDoors) if (model != null) model.SetActive(false);
+        foreach (GameObject model in rightDoors) if (model != null) model.SetActive(false);
+
+        if(leftDoors.Length > 0)
+        {
+            int randomLeftIndex = Random.Range(0, leftDoors.Length);
+            leftDoors[randomLeftIndex].SetActive(true); //Activate a random left door model
+        }
+        if(rightDoors.Length > 0)
+        {
+            int randomRightIndex = Random.Range(0, rightDoors.Length);
+            rightDoors[randomRightIndex].SetActive(true); //Activate a random right door model
         }
     }
 }
