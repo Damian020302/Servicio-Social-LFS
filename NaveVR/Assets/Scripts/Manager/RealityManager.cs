@@ -11,6 +11,14 @@ public class RealityManager : MonoBehaviour
 
     private void Start()
     {
+        if(OVRManager.instance != null)
+        {
+            OVRManager.instance.isInsightPassthroughEnabled = false;
+        }
+        if(passthroughLayer != null)
+        {
+            passthroughLayer.enabled = true;
+        }
         int savedReality = PlayerPrefs.GetInt("RealityMode", 0);
         isMixedReality = (savedReality == 1);
         if(isMixedReality) ActivateMR();
@@ -31,16 +39,22 @@ public class RealityManager : MonoBehaviour
     /// </summary>
     void ActivateMR()
     {
-        vrSign.SetActive(false);
-        mrSign.SetActive(true);
-        if(OVRManager.instance != null)
+        if(vrSign != null)
+        {
+            vrSign.SetActive(false);
+        }
+        if(mrSign != null)
+        {
+            mrSign.SetActive(true);
+        }
+        /*if(OVRManager.instance != null)
         {
             OVRManager.instance.isInsightPassthroughEnabled = true;
             Debug.Log("Ya debería funcionar");
-        }
+        }*/
         if(passthroughLayer != null)
         {
-            passthroughLayer.enabled = true;
+            //passthroughLayer.enabled = true;
             passthroughLayer.hidden = false;
         }
         mainCamera.clearFlags = CameraClearFlags.SolidColor;
@@ -53,15 +67,21 @@ public class RealityManager : MonoBehaviour
     /// </summary>
     void ActivateVR()
     {
-        mrSign.SetActive(false);
-        vrSign.SetActive(true);
-        if(OVRManager.instance != null)
+        if(mrSign != null)
+        {
+            mrSign.SetActive(false);
+        }
+        if(vrSign != null)
+        {
+            vrSign.SetActive(true);
+        }
+        /*if (OVRManager.instance != null)
         {
             OVRManager.instance.isInsightPassthroughEnabled = false;
-        }
+        }*/
         if (passthroughLayer != null)
         {
-            passthroughLayer.enabled = false;
+            //passthroughLayer.enabled = false;
             passthroughLayer.hidden = true;
         }
         mainCamera.clearFlags = CameraClearFlags.Skybox;
