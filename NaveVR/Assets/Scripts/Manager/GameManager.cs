@@ -167,6 +167,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void CancelCalibration()
+    {
+        if (timerPanel != null)
+        {
+            timerPanel.SetActive(false);
+        }
+    }
+
     public void Difficulty()
     {
         SceneManager.LoadScene("Dificultad");

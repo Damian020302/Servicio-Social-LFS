@@ -165,6 +165,14 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
+    public void CancelCalibration()
+    {
+        if (timerPanel != null)
+        {
+            timerPanel.SetActive(false);
+        }
+    }
+
     void Start()
     {
         selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
@@ -430,6 +438,13 @@ public class PuzzleManager : MonoBehaviour
     {
         isVictoryAchieved = true;
         timerIsRunning = false;
+        if(puzzleAdmin != null)
+        {
+            for(int i = 0; i < puzzleAdmin.transform.childCount; i++)
+            {
+                puzzleAdmin.transform.GetChild(i).gameObject.SetActive(false); // Deactivate all puzzles
+            }
+        }
         EndUI();
         if(totalRoundTimeText != null)
         {
@@ -490,13 +505,13 @@ public class PuzzleManager : MonoBehaviour
         StopReminder();
         if(actualPhase == 0)
         {
-            if (currentPuzzleIndex > 0) StartReminder("Rota tu muñeca en las runas interiores"); 
-            else StartReminder("Rota tu muñeca en la runa interior");
+            if (currentPuzzleIndex > 0) StartReminder("Rota tu muñeca en las runas interiores para alinear los marcadores <color=#FFA000>dorados</color>"); 
+            else StartReminder("Rota tu muñeca en la runa interior para alinear los marcadores <color=#FFA000>dorados</color>");
         }
         else
         {
-            if (currentPuzzleIndex > 0) StartReminder("Rota tu muñeca en las runas exteriores");
-            else StartReminder("Rota tu muñeca en la runa exterior");
+            if (currentPuzzleIndex > 0) StartReminder("Rota tu muñeca en las runas exteriores para alinear los marcadores <color=#FFA000>dorados</color>");
+            else StartReminder("Rota tu muñeca en la runa exterior para alinear los marcadores <color=#FFA000>dorados</color>");
         }
     }
 

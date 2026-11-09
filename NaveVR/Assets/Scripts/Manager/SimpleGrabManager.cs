@@ -180,6 +180,14 @@ public class SimpleGrabManager : MonoBehaviour
         }
     }
 
+    public void CancelCalibration()
+    {
+        if (timerPanel != null)
+        {
+            timerPanel.SetActive(false);
+        }
+    }
+
     private void Start()
     {
         selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);

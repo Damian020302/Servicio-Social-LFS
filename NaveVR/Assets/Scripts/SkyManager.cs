@@ -6,6 +6,9 @@ public class SkyManager : MonoBehaviour
     
     void Update()
     {
-        RenderSettings.skybox.SetFloat("_Rotation", Time.time * skySpeed);
+        if(RenderSettings.skybox != null)
+        {
+            RenderSettings.skybox.SetFloat("_Rotation", Time.time * skySpeed);
+        }
     }
 }

@@ -74,4 +74,10 @@ public class AppManager : MonoBehaviour
         if (configurator != null) configurator.ApplyConfig(2); //Applies configuration to both hands
         Debug.Log("Ambas manos seleccionadas");
     }
+
+    public void HandsMenu()
+    {
+        handMenu.SetActive(true);
+        mainMenu.SetActive(false);
+    }
 }

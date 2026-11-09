@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class RealityManager : MonoBehaviour
 {
@@ -9,11 +10,22 @@ public class RealityManager : MonoBehaviour
     public GameObject vrSign;
     public GameObject mrSign;
 
+    private Material savedSkyboxMaterial;
+
     private void Start()
     {
-        if(OVRManager.instance != null)
+        if(mainCamera == null)
         {
-            OVRManager.instance.isInsightPassthroughEnabled = false;
+            mainCamera = Camera.main;
+        }
+        if(passthroughLayer == null)
+        {
+            passthroughLayer = Object.FindFirstObjectByType<OVRPassthroughLayer>();
+        }
+        savedSkyboxMaterial = RenderSettings.skybox;
+        if (OVRManager.instance != null)
+        {
+            OVRManager.instance.isInsightPassthroughEnabled = true;
         }
         if(passthroughLayer != null)
         {
@@ -56,9 +68,20 @@ public class RealityManager : MonoBehaviour
         {
             //passthroughLayer.enabled = true;
             passthroughLayer.hidden = false;
+            passthroughLayer.textureOpacity = 1.0f;
         }
-        mainCamera.clearFlags = CameraClearFlags.SolidColor;
-        mainCamera.backgroundColor = new Color(0,0,0,0);
+        RenderSettings.skybox = null;
+        if (mainCamera != null)
+        {
+            mainCamera.clearFlags = CameraClearFlags.SolidColor;
+            mainCamera.backgroundColor = new Color(0, 0, 0, 0);
+            mainCamera.allowHDR = false;
+            var urpCameraData = mainCamera.GetUniversalAdditionalCameraData();
+            if(urpCameraData != null)
+            {
+                urpCameraData.renderPostProcessing = false;
+            }
+        }
         Debug.Log("Mixed Reality Activated");
     }
 
@@ -84,7 +107,14 @@ public class RealityManager : MonoBehaviour
             //passthroughLayer.enabled = false;
             passthroughLayer.hidden = true;
         }
-        mainCamera.clearFlags = CameraClearFlags.Skybox;
+        if(savedSkyboxMaterial != null)
+        {
+            RenderSettings.skybox = savedSkyboxMaterial;
+        }
+        if (mainCamera != null)
+        {
+            mainCamera.clearFlags = CameraClearFlags.Skybox;
+        }
         Debug.Log("Virtual Reality Activated");
     }
 }

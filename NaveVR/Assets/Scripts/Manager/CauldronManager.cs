@@ -177,6 +177,14 @@ public class CauldronManager : MonoBehaviour
         }
     }
 
+    public void CancelCalibration()
+    {
+        if (timerPanel != null)
+        {
+            timerPanel.SetActive(false);
+        }
+    }
+
     void Start()
     {
         if(SceneManager.GetActiveScene().name == "Juego3")
