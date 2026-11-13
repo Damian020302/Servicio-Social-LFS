@@ -445,14 +445,14 @@ public class PuzzleManager : MonoBehaviour
                 puzzleAdmin.transform.GetChild(i).gameObject.SetActive(false); // Deactivate all puzzles
             }
         }
-        EndUI();
-        if(totalRoundTimeText != null)
+        if (totalRoundTimeText != null)
         {
             float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
             float minutes = Mathf.FloorToInt(finalTimeToShow / 60);
             float seconds = Mathf.FloorToInt(finalTimeToShow % 60);
             totalRoundTimeText.text = string.Format("Tiempo Total:\n{0:00}:{1:00}", minutes, seconds);
         }
+        EndUI();
         if(doorManager != null)
         {
             StopReminder(); // Stop any active reminders when victory is achieved

@@ -3,7 +3,32 @@ guid: 32899bc4f2ac96d42af9abd8ea64ff99
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DragonDoor
+    second: {fileID: 2100000, guid: 53ebf9e4a5561ab4a94668861b581390, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: DD_Color
+    second: {fileID: 2800000, guid: 49e743ee7db9dc94796404d3768e52f6, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: DD_Metallic
+    second: {fileID: 2800000, guid: dc3227a2e4edc6548888e950278d3e16, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: DD_Roughness
+    second: {fileID: 2800000, guid: 29d5dde69766b2d41bfc60e7c3e0966c, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Dragons
+    second: {fileID: 2800000, guid: 9ff4fbd601eee9e41b9d0ebd82d486e2, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -50,7 +75,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
-    bakeAxisConversion: 0
+    bakeAxisConversion: 1
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4

@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RobotContainer
+  m_Controller: {fileID: 9100000, guid: d6146a9af578427478dd8e7571991271, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 5918414522304825243, guid: 483055b0c1e3bae448c8c678de46d3d8, type: 3}
+    m_OverrideClip: {fileID: 7292176801595371744, guid: 6acb9e142ed626542b9c4c5220639082, type: 3}
