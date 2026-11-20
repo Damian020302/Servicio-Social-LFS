@@ -3,7 +3,37 @@ guid: 83dec056503428b4cb1260138e5a4f7f
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Base
+    second: {fileID: 2100000, guid: dd6a7a6faf3b7744e95d54696727e522, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body2
+    second: {fileID: 2100000, guid: e1d65e6c9f7e86949a7691064cfb5122, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 13c7e6fdcaa611a41a9c579b6241c9ba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Nuts
+    second: {fileID: 2100000, guid: 1f77c1c96a7144a4392e598d9085816b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roll
+    second: {fileID: 2100000, guid: 83d378a0ff8a8fe4a86ec6c701c23b0f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Void
+    second: {fileID: 2100000, guid: 27b2e6f3ae08e134ca90521567add30a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

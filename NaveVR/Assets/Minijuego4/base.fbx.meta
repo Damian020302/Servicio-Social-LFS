@@ -8,37 +8,37 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Base
-    second: {fileID: 2100000, guid: ea728000f156860478a8d124212a4362, type: 2}
+    second: {fileID: 2100000, guid: df5eec50f07ca2344ac3eeccd8ca332a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Body
-    second: {fileID: 2100000, guid: 6547a6d00a03b184ab3f813dd6bd0c46, type: 2}
+    second: {fileID: 2100000, guid: f3d482bdf77700247b9b26a828886f17, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Details
-    second: {fileID: 2100000, guid: 3c49fafaffcb5634eb8408fdf0429303, type: 2}
+    second: {fileID: 2100000, guid: 54a5e80f41f6f0648bef7c9e7a4d368a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Electric2
-    second: {fileID: 2100000, guid: c3a7e9e33f2f3ec43909dbbf7e008359, type: 2}
+    second: {fileID: 2100000, guid: 73c076e99ecd3764aa8194197b9a5cb4, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Propulson2
-    second: {fileID: 2100000, guid: 43fa9a532792dcf4796a0a1a17847b7d, type: 2}
+    second: {fileID: 2100000, guid: 95a3d488b7f69214880a973599e8eb32, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Propulsor
-    second: {fileID: 2100000, guid: c3f6e84a2d1470e40b8ad3642ea7174d, type: 2}
+    second: {fileID: 2100000, guid: bd176fab43e02b64da1b28faa25957dc, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Void
-    second: {fileID: 2100000, guid: 84899ef783eb35845bd2d3be88f182e0, type: 2}
+    second: {fileID: 2100000, guid: 876540a26fcef104d9bba1f810540d67, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

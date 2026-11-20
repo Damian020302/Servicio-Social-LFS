@@ -8,27 +8,27 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: DragonDoor
-    second: {fileID: 2100000, guid: 53ebf9e4a5561ab4a94668861b581390, type: 2}
+    second: {fileID: 2100000, guid: 7d19636639c86a0468a710c78bba40ad, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: DD_Color
-    second: {fileID: 2800000, guid: 49e743ee7db9dc94796404d3768e52f6, type: 3}
+    second: {fileID: 2800000, guid: 9e0641d0a6294a046bcd3dfde6b0e264, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: DD_Metallic
-    second: {fileID: 2800000, guid: dc3227a2e4edc6548888e950278d3e16, type: 3}
+    second: {fileID: 2800000, guid: 34ec4e4f38ea1b74b9d4d405899a29bd, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: DD_Roughness
-    second: {fileID: 2800000, guid: 29d5dde69766b2d41bfc60e7c3e0966c, type: 3}
+    second: {fileID: 2800000, guid: 8c04335517f4eac49bb7cfed2d96772b, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Dragons
-    second: {fileID: 2800000, guid: 9ff4fbd601eee9e41b9d0ebd82d486e2, type: 3}
+    second: {fileID: 2800000, guid: e3ad5ea5579da2243a8959098b268473, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

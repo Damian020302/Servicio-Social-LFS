@@ -8,57 +8,57 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Arc
-    second: {fileID: 2100000, guid: 776372f9070de7e4e948a7f6932ab3b1, type: 2}
+    second: {fileID: 2100000, guid: e2934a0f673c01f498be93fef56a5616, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Arc2
-    second: {fileID: 2100000, guid: b8c90cc91a37da241964ffcef223b600, type: 2}
+    second: {fileID: 2100000, guid: 80a1d44bf06e7734797c4aaaeddb184c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Coal
-    second: {fileID: 2100000, guid: 65f98e00fdd2fb54a9bf216aad7538a7, type: 2}
+    second: {fileID: 2100000, guid: 30212b3edfedbdd448a2fe3d2db0a260, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Fire
-    second: {fileID: 2100000, guid: e1e0351ef48fd9e4a9ffac36ae14cc7f, type: 2}
+    second: {fileID: 2100000, guid: 77a2493782969f1478bb4f8716b85b1c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Wood
-    second: {fileID: 2100000, guid: dda7ee049a12a4145951ec91d9ef361e, type: 2}
+    second: {fileID: 2100000, guid: f23d42ce17ca4ea46b6a22969a23c03d, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Rock023_2K-JPG_Color
-    second: {fileID: 2800000, guid: 146dd408f97562546b350a7fb4f56c75, type: 3}
+    second: {fileID: 2800000, guid: a3031f24c3b95c04787e74ec9568fec8, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Rock023_2K-JPG_NormalGL
-    second: {fileID: 2800000, guid: 78f0a168d88cf7748a5fba8c3c22ea46, type: 3}
+    second: {fileID: 2800000, guid: 09997027f5331e544bbdcece5756607e, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Rock023_2K-JPG_Roughness
-    second: {fileID: 2800000, guid: 64656c0799f079243aa293176ef95364, type: 3}
+    second: {fileID: 2800000, guid: 9f5f701f053016844bec8f2d5fc2fba2, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Rock037_2K-JPG_Color
-    second: {fileID: 2800000, guid: 7aa9ade9f3dee414994f7ecec5ad4438, type: 3}
+    second: {fileID: 2800000, guid: fb2921ba590465b4ba63718874b799c2, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Rock037_2K-JPG_NormalGL
-    second: {fileID: 2800000, guid: e1c21e4f2dc60c949a89ef1abcbf3666, type: 3}
+    second: {fileID: 2800000, guid: 7adfa7b6e0b55634c82a1e9fe3f7af1d, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Rock037_2K-JPG_Roughness
-    second: {fileID: 2800000, guid: 6481f534dd5171c47833a35e7776b069, type: 3}
+    second: {fileID: 2800000, guid: c70650a5c42b96f41ad84e56e0856418, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

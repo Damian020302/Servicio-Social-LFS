@@ -8,27 +8,27 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: AngelDoor
-    second: {fileID: 2100000, guid: 06487b35502d81a49b6b4822450b303a, type: 2}
+    second: {fileID: 2100000, guid: 9fa78806b7c6f6c40ab6dd1dc66a794d, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: AD_Color
-    second: {fileID: 2800000, guid: e2c579e235c9fa540b497377d239f225, type: 3}
+    second: {fileID: 2800000, guid: 62e01bccfd1b5234eb6ee4eded19c49c, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: AD_Metallic
-    second: {fileID: 2800000, guid: c64c47d30f8244540a779dd0134e718c, type: 3}
+    second: {fileID: 2800000, guid: 2ce587c3bded9754fbab6df06850e8c9, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: AD_Roughness
-    second: {fileID: 2800000, guid: 9cf0a3b0839fd9744af96e227b6c265c, type: 3}
+    second: {fileID: 2800000, guid: 5b4cb138897de364fad42ded34e5a48f, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Angels
-    second: {fileID: 2800000, guid: 216697211d2c98d4cad1bd21ef306fa7, type: 3}
+    second: {fileID: 2800000, guid: 384c7953e7e97c448b2294967a98f8f6, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

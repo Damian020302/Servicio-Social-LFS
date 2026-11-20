@@ -8,27 +8,27 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WolfDoor
-    second: {fileID: 2100000, guid: 08b01b344b3d37747a6859e0160377a9, type: 2}
+    second: {fileID: 2100000, guid: 6df43646c97729a4aad0257d628e3d05, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: WD_Color
-    second: {fileID: 2800000, guid: 9fc7864dae8f9ca42a7bea0e564314a9, type: 3}
+    second: {fileID: 2800000, guid: e755fbe65d1894f49aec961388797735, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: WD_Metallic
-    second: {fileID: 2800000, guid: 165ff97ae97958147aadbf73706095b1, type: 3}
+    second: {fileID: 2800000, guid: 405622852b449e2429b1dcc85a133cda, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: WD_Roughness
-    second: {fileID: 2800000, guid: 1bd2ef32358562447a65a0872780a543, type: 3}
+    second: {fileID: 2800000, guid: 84cfcfa6e4bf6c449bd70e74740706d4, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Wolfs
-    second: {fileID: 2800000, guid: 039216a01c89f7e44aa0bbecd196fe0e, type: 3}
+    second: {fileID: 2800000, guid: 3a6b099c428244b44a1a0292c5b3171c, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
