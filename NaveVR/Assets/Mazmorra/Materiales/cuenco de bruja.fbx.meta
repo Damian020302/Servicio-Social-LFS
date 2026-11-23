@@ -3,7 +3,192 @@ guid: c44eae66f3b674b45a6195c51aeccca8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Book21Mtl
+    second: {fileID: 2100000, guid: 5c18be86be27d6343a4e7939038d05d5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Candle1Mtl.002
+    second: {fileID: 2100000, guid: 6ca7837ef2c455b4d9c965c512c9fee6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cylinder1Mtl
+    second: {fileID: 2100000, guid: 4643161f0ec1bc94391824895a325f5e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Handle1Mtl
+    second: {fileID: 2100000, guid: f3ef3a5c1efd25d419985d7cd94fa753, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Handle1Mtl.001
+    second: {fileID: 2100000, guid: 5815e33826304204eb0984e0d65dd68b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Handle1Mtl.002
+    second: {fileID: 2100000, guid: 7a65b1e730f95564291a5c0a797a21c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Handle1Mtl.005
+    second: {fileID: 2100000, guid: 33d9661535214ba4caf4edbdc742b105, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LargeBushF1Mtl.001
+    second: {fileID: 2100000, guid: 62eeb085b97bdf24584d81932f5c2c8a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: f17b78bc3287aff45bfc4a03d700782e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 11bd30fb901936249bb6adc4aa92cea1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 7543e333c65b080409b95792f62cecd2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.004
+    second: {fileID: 2100000, guid: e6ed4cd52a33c49448693450781ab423, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.005
+    second: {fileID: 2100000, guid: 7533b98f31fb8c14388b8893be65bfee, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.006
+    second: {fileID: 2100000, guid: a219ad53107d1364996ee2ff30f25bb6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.008
+    second: {fileID: 2100000, guid: dbb029f517c8e38459d929e289aa83f1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.009
+    second: {fileID: 2100000, guid: 2405f09e3100a9f44890fe9179c74f72, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.010
+    second: {fileID: 2100000, guid: ce641725225bb3a41b20c11f9169af58, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.012
+    second: {fileID: 2100000, guid: 84787db2ed9144647a8bc00f121af95e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.013
+    second: {fileID: 2100000, guid: 80b545294b2561140bae6b218daf22ec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.015
+    second: {fileID: 2100000, guid: 7061bc5e841cd0b4b988c0bf7a340211, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.016
+    second: {fileID: 2100000, guid: b228ac102040fba48a6308ce9badb3b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.017
+    second: {fileID: 2100000, guid: 3b1f2984f9e1e7a4dabd02319ff9dbe4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.019
+    second: {fileID: 2100000, guid: f7632ee9093d8a54b8fd663a4745b583, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.021
+    second: {fileID: 2100000, guid: b4956b27c75e8fe47a66b091e09a1e15, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.023
+    second: {fileID: 2100000, guid: e910c7bcfc5f04e459091ac76c538b3e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.024
+    second: {fileID: 2100000, guid: a545cc9fe4b864740afbd06d0c71365d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.026
+    second: {fileID: 2100000, guid: 68811362e273c024b84df665c29bfe65, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Meshesantorchacube1Mtl
+    second: {fileID: 2100000, guid: 9876a519f0c6ecc42bbeef9c0b95abb3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Meshesantorchacylinder0011Mtl
+    second: {fileID: 2100000, guid: e9e019c8009212c46aa83872c210f2b1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Meshesantorchacylinder1Mtl
+    second: {fileID: 2100000, guid: dc89245fdeb0ea742864a482bf750706, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Meshespolygondungeonitemssmitempotion081Mtl.001
+    second: {fileID: 2100000, guid: 236882e93691f7046a816d6d38eb4bcf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Meshespolygondungeonitemssmitempotion081Mtl.002
+    second: {fileID: 2100000, guid: 9a2b03c552f403a46b34edb2de71c6d3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Model1Mtl.001
+    second: {fileID: 2100000, guid: 6f5d39dfdc66be944a8a62b18e107da6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Model1Mtl.002
+    second: {fileID: 2100000, guid: bba79779771937b41a6c2ce6b6945ae2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Part1Mtl
+    second: {fileID: 2100000, guid: c856eeb9ffdad134185a86c36ddfdb15, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Part1Mtl.002
+    second: {fileID: 2100000, guid: 477ff6e8589ebae4586b006e9a8db79f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: puerta
+    second: {fileID: 2100000, guid: 56f94442f43156145891eba99d02c5e7, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -50,7 +235,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
-    bakeAxisConversion: 0
+    bakeAxisConversion: 1
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
