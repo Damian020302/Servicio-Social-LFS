@@ -447,9 +447,8 @@ public class PuzzleManager : MonoBehaviour
         }
         if (totalRoundTimeText != null)
         {
-            float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
-            float minutes = Mathf.FloorToInt(finalTimeToShow / 60);
-            float seconds = Mathf.FloorToInt(finalTimeToShow % 60);
+            float minutes = Mathf.FloorToInt(totalRoundTime / 60);
+            float seconds = Mathf.FloorToInt(totalRoundTime % 60);
             totalRoundTimeText.text = string.Format("Tiempo Total:\n{0:00}:{1:00}", minutes, seconds);
         }
         EndUI();

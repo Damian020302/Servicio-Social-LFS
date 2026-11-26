@@ -4040,7 +4040,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1360367179}
   m_Direction: 2
   m_Value: 1.0000323
-  m_Size: 0.96730524
+  m_Size: 0.96727544
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4758,6 +4758,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RealityManager
   mainCamera: {fileID: 159029307}
   passthroughLayer: {fileID: 591693384}
+  vrSign: {fileID: 0}
+  mrSign: {fileID: 0}
 --- !u!114 &629680552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5321,7 +5323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Oculus.Interaction::Oculus.Interaction.PointableCanvasModule
   m_SendPointerHoverToParent: 1
   _useInitialPressPositionForDrag: 1
-  _exclusiveMode: 0
+  _exclusiveMode: 1
 --- !u!114 &708738564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7895,7 +7897,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00067350344}
+  m_AnchoredPosition: {x: 0, y: -0.00053443736}
   m_SizeDelta: {x: 0, y: 520}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1006574792
@@ -8505,6 +8507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24c9e128525e4f45801b03a143fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandTouch
+  isLeftHand: 1
 --- !u!135 &1083404097
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -15073,6 +15076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24c9e128525e4f45801b03a143fa4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandTouch
+  isLeftHand: 1
 --- !u!135 &2001954048
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -15371,16 +15375,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CauldronManager
   spawner: {fileID: 0}
+  timerPanel: {fileID: 0}
+  timeDisplay: {fileID: 0}
+  useTimerToggle: {fileID: 0}
+  timerControls: {fileID: 0}
   leftWrist: {fileID: 1073285175}
   rightWrist: {fileID: 471967065}
   victory: {fileID: 0}
-  defeat: {fileID: 0}
-  yesD: {fileID: 0}
-  noD: {fileID: 0}
   yesV: {fileID: 0}
   noV: {fileID: 0}
   cauldronText: {fileID: 0}
   timeRemainingText: {fileID: 0}
+  potionsText: {fileID: 0}
   flexionThreshold: 30
   extensionThreshold: 30
   flexionAngle: 0
@@ -15388,6 +15394,9 @@ MonoBehaviour:
   warning: {fileID: 0}
   warningBlinkSpeed: 5
   warningScaleMultiplier: 1.2
+  selectedHand: 0
+  leftHand: {fileID: 0}
+  rightHand: {fileID: 0}
   prefabPotion: {fileID: 5815870493130946573, guid: 63160b465f68cb84db67d0b3424089a0, type: 3}
   spawnPoint: {fileID: 0}
   cauldronEndpoint: {fileID: 0}
@@ -15396,11 +15405,33 @@ MonoBehaviour:
   cauldron: 1
   difficulty: 0
   winningStreak: 0
+  wandManager: {fileID: 0}
+  maxPotionsPerRound: 10
   timer: 60
   timerIsRunning: 0
   initialTimerValue: 0
-  wandManager: {fileID: 0}
-  basePotionsNeeded: 1
+  averageFlexionTime: 0
+  averageExtensionTime: 0
+  totalRoundTime: 0
+  initialReactionTime: 0
+  maxFlexionAngle: 0
+  maxExtensionAngle: 0
+  averageExtensionAngle: 0
+  averageFlexionAngle: 0
+  initialReactionTimeText: {fileID: 0}
+  totalRoundTimeText: {fileID: 0}
+  averageTimeToFlexText: {fileID: 0}
+  averageTimeToExtText: {fileID: 0}
+  maxAngleFlexText: {fileID: 0}
+  maxAngleExtText: {fileID: 0}
+  averageAngleFlexText: {fileID: 0}
+  averageAngleExtText: {fileID: 0}
+  selectedArmText: {fileID: 0}
+  roundDateText: {fileID: 0}
+  roundStartTimeText: {fileID: 0}
+  roundDate: 
+  roundStartingTime: 
+  currentArmName: 
 --- !u!1 &2016346816
 GameObject:
   m_ObjectHideFlags: 0

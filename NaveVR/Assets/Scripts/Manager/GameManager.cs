@@ -413,9 +413,8 @@ public class GameManager : MonoBehaviour
             StopReminder();
             if(totalRoundTimeText != null)
             {
-                float finalTime = useTimerConfig ? initialTimerValue : totalRoundTime;
-                float minutes = Mathf.FloorToInt(finalTime / 60);
-                float seconds = Mathf.FloorToInt(finalTime % 60);
+                float minutes = Mathf.FloorToInt(totalRoundTime / 60);
+                float seconds = Mathf.FloorToInt(totalRoundTime % 60);
                 totalRoundTimeText.text = string.Format("Tiempo total: {0:00}:{1:00}", minutes, seconds);
             }
             EndUI();

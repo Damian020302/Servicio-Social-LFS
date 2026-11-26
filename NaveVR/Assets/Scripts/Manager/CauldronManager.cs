@@ -56,6 +56,12 @@ public class CauldronManager : MonoBehaviour
     private Coroutine warningCoroutine;
     private Vector3 warningOriginalScale;
 
+    [Header("Hand Setup")]
+    public int selectedHand;
+    public OVRHand leftHand;
+    public OVRHand rightHand;
+    private OVRHand activeHand;
+
     [Header("Potion Launcher")]
     public GameObject prefabPotion;
     public Transform spawnPoint;
@@ -185,21 +191,35 @@ public class CauldronManager : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
-        if(SceneManager.GetActiveScene().name == "Juego3")
+        selectedHand = PlayerPrefs.GetInt("SelectedHand", 1);
+        if (selectedHand == 0 && leftHand != null)
+        {
+            currentArmName = "Izquierdo";
+            activeHand = leftHand;
+        }
+        else if (selectedHand == 1 && rightHand != null)
+        {
+            currentArmName = "Derecho";
+            activeHand = rightHand;
+        }
+        else
+        {
+            Debug.Log("No se encontro una mano activa");
+        }
+        if (SceneManager.GetActiveScene().name == "Juego3")
         {
             spawner.SpawnWand();
             wandManager = Object.FindFirstObjectByType<WandManager>();
             initialTimerValue = timer;
-            StartUI();
             if (warning != null)
             {
                 warningOriginalScale = warning.transform.localScale;
                 if (warningOriginalScale == Vector3.zero) warningOriginalScale = Vector3.one;
             }
             UpdateActiveWrist();
-
+            StartUI();
             if (activeWrist != null) neutralRotation = activeWrist.rotation;
             else Debug.LogError("No se ha asignado ninguna muñeca activa. Por favor, asigna una muñeca en el inspector.");
             extensionThreshold = PlayerPrefs.GetFloat("CauldronMaxExtension", extensionThreshold);
@@ -450,9 +470,8 @@ public class CauldronManager : MonoBehaviour
         timerIsRunning = false;
         if(totalRoundTimeText != null)
         {
-            float finalTimeToShow = useTimerConfig ? initialTimerValue : totalRoundTime;
-            float minutes = Mathf.FloorToInt(finalTimeToShow / 60);
-            float seconds = Mathf.FloorToInt(finalTimeToShow % 60);
+            float minutes = Mathf.FloorToInt(totalRoundTime / 60);
+            float seconds = Mathf.FloorToInt(totalRoundTime % 60);
             totalRoundTimeText.text = string.Format("Tiempo Total:\n{0:00}:{1:00}s", minutes, seconds);
         }
         UpdateMetricsUI();
